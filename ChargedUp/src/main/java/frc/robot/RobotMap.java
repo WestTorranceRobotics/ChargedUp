@@ -16,4 +16,24 @@ public final class RobotMap {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public final class DriveTrain{
+    public static final int leftLeader_ID = 1;
+    public static final int leftFollower_ID = 2;
+    public static final int rightLeader_ID =3;
+    public static final int rightFollower_ID = 4;
+
+    public static final int rightLeaderEncoder1 = 5;
+    public static final int leftleaderEncoder1 = 6;
+    public static final int rightFollowerEncoder1 = 7;
+    public static final int leftFollowerEncoder1 = 8;
+    public static final int rightLeaderEncoder2 = 9;
+    public static final int leftleaderEncoder2 = 10;
+    public static final int rightFollowerEncoder2 = 11;
+    public static final int leftFollowerEncoder2 = 12;
+
+
+}
+
+
 }
