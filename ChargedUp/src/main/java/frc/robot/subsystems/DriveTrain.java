@@ -47,13 +47,13 @@ public class DriveTrain extends SubsystemBase {
     //Variables
 
 
-    WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrain.leftLeader_ID);
-    WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrain.leftFollower_ID);
-    WPI_TalonSRX righttLeader = new WPI_TalonSRX(RobotMap.DriveTrain.rightLeader_ID);
-    WPI_TalonSRX righttFollower = new WPI_TalonSRX(RobotMap.DriveTrain.rightFollower_ID);
+    WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
+    WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
+    WPI_TalonSRX righttLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
+    WPI_TalonSRX righttFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
-    Encoder rightEncoder = new Encoder(RobotMap.DriveTrain.rightLeaderEncoder1,RobotMap.DriveTrain.rightLeaderEncoder2,false);
-    Encoder leftEncoder = new Encoder(RobotMap.DriveTrain.leftleaderEncoder1,RobotMap.DriveTrain.leftleaderEncoder2,false);
+    Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
+    Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
 
 
     
@@ -84,6 +84,10 @@ public class DriveTrain extends SubsystemBase {
 
   public int GetLeftSpeed(){
     return leftLeaderEncoder.get();
+  }
+
+  public void StopDrive(){
+    drive.tankDrive(0, 0);
   }
 
 

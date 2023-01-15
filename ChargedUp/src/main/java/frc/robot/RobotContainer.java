@@ -4,11 +4,14 @@
 
 package frc.robot;
 
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.commands.TankDrive;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -16,17 +19,38 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  DriveTrain driverBaseSubsystem;
+  TankDrive driveBaseTankDriveCommand;
+  private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
+  private static final Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  //private final CommandXboxController m_driverController =
+      //new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
+ 
+ 
+ 
   public RobotContainer() {
+    
+    initSubsytems();
+    initCommands();
     // Configure the trigger bindings
     configureBindings();
   }
+
+  private void initSubsytems() {
+    driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+  }
+
+  private void initCommands(){
+    driveBaseTankDriveCommand = new TankDrive(leftJoystick, leftJoystick, driverBaseSubsystem);
+    driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);
+
+  }
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the

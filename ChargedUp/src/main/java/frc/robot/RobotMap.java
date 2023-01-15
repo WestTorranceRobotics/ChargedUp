@@ -17,7 +17,7 @@ public final class RobotMap {
     public static final int kDriverControllerPort = 0;
   }
 
-  public final class DriveTrain{
+  public final class DriveTrainConstants{
     public static final int leftLeader_ID = 1;
     public static final int leftFollower_ID = 2;
     public static final int rightLeader_ID =3;
@@ -33,6 +33,11 @@ public final class RobotMap {
     public static final int leftFollowerEncoder2 = 12;
 
 
+}
+
+public final class JoyStickConstants{
+  public static final int leftJoystickPort = 1;
+  public static final int rightJoystickPort = 2;
 }
 
 
