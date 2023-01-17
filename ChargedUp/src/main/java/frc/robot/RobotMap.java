@@ -17,11 +17,16 @@ public final class RobotMap {
     public static final int kDriverControllerPort = 0;
   }
 
+  public final class IntakeConstants{
+    public static final int intakeMotor1_ID = 0;
+    public static final int intakeMotor2_ID = 0;
+  }
+
   public final class DriveTrainConstants{
-    public static final int leftLeader_ID = 1;
-    public static final int leftFollower_ID = 2;
-    public static final int rightLeader_ID =3;
-    public static final int rightFollower_ID = 4;
+    public static final int leftLeader_ID = 5;
+    public static final int leftFollower_ID = 4;
+    public static final int rightLeader_ID =2;
+    public static final int rightFollower_ID = 3;
 
     public static final int rightLeaderEncoder1 = 5;
     public static final int leftleaderEncoder1 = 6;
@@ -36,8 +41,11 @@ public final class RobotMap {
 }
 
 public final class JoyStickConstants{
-  public static final int leftJoystickPort = 1;
-  public static final int rightJoystickPort = 2;
+  public static final int leftJoystickPort = 0;
+  public static final int rightJoystickPort = 1;
+  public static final int xboxControllerPort = 2;
+  public static final int leftJoystickTrigger = 1;
+  public static final int rightJoystickTrigger = 1;
 }
 
 

@@ -3,12 +3,16 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.RunIntake;
+import frc.robot.commands.RunOuttake;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 import frc.robot.commands.TankDrive;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
@@ -18,11 +22,21 @@ import edu.wpi.first.wpilibj.Joystick;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
   DriveTrain driverBaseSubsystem;
+  Intake intakesubsystem;
   TankDrive driveBaseTankDriveCommand;
+  ArcadeDrive driveBaseArcadeDriveCommand;
+  RunIntake runIntakeCommand;
+  RunOuttake runOuttakeCommand;
+
+  private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static final Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
+  private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
+  private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
+
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -43,11 +57,14 @@ public class RobotContainer {
 
   private void initSubsytems() {
     driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+    intakesubsystem = new frc.robot.subsystems.Intake();
   }
 
   private void initCommands(){
-    driveBaseTankDriveCommand = new TankDrive(leftJoystick, leftJoystick, driverBaseSubsystem);
-    driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);
+    driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
+    driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
+    runIntakeCommand = new RunIntake(intakesubsystem);
+    driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
 
   }
 
@@ -63,11 +80,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
+    driverLeftTrigger.whileTrue(runIntakeCommand);
+    driverRightTrigger.whileTrue(runOuttakeCommand);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-
+    
   }
 
   /**

@@ -14,6 +14,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -39,35 +40,38 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
   private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 100).withPosition(0,1).withSize(2, 1).getEntry();
-
+   
   
     
   public DriveTrain() {
     speedPercentage = 100;
     //Variables
 
-
+    SBSpeedPercentage.setDouble(100);
     WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
     WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
-    WPI_TalonSRX righttLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
-    WPI_TalonSRX righttFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
+    WPI_TalonSRX rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
+    WPI_TalonSRX rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
-    Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
-    Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
+    //no encoders on kitbot
+    //Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
+    //Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
+
+leftLeader.setSafetyEnabled(true);
+leftFollower.setSafetyEnabled(true);
+rightLeader.setSafetyEnabled(true);
+rightFollower.setSafetyEnabled(true);
 
 
-    
 
-
-
-    drive = new DifferentialDrive(righttLeader,leftLeader);
+    drive = new DifferentialDrive(leftLeader,rightLeader);
 
     leftFollower.follow(leftLeader);
-    righttFollower.follow(righttLeader);
+    rightFollower.follow(rightLeader);
 
     leftLeader.setInverted(true);
     leftFollower.setInverted(InvertType.FollowMaster);
-    righttFollower.setInverted(InvertType.FollowMaster);
+    rightFollower.setInverted(InvertType.FollowMaster);
     
 
   }
@@ -75,11 +79,14 @@ public class DriveTrain extends SubsystemBase {
 
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
-    drive.arcadeDrive(InputSpeed*speedPercentage, InputRotation);
+    //if (0.2<InputSpeed){
+
+      drive.arcadeDrive(InputSpeed*(speedPercentage/100), InputRotation*0.7);
+    
   }
 
   public void TankDrive(double InputLeftSpeed, double InputRightSpeed){
-    drive.tankDrive(InputLeftSpeed*speedPercentage, InputRightSpeed*speedPercentage);
+    drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
   }
 
   public int GetLeftSpeed(){
@@ -90,21 +97,25 @@ public class DriveTrain extends SubsystemBase {
     drive.tankDrive(0, 0);
   }
 
-
-
-public void UpdateShuffleBoard(){
-  if (speedPercentage != SBSpeedPercentage.getDouble(100)){
-    speedPercentage = SBSpeedPercentage.getDouble(100);
+  public void SetSpeedPercentage(double percent){
+    speedPercentage = percent;
   }
+
+
+
+
   
-  SBLeftSpeed.setInteger(leftLeaderEncoder.get());
-  SBRightSpeed.setInteger(rightLeaderEncoder.get());
+  //SBLeftSpeed.setInteger(leftLeaderEncoder.get());
+ //SBRightSpeed.setInteger(rightLeaderEncoder.get());
   
 
-}  
+  
 
   @Override
   public void periodic() {
+   if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
+    SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
+   } 
     // This method will be called once per scheduler run
   }
 }
