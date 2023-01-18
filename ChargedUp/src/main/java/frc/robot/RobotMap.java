@@ -12,8 +12,19 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants {
+public final class RobotMap {
+
+  public static class ClawMap{
+
+public static int controlModuleCANID = 0;
+
+public static int solenoidOneForwardChannel = 0;
+public static int solenoidOneReverseChannel = 7;
+public static int solenoidTwoForwardChannel = 1;
+public static int solenoidTwoReverseChannel = 6;
+
+  }
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+   
   }
 }
