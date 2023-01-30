@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAnalogSensor.Mode;
 
@@ -14,22 +16,28 @@ public class Intake extends SubsystemBase {
   CANSparkMax intakeMotor2;
   /** Creates a new Intake. */
   public Intake() {
-    intakeMotor1 = new CANSparkMax(0,MotorType.kBrushless);
-    intakeMotor2 = new CANSparkMax(0,MotorType.kBrushless);
+    intakeMotor1 = new CANSparkMax(RobotMap.IntakeConstants.intakeMotor1_ID,MotorType.kBrushless);
+    intakeMotor2 = new CANSparkMax(RobotMap.IntakeConstants.intakeMotor2_ID,MotorType.kBrushless);
 
-    intakeMotor1.setInverted(false);
-    intakeMotor2.setInverted(true);
+    intakeMotor1.setIdleMode(IdleMode.kBrake);
+    intakeMotor2.setIdleMode(IdleMode.kBrake);
+    // intakeMotor1.setInverted(false);
+    // intakeMotor2.setInverted(false);
+
+    intakeMotor2.follow(intakeMotor1, true);
+
+
     
   }
 
   public void runIntake(boolean inverted){
     if (inverted){
-    intakeMotor1.set(-0.7);
-    intakeMotor2.set(-0.7);
+    intakeMotor1.set(0.8);
+    intakeMotor2.set(-0.8);
     }
-    else{
-    intakeMotor1.set(0.7);
-    intakeMotor2.set(0.7);
+    else{ 
+    intakeMotor1.set(-0.8);
+    intakeMotor2.set(0.8);
     }
  
   }

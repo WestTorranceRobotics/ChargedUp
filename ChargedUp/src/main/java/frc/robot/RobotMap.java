@@ -18,8 +18,8 @@ public final class RobotMap {
   }
 
   public final class IntakeConstants{
-    public static final int intakeMotor1_ID = 0;
-    public static final int intakeMotor2_ID = 0;
+    public static final int intakeMotor1_ID = 6;
+    public static final int intakeMotor2_ID = 7;
   }
 
   public final class DriveTrainConstants{

@@ -64,6 +64,7 @@ public class RobotContainer {
     driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
     driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
     runIntakeCommand = new RunIntake(intakesubsystem);
+    runOuttakeCommand = new RunOuttake(intakesubsystem);
     driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
 
   }
