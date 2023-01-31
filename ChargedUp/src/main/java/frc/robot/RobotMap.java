@@ -21,6 +21,10 @@ public final class RobotMap {
     public static final int intakeMotor1_ID = 6;
     public static final int intakeMotor2_ID = 7;
   }
+  public final class ShooterConstants{
+    public static final int shooterLeader_ID = 6;
+    public static final int shooterFollower_ID = 9;
+  }
 
   public final class DriveTrainConstants{
     public static final int leftLeader_ID = 5;

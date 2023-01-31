@@ -6,8 +6,10 @@ package frc.robot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
+import frc.robot.commands.ShooterSetPower;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 import frc.robot.commands.TankDrive;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,16 +28,19 @@ import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
   DriveTrain driverBaseSubsystem;
   Intake intakesubsystem;
+  Shooter shootersubsystem;
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
+  ShooterSetPower runShooterPower;
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static final Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
   private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
   private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
+
 
   // The robot's subsystems and commands are defined here...
 
@@ -56,16 +61,20 @@ public class RobotContainer {
   }
 
   private void initSubsytems() {
-    driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
-    intakesubsystem = new frc.robot.subsystems.Intake();
+    //driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+    //intakesubsystem = new frc.robot.subsystems.Intake();
+    
+
+    shootersubsystem = new frc.robot.subsystems.Shooter();
   }
 
   private void initCommands(){
-    driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
-    driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
-    runIntakeCommand = new RunIntake(intakesubsystem);
-    runOuttakeCommand = new RunOuttake(intakesubsystem);
-    driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+    //driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
+    //driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
+    //runIntakeCommand = new RunIntake(intakesubsystem);
+    //runOuttakeCommand = new RunOuttake(intakesubsystem);
+    //driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+    runShooterPower = new ShooterSetPower(shootersubsystem);
 
   }
 
@@ -81,8 +90,9 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverLeftTrigger.whileTrue(runIntakeCommand);
-    driverRightTrigger.whileTrue(runOuttakeCommand);
+    //driverLeftTrigger.whileTrue(runIntakeCommand);
+    //driverRightTrigger.whileTrue(runOuttakeCommand);
+    driverRightTrigger.whileTrue(runShooterPower);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
