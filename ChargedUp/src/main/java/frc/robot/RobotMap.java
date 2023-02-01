@@ -18,10 +18,18 @@ public final class RobotMap {
 
 public static int controlModuleCANID = 0;
 
-public static int solenoidOneForwardChannel = 0;
-public static int solenoidOneReverseChannel = 7;
-public static int solenoidTwoForwardChannel = 1;
-public static int solenoidTwoReverseChannel = 6;
+public static int motionMotorCANID = 0;
+public static int powerMotorCANID = 0;
+
+public static int leftSolenoidPort = 0;
+public static int rightSolenoidPort = 0;
+
+public static int upLimitSwitchChannel = 0;
+public static int downLimitSwitchChannel = 0;
+
+public static double motionMotorFlipPower = 0.3;
+public static double motionMotorTurnPower = 0.2;
+public static double runClawPower = 0.5;
 
   }
   public static class OperatorConstants {
