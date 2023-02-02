@@ -17,6 +17,7 @@ public final class RobotMap {
     public static final int kDriverControllerPort = 0;
   }
 
+
   public final class IntakeConstants{
     public static final int intakeMotor1_ID = 6;
     public static final int intakeMotor2_ID = 7;
@@ -24,6 +25,9 @@ public final class RobotMap {
   public final class ShooterConstants{
     public static final int shooterLeader_ID = 6;
     public static final int shooterFollower_ID = 9;
+    public static final double kP = 0.00061675;
+    public static final double kI = 0.00;
+    public static final double kD =  0.52171675; 
   }
 
   public final class DriveTrainConstants{
