@@ -6,6 +6,7 @@ package frc.robot;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
+import frc.robot.commands.ShooterPIDController;
 import frc.robot.commands.ShooterSetPower;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -34,6 +35,7 @@ public class RobotContainer {
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
   ShooterSetPower runShooterPower;
+  ShooterPIDController runShooterPID;
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
@@ -75,6 +77,7 @@ public class RobotContainer {
     //runOuttakeCommand = new RunOuttake(intakesubsystem);
     //driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
     runShooterPower = new ShooterSetPower(shootersubsystem);
+    runShooterPID = new ShooterPIDController(shootersubsystem);
 
   }
 
@@ -93,6 +96,7 @@ public class RobotContainer {
     //driverLeftTrigger.whileTrue(runIntakeCommand);
     //driverRightTrigger.whileTrue(runOuttakeCommand);
     driverRightTrigger.whileTrue(runShooterPower);
+    driverLeftTrigger.whileTrue(runShooterPID);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
