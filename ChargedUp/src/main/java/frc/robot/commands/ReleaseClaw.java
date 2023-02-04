@@ -11,12 +11,12 @@ import frc.robot.subsystems.Claw;
 public class ReleaseClaw extends CommandBase {
 
 Claw claw;
-JoystickButton operatorY;
+JoystickButton operatorX;
 
   /** Creates a new ReleaseClaw. */
-  public ReleaseClaw(JoystickButton operatorY, Claw claw) {
+  public ReleaseClaw(JoystickButton operatorX, Claw claw) {
 
-this.operatorY = operatorY;
+this.operatorX = operatorX;
 this.claw = claw;
 
 addRequirements(claw);

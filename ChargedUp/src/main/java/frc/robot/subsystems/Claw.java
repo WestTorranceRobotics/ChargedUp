@@ -118,11 +118,23 @@ public void counterClockTurn(){
 
 motionMotor.set(-RobotMap.ClawMap.motionMotorTurnPower);
 
+if (getUpSwitch() == true){
+
+motionMotor.stopMotor();
+
+}
+
 }
 
 public void clockTurn(){
 
 motionMotor.set(RobotMap.ClawMap.motionMotorTurnPower);
+
+if(getDownSwitch() == true){
+
+motionMotor.stopMotor();
+
+}
 
 }
   @Override

@@ -5,8 +5,15 @@
 package frc.robot;
 
 import frc.robot.RobotMap.OperatorConstants;
+import frc.robot.commands.AboutFaceClaw;
+import frc.robot.commands.PullClaw;
+import frc.robot.commands.ReleaseClaw;
+import frc.robot.commands.TurnClawDown;
+import frc.robot.commands.TurnClawUp;
+import frc.robot.subsystems.Claw;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -18,6 +25,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
+private Claw claw;
+
+public JoystickButton operatorA;
+public JoystickButton operatorB;
+public JoystickButton operatorX;
+public JoystickButton operatorY;
+
+public JoystickButton operatorLT;
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   // private final CommandXboxController m_driverController =
   //     new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -25,6 +41,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    configureSubsystem();
     configureBindings();
   }
 
@@ -37,7 +54,19 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+  private void configureSubsystem(){
+
+claw = new Claw();
+
+  }
   private void configureBindings() {
+
+    operatorA.whileTrue(new TurnClawUp(operatorA, claw));
+    operatorB.whileTrue(new TurnClawDown(operatorB, claw));
+    operatorX.onTrue(new ReleaseClaw(operatorX, claw));
+    operatorY.onTrue(new PullClaw(operatorY, claw));
+
+    operatorLT.onTrue(new AboutFaceClaw(operatorLT, claw));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

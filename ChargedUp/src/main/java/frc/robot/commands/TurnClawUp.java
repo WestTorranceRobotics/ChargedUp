@@ -8,16 +8,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.Claw;
 
-public class AboutFaceClaw extends CommandBase {
+public class TurnClawUp extends CommandBase {
 
-  Claw claw;
+Claw claw;
+JoystickButton operatorA;
 
-  private JoystickButton operatorLT;
+  /** Creates a new TurnClawUp. */
+  public TurnClawUp(JoystickButton operatorA, Claw claw) {
 
-  /** Creates a new AboutFaceClaw. */
-  public AboutFaceClaw(JoystickButton operatorLT, Claw claw) {
-
-this.operatorLT = operatorLT;
+this.operatorA = operatorA;
 this.claw = claw;
 
 addRequirements(claw);
@@ -33,7 +32,7 @@ addRequirements(claw);
   @Override
   public void execute() {
 
-claw.flipClaw();
+claw.counterClockTurn();
 
   }
 
