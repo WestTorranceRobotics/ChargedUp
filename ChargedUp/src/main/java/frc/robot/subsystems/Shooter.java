@@ -36,7 +36,7 @@ public class Shooter extends SubsystemBase {
   private GenericEntry SBTargetPosition =  shootTab.add("Target Position", 0).withPosition(1, 2).getEntry();
   private GenericEntry SBVelocityOrPosition = shootTab.add("Velocity/Position", true).withWidget(BuiltInWidgets.kBooleanBox).withPosition(2, 2).getEntry();
   private GenericEntry SBshooterLeaderPosition = shootTab.add("Leader Position", 0).withPosition(0, 3).getEntry();
-  private GenericEntry SBshooterFollowerPosition = shootTab.add("Leader Position", 0).withPosition(1, 3).getEntry();
+  private GenericEntry SBshooterFollowerPosition = shootTab.add("Follower Position", 0).withPosition(1, 3).getEntry();
 
 
   private double targetVelocity;
@@ -62,7 +62,6 @@ public class Shooter extends SubsystemBase {
 
   public void setPower(double power) {
     shootMotorLeader.set(power);
-    shootMotorFollower.set(power);
   }
 
   public void setPID(double p, double i, double d){
@@ -86,14 +85,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setVelocity (double velocity){
-    shootMotorFollower.getPIDController().setReference(velocity,ControlType.kVelocity);
+    shootMotorLeader.getPIDController().setReference(velocity,ControlType.kVelocity);
 
   
   }
 
   
   public void setPosition (double position){
-    shootMotorFollower.getPIDController().setReference(position,ControlType.kPosition);
+    shootMotorLeader.getPIDController().setReference(position,ControlType.kPosition);
 
   }
 
