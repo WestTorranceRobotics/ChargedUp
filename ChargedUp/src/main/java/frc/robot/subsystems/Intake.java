@@ -32,12 +32,12 @@ public class Intake extends SubsystemBase {
 
   public void runIntake(boolean inverted){
     if (inverted){
-    intakeMotor1.set(0.8);
-    intakeMotor2.set(-0.8);
+    intakeMotor1.set(0.6);
+    intakeMotor2.set(-0.6);
     }
     else{ 
-    intakeMotor1.set(-0.8);
-    intakeMotor2.set(0.8);
+    intakeMotor1.set(-0.6);
+    intakeMotor2.set(0.6);
     }
  
   }

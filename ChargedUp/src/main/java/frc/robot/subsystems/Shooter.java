@@ -34,7 +34,7 @@ public class Shooter extends SubsystemBase {
   private GenericEntry SBPIDD = shootTab.add("PID D Value", RobotMap.ShooterConstants.kD).withPosition(2, 1).getEntry();
   private GenericEntry SBTargetVelocity =  shootTab.add("Target Velocity", 0).withPosition(0, 2).getEntry();
   private GenericEntry SBTargetPosition =  shootTab.add("Target Position", 0).withPosition(1, 2).getEntry();
-  private GenericEntry SBVelocityOrPosition = shootTab.add("Velocity/Position", true).withWidget(BuiltInWidgets.kBooleanBox).withPosition(2, 2).getEntry();
+  private GenericEntry SBVelocityOrPosition = shootTab.add("Velocity/Position",1).withPosition(2, 2).getEntry();
   private GenericEntry SBshooterLeaderPosition = shootTab.add("Leader Position", 0).withPosition(0, 3).getEntry();
   private GenericEntry SBshooterFollowerPosition = shootTab.add("Follower Position", 0).withPosition(1, 3).getEntry();
 

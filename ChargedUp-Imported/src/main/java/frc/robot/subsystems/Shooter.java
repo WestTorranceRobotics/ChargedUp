@@ -62,7 +62,7 @@ public class Shooter extends SubsystemBase {
 
   public void setPower(double power) {
     shootMotorLeader.set(power);
-    shootMotorFollower.set(power);
+    shootMotorFollower.set(-power);
   }
 
   public void setPID(double p, double i, double d){
