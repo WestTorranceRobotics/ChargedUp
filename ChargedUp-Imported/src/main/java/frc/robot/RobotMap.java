@@ -23,8 +23,8 @@ public final class RobotMap {
     public static final int intakeMotor2_ID = 7;
   }
   public final class ShooterConstants{
-    public static final int shooterLeader_ID = 2;
-    public static final int shooterFollower_ID = 1;
+    public static final int shooterLeader_ID = 6;
+    public static final int shooterFollower_ID = 7;
     public static final double kP = 0.00061675;
     public static final double kI = 0.00;
     public static final double kD =  0.52171675; 
