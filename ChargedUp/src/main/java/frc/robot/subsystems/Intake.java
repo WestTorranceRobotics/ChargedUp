@@ -26,6 +26,8 @@ public class Intake extends SubsystemBase {
 
     intakeMotor2.follow(intakeMotor1, true);
 
+    
+
 
     
   }

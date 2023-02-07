@@ -17,6 +17,13 @@ public final class RobotMap {
     public static final int kDriverControllerPort = 0;
   }
 
+  public final class ArmConstants{
+    public static final int armMotorID =9;
+    public static final double kP = 0;
+    public static final double kI = 0;
+    public static final double kD = 0;
+  }
+
 
   public final class IntakeConstants{
     public static final int intakeMotor1_ID = 6;

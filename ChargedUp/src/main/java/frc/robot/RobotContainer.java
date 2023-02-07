@@ -4,10 +4,13 @@
 
 package frc.robot;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.RunArmPosition;
+import frc.robot.commands.RunArmPower;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.ShooterPIDController;
 import frc.robot.commands.ShooterSetPower;
+import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -30,12 +33,15 @@ public class RobotContainer {
   DriveTrain driverBaseSubsystem;
   Intake intakesubsystem;
   Shooter shootersubsystem;
+  Arms armsubsystem;
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
   ShooterSetPower runShooterPower;
   ShooterPIDController runShooterPID;
+  RunArmPosition runArmPosition;
+  RunArmPower runArmPower;
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
@@ -67,7 +73,8 @@ public class RobotContainer {
     //intakesubsystem = new frc.robot.subsystems.Intake();
     
 
-    shootersubsystem = new frc.robot.subsystems.Shooter();
+    //shootersubsystem = new frc.robot.subsystems.Shooter();
+    armsubsystem = new frc.robot.subsystems.Arms();
   }
 
   private void initCommands(){
@@ -76,9 +83,10 @@ public class RobotContainer {
     //runIntakeCommand = new RunIntake(intakesubsystem);
     //runOuttakeCommand = new RunOuttake(intakesubsystem);
     //driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
-    runShooterPower = new ShooterSetPower(shootersubsystem);
-    runShooterPID = new ShooterPIDController(shootersubsystem);
-
+    //runShooterPower = new ShooterSetPower(shootersubsystem);
+    ///runShooterPID = new ShooterPIDController(shootersubsystem);
+    runArmPosition = new RunArmPosition(armsubsystem);
+    runArmPower = new RunArmPower(armsubsystem);
   }
 
 
@@ -95,8 +103,8 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     //driverLeftTrigger.whileTrue(runIntakeCommand);
     //driverRightTrigger.whileTrue(runOuttakeCommand);
-    driverRightTrigger.whileTrue(runShooterPower);
-    driverLeftTrigger.whileTrue(runShooterPID);
+    driverRightTrigger.whileTrue(runArmPower);
+    driverLeftTrigger.whileTrue(runArmPosition);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
