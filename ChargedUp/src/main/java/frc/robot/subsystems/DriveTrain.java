@@ -22,10 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class DriveTrain extends SubsystemBase {
-  TalonSRX leftLeader;
-  TalonSRX leftFollower;
-  TalonSRX rightLeader;
-  TalonSRX rightFollower;
 
   Encoder rightFollowerEncoder;
   Encoder rightLeaderEncoder;
@@ -105,8 +101,6 @@ rightFollower.setSafetyEnabled(true);
 
 
   
-  //SBLeftSpeed.setInteger(leftLeaderEncoder.get());
- //SBRightSpeed.setInteger(rightLeaderEncoder.get());
   
 
   
