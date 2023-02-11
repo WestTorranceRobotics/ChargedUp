@@ -31,8 +31,6 @@ public class TankDrive extends CommandBase {
   public void execute() {
     drivetrain.TankDrive(leftjoystick.getY(),rightjoystick.getY());
 
-
-
   }
 
   // Called once the command ends or is interrupted.

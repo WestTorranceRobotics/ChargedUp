@@ -30,7 +30,7 @@ public final class RobotMap {
     public static final int intakeMotor2_ID = 7;
   }
   public final class ShooterConstants{
-    public static final int shooterLeader_ID = 6;
+    public static final int shooterLeader_ID = 12;
     public static final int shooterFollower_ID = 7;
     public static final double kP = 0.00061675;
     public static final double kI = 0.00;
@@ -38,9 +38,9 @@ public final class RobotMap {
   }
 
   public final class DriveTrainConstants{
-    public static final int leftLeader_ID = 5;
-    public static final int leftFollower_ID = 4;
-    public static final int rightLeader_ID =2;
+    public static final int leftLeader_ID = 4;
+    public static final int leftFollower_ID = 5;
+    public static final int rightLeader_ID = 1;
     public static final int rightFollower_ID = 3;
 
     public static final int rightLeaderEncoder1 = 5;

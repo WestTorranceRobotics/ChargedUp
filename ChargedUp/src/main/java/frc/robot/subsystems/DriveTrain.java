@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -35,30 +36,32 @@ public class DriveTrain extends SubsystemBase {
   private ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
-  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 100).withPosition(0,1).withSize(2, 1).getEntry();
-   
+  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 50).withPosition(0,1).withSize(2, 1).getEntry();
+  WPI_TalonSRX rightLeader;
+  WPI_TalonSRX leftLeader;
+
   
     
   public DriveTrain() {
-    speedPercentage = 100;
+    speedPercentage = 50;
     //Variables
 
     SBSpeedPercentage.setDouble(100);
-    WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
+    leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
     WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
-    WPI_TalonSRX rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
+    rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
     WPI_TalonSRX rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
     //no encoders on kitbot
     //Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
     //Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
 
-leftLeader.setSafetyEnabled(true);
-leftFollower.setSafetyEnabled(true);
-rightLeader.setSafetyEnabled(true);
-rightFollower.setSafetyEnabled(true);
+// leftLeader.setSafetyEnabled(true);
+// leftFollower.setSafetyEnabled(true);
+// rightLeader.setSafetyEnabled(true);
+// rightFollower.setSafetyEnabled(true);
 
-
+    rightLeader.setInverted(true);
 
     drive = new DifferentialDrive(leftLeader,rightLeader);
 
@@ -82,7 +85,9 @@ rightFollower.setSafetyEnabled(true);
   }
 
   public void TankDrive(double InputLeftSpeed, double InputRightSpeed){
-    drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+    drive.tankDrive(InputLeftSpeed, InputRightSpeed);
+    leftLeader.set(ControlMode.PercentOutput, InputLeftSpeed * (speedPercentage/100));
+    rightLeader.set(ControlMode.PercentOutput,InputRightSpeed*(speedPercentage/100));
   }
 
   public int GetLeftSpeed(){
@@ -107,9 +112,12 @@ rightFollower.setSafetyEnabled(true);
 
   @Override
   public void periodic() {
-   if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
-    SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
-   } 
+    SBLeftSpeed.setInteger(leftLeaderEncoder.get());
+    SBRightSpeed.setInteger(rightLeaderEncoder.get());
+  
+    if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
+      SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
+    } 
     // This method will be called once per scheduler run
   }
 }
