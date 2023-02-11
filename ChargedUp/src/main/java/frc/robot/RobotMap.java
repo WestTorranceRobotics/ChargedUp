@@ -19,9 +19,9 @@ public final class RobotMap {
 
   public final class ArmConstants{
     public static final int armMotorID =9;
-    public static final double kP = 0;
-    public static final double kI = 0;
-    public static final double kD = 0;
+    public static final double kP = 0.0085;
+    public static final double kI = 0.00000002;
+    public static final double kD = 0.036;
   }
 
 

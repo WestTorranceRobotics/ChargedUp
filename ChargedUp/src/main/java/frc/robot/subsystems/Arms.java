@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.networktables.GenericEntry;
 
+
 public class Arms extends SubsystemBase {
   private CANSparkMax armMotorController;
 
@@ -55,6 +56,10 @@ public class Arms extends SubsystemBase {
   public void runArmPower(double Percentage){
     armMotorController.set(Percentage);
   }
+
+  
+
+
 
   public void runArmPosition(double Position){
     armMotorController.getPIDController().setReference(Position, ControlType.kPosition);

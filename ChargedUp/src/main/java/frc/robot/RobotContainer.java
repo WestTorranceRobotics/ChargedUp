@@ -69,24 +69,24 @@ public class RobotContainer {
   }
 
   private void initSubsytems() {
-    driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+    //driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
     //intakesubsystem = new frc.robot.subsystems.Intake();
     
 
-    shootersubsystem = new frc.robot.subsystems.Shooter();
-    //armsubsystem = new frc.robot.subsystems.Arms();
+    //shootersubsystem = new frc.robot.subsystems.Shooter();
+    armsubsystem = new frc.robot.subsystems.Arms();
   }
 
   private void initCommands(){
-    driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
+    //driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
     //driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
     //runIntakeCommand = new RunIntake(intakesubsystem);
     //runOuttakeCommand = new RunOuttake(intakesubsystem);
     //driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
-    runShooterPower = new ShooterSetPower(shootersubsystem);
-    runShooterPID = new ShooterPIDController(shootersubsystem);
-    //runArmPosition = new RunArmPosition(armsubsystem);
-    //runArmPower = new RunArmPower(armsubsystem);
+    //runShooterPower = new ShooterSetPower(shootersubsystem);
+    //runShooterPID = new ShooterPIDController(shootersubsystem);
+    runArmPosition = new RunArmPosition(armsubsystem);
+    runArmPower = new RunArmPower(armsubsystem);
   }
 
 
@@ -105,9 +105,9 @@ public class RobotContainer {
     //driverRightTrigger.whileTrue(runOuttakeCommand);
    // driverRightTrigger.whileTrue(runArmPower);
     //driverLeftTrigger.whileTrue(runArmPosition);
-    driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);
-    driverRightTrigger.whileTrue(runShooterPower);
-    driverLeftTrigger.whileTrue(runShooterPID);
+    //driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);
+    driverRightTrigger.whileTrue(runArmPower);
+    driverLeftTrigger.whileTrue(runArmPosition);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
