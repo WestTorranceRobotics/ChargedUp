@@ -39,7 +39,7 @@ public class Arms extends SubsystemBase {
 
   private GenericEntry SBArmTargettedPosition = armTab.add("Arm Targetted Position", 0).withPosition(0, 2).getEntry();
   private GenericEntry SBArmTargettedPowerSpeed = armTab.add("Arm Targetted Power Speed", 0.15).withPosition(1, 2).getEntry();
-  
+  private GenericEntry SBArmHeldPID = armTab.add("Hold PID?",0).withPosition(0, 3).getEntry();
   /** Creates a new Arms. */
   public Arms() {
     armMotorController = new CANSparkMax(RobotMap.ArmConstants.armMotorID, MotorType.kBrushless);
@@ -113,6 +113,10 @@ public class Arms extends SubsystemBase {
     SBArmCurrentPosition.setDouble(armMotorController.getEncoder().getPosition());
     SBArmCurrentSpeed.setDouble(armMotorController.getEncoder().getVelocity());
 
+    if(SBArmHeldPID.getDouble(0) == 1){
+      runArmPosition(targettedPosition);
+    }
+    
 
 
 
