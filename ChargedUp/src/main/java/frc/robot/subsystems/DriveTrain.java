@@ -4,11 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,7 +25,7 @@ CANSparkMax rightFollower;
 
 DifferentialDrive differentialDrive;
 
-
+AHRS gyro;
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
@@ -47,7 +48,7 @@ rightFollower.follow(rightLeader);
 
 DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-
+AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   }
 
