@@ -4,10 +4,12 @@
 
 package frc.robot;
 
-import frc.robot.RobotMap.OperatorConstants;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.TankDrive;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,16 +18,29 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+Joystick leftstick;
+Joystick rightStick;
+
+DriveTrain driveTrain;
+
+TankDrive tankDrive;
+
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+
+Joystick leftStick = new Joystick(0);
+Joystick rightStick = new Joystick(0);
+
+
     // Configure the trigger bindings
     configureBindings();
+    configureDefaultCommands();
   }
 
   /**
@@ -46,6 +61,11 @@ public class RobotContainer {
 
   }
 
+  private void configureDefaultCommands(){
+
+driveTrain.setDefaultCommand(new TankDrive(leftstick, rightStick, driveTrain));
+
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
