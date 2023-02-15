@@ -16,6 +16,8 @@ public final class RobotMap {
 
   public static class ClawMap{
 
+//gear ratios: wheel turn: 10-1       limit switch: 2-1-10-1-80-18
+
 public static int controlModuleCANID = 0;
 
 public static int motionMotorCANID = 0;
