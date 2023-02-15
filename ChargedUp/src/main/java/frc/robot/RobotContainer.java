@@ -5,6 +5,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -37,10 +39,13 @@ TankDrive tankDrive;
 Joystick leftStick = new Joystick(0);
 Joystick rightStick = new Joystick(0);
 
+ShuffleboardTab display;
 
     // Configure the trigger bindings
     configureBindings();
     configureDefaultCommands();
+    configureShuffleBoard();
+
   }
 
   /**
@@ -64,6 +69,14 @@ Joystick rightStick = new Joystick(0);
   private void configureDefaultCommands(){
 
 driveTrain.setDefaultCommand(new TankDrive(leftstick, rightStick, driveTrain));
+
+  }
+
+  private void configureShuffleBoard(){
+
+ShuffleboardTab display = Shuffleboard.getTab("GyroYaw");
+
+display.addNumber("GyroYaw", driveTrain::getYaw);
 
   }
   /**
