@@ -19,9 +19,15 @@ public final class RobotMap {
 
   public final class ArmConstants{
     public static final int armMotorID =9;
-    public static final double kP = 0.0085; //Fast Far preset 0.0125
-    public static final double kI = 0.00000002; //0.000000125
-    public static final double kD = 0.036; //0.065
+    public static final double kP =  0.0125;
+    public static final double kI = 0.000000125;
+    public static final double kD = 0.065;
+     
+    //Default PID
+    //0.0085
+    //0.00000002
+    // 0.036
+
 
     //Fast and far PID preset
     // 0.0125
