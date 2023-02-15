@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DriveToYaw;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 
@@ -23,6 +25,8 @@ public class RobotContainer {
 
 Joystick leftstick;
 Joystick rightStick;
+
+JoystickButton leftTrigger;
 
 DriveTrain driveTrain;
 
@@ -58,6 +62,9 @@ ShuffleboardTab display;
    * joysticks}.
    */
   private void configureBindings() {
+
+leftTrigger.whileTrue(new DriveToYaw(leftTrigger, driveTrain));
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
 
