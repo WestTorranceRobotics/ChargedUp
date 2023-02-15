@@ -50,6 +50,9 @@ DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLea
 
 AHRS gyro = new AHRS(SPI.Port.kMXP);
 
+gyro.reset();
+gyro.zeroYaw();
+
   }
 
   public void tankDrive(double leftPower, double rightPower){
@@ -58,6 +61,11 @@ differentialDrive.tankDrive(leftPower, rightPower);
 
   }
 
+  public double getYaw(){
+
+return gyro.getYaw();
+
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
