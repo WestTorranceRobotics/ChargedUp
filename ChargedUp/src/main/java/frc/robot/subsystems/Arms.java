@@ -115,7 +115,8 @@ public class Arms extends SubsystemBase {
     runArmPosition(targettedPosition);
     
     if(targettedPosition == 0){
-      resetTargettedPosition();
+        armMotorController.getEncoder().setPosition(0);
+
     }
 
   }
