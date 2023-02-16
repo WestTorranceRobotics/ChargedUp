@@ -27,7 +27,7 @@ public class Arms extends SubsystemBase {
 
   private double targettedPowerVelocity;
   private double targettedPosition;
-
+  private double targettedSetPoint;
 
   private ShuffleboardTab armTab = Shuffleboard.getTab("ArmTab");
   private GenericEntry SBArmCurrentSpeed = armTab.add("Arm Current Velocity", 0).withPosition(0, 0).getEntry();
@@ -40,6 +40,11 @@ public class Arms extends SubsystemBase {
   private GenericEntry SBArmTargettedPosition = armTab.add("Arm Targetted Position", 0).withPosition(0, 2).getEntry();
   private GenericEntry SBArmTargettedPowerSpeed = armTab.add("Arm Targetted Power Speed", 0.15).withPosition(1, 2).getEntry();
   private GenericEntry SBArmHeldPID = armTab.add("Hold PID?",0).withPosition(0, 3).getEntry();
+  private GenericEntry SBResetArmPosition = armTab.add("Reset Position?",0).withPosition(1,3).getEntry();
+  private GenericEntry SBCurrentArmSetPoint = armTab.add("Current Arm Setpoint",0).withPosition(0, 4).getEntry();
+  private GenericEntry SBArmSetPointEnable = armTab.add("Enable Arm Set Point",0).withPosition(2, 3).getEntry();
+  
+  
   /** Creates a new Arms. */
   public Arms() {
     armMotorController = new CANSparkMax(RobotMap.ArmConstants.armMotorID, MotorType.kBrushless);
@@ -49,6 +54,7 @@ public class Arms extends SubsystemBase {
     armMotorController.setIdleMode(IdleMode.kBrake);
 
     targettedPosition = 0;
+    targettedSetPoint = 1;
     targettedPowerVelocity = 0.15;
   }
 
@@ -57,8 +63,62 @@ public class Arms extends SubsystemBase {
     armMotorController.set(Percentage);
   }
 
-  
 
+  
+  public void shuffleSetPoint(boolean increase){
+    if (increase){
+      if (targettedSetPoint +1 >=4){
+        targettedPosition = 0;
+      }
+      else{
+        targettedSetPoint += 1;
+      }
+
+      
+    }
+    else{
+      if(targettedSetPoint -1 <=-1){
+        targettedSetPoint = 3;
+      }
+      else{
+        targettedSetPoint -= 1;
+      }
+    }
+  }
+
+  public double getPoint(){
+    return targettedSetPoint; 
+  }
+
+  public void runSetPoint(){
+    if (targettedSetPoint ==0){
+      SBArmTargettedPosition.setDouble(-2);
+      targettedPosition = -2;
+    
+
+    }
+
+    else if (targettedSetPoint==1){
+      SBArmTargettedPosition.setDouble(14);
+      targettedPosition = 14;
+    }
+
+    else if (targettedSetPoint == 2){
+      SBArmTargettedPosition.setDouble(69);
+      targettedPosition = 69;
+    }
+    else if (targettedSetPoint ==3){
+      SBArmTargettedPosition.setDouble(91);
+      targettedPosition = 91;
+    }
+
+    runArmPosition(targettedPosition);
+    
+    if(targettedPosition == 0){
+      resetTargettedPosition();
+    }
+
+  }
 
 
   public void runArmPosition(double Position){
@@ -93,11 +153,16 @@ public class Arms extends SubsystemBase {
 
 
 
+
+
   
   
 
   @Override
   public void periodic() {
+    if (SBResetArmPosition.getDouble(0) ==1){
+      armMotorController.getEncoder().setPosition(0);
+    }
     if ((SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getP()) || (SBArmPIDI.getDouble(0)!= armMotorController.getPIDController().getI())||(SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getD(0))){
       setPID(SBArmPIDP.getDouble(0), SBArmPIDI.getDouble(0), SBArmPIDD.getDouble(0));
     }
@@ -112,9 +177,17 @@ public class Arms extends SubsystemBase {
 
     SBArmCurrentPosition.setDouble(armMotorController.getEncoder().getPosition());
     SBArmCurrentSpeed.setDouble(armMotorController.getEncoder().getVelocity());
+    SBCurrentArmSetPoint.setDouble(getPoint());
+
+    
+    
 
     if(SBArmHeldPID.getDouble(0) == 1){
       runArmPosition(targettedPosition);
+    }
+
+    if(SBArmSetPointEnable.getDouble(0) == 1){
+      runSetPoint();
     }
     
 

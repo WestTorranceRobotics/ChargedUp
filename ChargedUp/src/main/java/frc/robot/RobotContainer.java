@@ -4,6 +4,8 @@
 
 package frc.robot;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.DecreaseArmSetPoint;
+import frc.robot.commands.IncreaseArmSetPoint;
 import frc.robot.commands.RunArmPosition;
 import frc.robot.commands.RunArmPower;
 import frc.robot.commands.RunIntake;
@@ -20,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 /**
@@ -29,6 +33,8 @@ import edu.wpi.first.wpilibj.Joystick;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 public class RobotContainer {
   DriveTrain driverBaseSubsystem;
   Intake intakesubsystem;
@@ -42,12 +48,16 @@ public class RobotContainer {
   ShooterPIDController runShooterPID;
   RunArmPosition runArmPosition;
   RunArmPower runArmPower;
+  DecreaseArmSetPoint decreaseArmSetPoint;
+  IncreaseArmSetPoint increaseArmSetPoint;
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
   private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
   private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
+  private JoystickButton driverThreeButton = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickThreeButton);
+  private JoystickButton driverFiveButton = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickFiveButton);
 
 
   // The robot's subsystems and commands are defined here...
@@ -69,7 +79,8 @@ public class RobotContainer {
   }
 
   private void initSubsytems() {
-    //driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+    CameraServer.startAutomaticCapture();
+    driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
     //intakesubsystem = new frc.robot.subsystems.Intake();
     
 
@@ -87,6 +98,8 @@ public class RobotContainer {
     //runShooterPID = new ShooterPIDController(shootersubsystem);
     runArmPosition = new RunArmPosition(armsubsystem);
     runArmPower = new RunArmPower(armsubsystem);
+    decreaseArmSetPoint = new DecreaseArmSetPoint(armsubsystem);
+    increaseArmSetPoint = new IncreaseArmSetPoint(armsubsystem);
   }
 
 
@@ -109,8 +122,17 @@ public class RobotContainer {
     driverRightTrigger.whileTrue(runArmPower);
     driverLeftTrigger.whileTrue(runArmPosition);
 
+    driverThreeButton.onTrue(decreaseArmSetPoint);
+    driverFiveButton.onTrue(increaseArmSetPoint);
+    
+
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
+    
+  }
+  
+  private void configureShuffleBoard(){
+    
     
   }
 

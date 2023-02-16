@@ -22,7 +22,8 @@ public final class RobotMap {
     public static final double kP =  0.0125;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
-     
+    
+  
     //Default PID
     //0.0085
     //0.00000002
@@ -72,6 +73,8 @@ public final class JoyStickConstants{
   public static final int xboxControllerPort = 2;
   public static final int leftJoystickTrigger = 1;
   public static final int rightJoystickTrigger = 1;
+  public static final int rightJoystickThreeButton = 3;
+  public static final int rightJoystickFiveButton = 5;
 }
 
 
