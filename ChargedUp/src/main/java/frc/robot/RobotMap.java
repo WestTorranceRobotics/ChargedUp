@@ -75,6 +75,9 @@ public final class JoyStickConstants{
   public static final int rightJoystickTrigger = 1;
   public static final int rightJoystickThreeButton = 3;
   public static final int rightJoystickFiveButton = 5;
+
+  public static final int xboxControllerRightBack = 6;
+  public static final int xboxControllerRightTrigger = 8;
 }
 
 

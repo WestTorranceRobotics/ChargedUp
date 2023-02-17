@@ -51,6 +51,7 @@ public class RobotContainer {
   DecreaseArmSetPoint decreaseArmSetPoint;
   IncreaseArmSetPoint increaseArmSetPoint;
 
+  
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
@@ -58,7 +59,9 @@ public class RobotContainer {
   private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
   private JoystickButton driverThreeButton = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickThreeButton);
   private JoystickButton driverFiveButton = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickFiveButton);
-
+  private JoystickButton operatorRightBack = new JoystickButton(xboxController, RobotMap.JoyStickConstants.xboxControllerRightBack);
+  private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, RobotMap.JoyStickConstants.xboxControllerRightTrigger);
+  
 
   // The robot's subsystems and commands are defined here...
 
@@ -122,8 +125,12 @@ public class RobotContainer {
     driverRightTrigger.whileTrue(runArmPower);
     driverLeftTrigger.whileTrue(runArmPosition);
 
-    driverThreeButton.onTrue(decreaseArmSetPoint);
-    driverFiveButton.onTrue(increaseArmSetPoint);
+    //driverThreeButton.onTrue(decreaseArmSetPoint);
+    //driverFiveButton.onTrue(increaseArmSetPoint);
+    operatorRightBack.onTrue(increaseArmSetPoint);
+    operatorRightTrigger.onTrue(decreaseArmSetPoint);
+    
+
     
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,

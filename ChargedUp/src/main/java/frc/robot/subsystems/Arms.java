@@ -94,8 +94,6 @@ public class Arms extends SubsystemBase {
     if (targettedSetPoint ==0){
       SBArmTargettedPosition.setDouble(-2);
       targettedPosition = -2;
-    
-
     }
 
     else if (targettedSetPoint==1){
@@ -112,11 +110,14 @@ public class Arms extends SubsystemBase {
       targettedPosition = 91;
     }
 
+    if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()<=3)){
+      armMotorController.getEncoder().setPosition(0);
+
+    }
+
     runArmPosition(targettedPosition);
     
-    if(targettedPosition == 0){
-      resetTargettedPosition();
-    }
+ 
 
   }
 
