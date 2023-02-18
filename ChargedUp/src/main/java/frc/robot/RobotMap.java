@@ -17,42 +17,23 @@ public final class RobotMap {
     public static final int kDriverControllerPort = 0;
   }
 
-  public final class ArmConstants{
-    public static final int armMotorID =9;
-    public static final double kP =  0.0125;
-    public static final double kI = 0.000000125;
-    public static final double kD = 0.065;
-    
-  
-    //Default PID
-    //0.0085
-    //0.00000002
-    // 0.036
-
-
-    //Fast and far PID preset
-    // 0.0125
-    //0.000000125
-    ///0.065
-  }
-
 
   public final class IntakeConstants{
     public static final int intakeMotor1_ID = 6;
     public static final int intakeMotor2_ID = 7;
   }
   public final class ShooterConstants{
-    public static final int shooterLeader_ID = 12;
-    public static final int shooterFollower_ID = 7;
+    public static final int shooterLeader_ID = 6;
+    public static final int shooterFollower_ID = 9;
     public static final double kP = 0.00061675;
     public static final double kI = 0.00;
     public static final double kD =  0.52171675; 
   }
 
   public final class DriveTrainConstants{
-    public static final int leftLeader_ID = 4;
-    public static final int leftFollower_ID = 5;
-    public static final int rightLeader_ID = 1;
+    public static final int leftLeader_ID = 5;
+    public static final int leftFollower_ID = 4;
+    public static final int rightLeader_ID =2;
     public static final int rightFollower_ID = 3;
 
     public static final int rightLeaderEncoder1 = 5;
@@ -75,9 +56,13 @@ public final class JoyStickConstants{
   public static final int rightJoystickTrigger = 1;
   public static final int rightJoystickThreeButton = 3;
   public static final int rightJoystickFiveButton = 5;
-
   public static final int xboxControllerRightBack = 6;
   public static final int xboxControllerRightTrigger = 8;
+}
+
+public final class ArmMap{
+  public static final int leftArmMotorCANID = 8;
+  public static final int rightArmMotorCANID = 9;
 }
 
 
