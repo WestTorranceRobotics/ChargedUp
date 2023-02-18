@@ -4,27 +4,23 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Spindexer;
 
-public class TankDrive extends CommandBase {
+public class CounterClockwiseSpin extends CommandBase {
 
-private Joystick leftJoystick;
-private Joystick rightJoystick;
+JoystickButton operatorLB;
 
-private final DriveTrain driveTrain;
+Spindexer spindexer;
 
-  /** Creates a new TankDrive. */
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain driveTrain) {
+  /** Creates a new CounterClockwiseSpin. */
+  public CounterClockwiseSpin(JoystickButton operatorLB, Spindexer spindexer) {
 
-this.leftJoystick = leftJoystick;
-this.rightJoystick = rightJoystick;
+this.operatorLB = operatorLB;
+this.spindexer = spindexer;
 
-this.driveTrain = driveTrain;
-
-addRequirements(driveTrain);
-
+addRequirements(spindexer);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,17 +32,13 @@ addRequirements(driveTrain);
   @Override
   public void execute() {
 
-driveTrain.tankDrive(0.6, 0.6);
+spindexer.spinLeft();
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-
-driveTrain.tankDrive(0, 0);
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

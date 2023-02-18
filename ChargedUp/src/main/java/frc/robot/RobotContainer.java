@@ -4,16 +4,15 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.RobotMap;
+import frc.robot.commands.ClockwiseSpin;
+import frc.robot.commands.CounterClockwiseSpin;
+import frc.robot.subsystems.Spindexer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveToYaw;
-import frc.robot.commands.TankDrive;
-import frc.robot.subsystems.DriveTrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,33 +22,21 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class RobotContainer {
 
-Joystick leftstick;
-Joystick rightStick;
+public XboxController operator = new XboxController(0);
 
-JoystickButton leftTrigger;
+public JoystickButton operatorLB = new JoystickButton(operator, 5);
+public JoystickButton operatorRB = new JoystickButton(operator, 6);
 
-DriveTrain driveTrain;
-
-TankDrive tankDrive;
+Spindexer spindexer;
 
   // The robot's subsystems and commands are defined here...
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
 
-
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-
-Joystick leftStick = new Joystick(0);
-Joystick rightStick = new Joystick(0);
-
-ShuffleboardTab display;
-
     // Configure the trigger bindings
     configureBindings();
-    configureDefaultCommands();
-    configureShuffleBoard();
-
   }
 
   /**
@@ -63,34 +50,20 @@ ShuffleboardTab display;
    */
   private void configureBindings() {
 
-leftTrigger.whileTrue(new DriveToYaw(leftTrigger, driveTrain));
+operatorLB.whileTrue(new CounterClockwiseSpin(operatorLB, spindexer));
+operatorRB.whileTrue(new ClockwiseSpin(operatorRB, spindexer));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
   }
 
-  private void configureDefaultCommands(){
-
-driveTrain.setDefaultCommand(new TankDrive(leftstick, rightStick, driveTrain));
-
-  }
-
-  private void configureShuffleBoard(){
-
-ShuffleboardTab display = Shuffleboard.getTab("GyroYaw");
-
-display.addNumber("GyroYaw", driveTrain::getYaw);
-
-  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
+   *
+   * @return the command to run in autonomous
    */
-  //public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-
-  }
-//}
+ 
+}

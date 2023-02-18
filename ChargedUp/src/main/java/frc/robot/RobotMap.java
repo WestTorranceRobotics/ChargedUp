@@ -22,4 +22,12 @@ public static int leftFollowerCANID = 0;
 public static int rightFollowerCANID = 0;
 
   }
+
+  public static class SpindexerMap{
+
+public static int spinnerCANID = 0;
+
+public static double spinnerSpeed = 0;
+
+  }
 }
