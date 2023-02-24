@@ -11,6 +11,7 @@ import frc.robot.commands.ReleaseClaw;
 import frc.robot.commands.TurnClawDown;
 import frc.robot.commands.TurnClawUp;
 import frc.robot.subsystems.Claw;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -27,10 +28,12 @@ public class RobotContainer {
 
 private Claw claw;
 
-public JoystickButton operatorA;
-public JoystickButton operatorB;
-public JoystickButton operatorX;
-public JoystickButton operatorY;
+public XboxController operator = new XboxController(0);
+
+public JoystickButton operatorA = new JoystickButton(operator, 0);
+public JoystickButton operatorB = new JoystickButton(operator, 0);
+public JoystickButton operatorX = new JoystickButton(operator, 0);
+public JoystickButton operatorY = new JoystickButton(operator, 0);
 
 public JoystickButton operatorLT;
 
