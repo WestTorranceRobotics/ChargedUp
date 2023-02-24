@@ -60,9 +60,23 @@ public final class JoyStickConstants{
   public static final int xboxControllerRightTrigger = 8;
 }
 
-public final class ArmMap{
-  public static final int leftArmMotorCANID = 8;
-  public static final int rightArmMotorCANID = 9;
+public final class ArmConstants{
+  public static final int armMotorID =9;
+  public static final double kP =  0.0125;
+  public static final double kI = 0.000000125;
+  public static final double kD = 0.065;
+  
+
+  //Default PID
+  //0.0085
+  //0.00000002
+  // 0.036
+
+
+  //Fast and far PID preset
+  // 0.0125
+  //0.000000125
+  ///0.065
 }
 
 
