@@ -16,10 +16,10 @@ public final class RobotMap {
 
   public static class DriveTrainMap{
 
-public static int leftLeaderCANID = 0;
-public static int rightLeaderCANID = 0;
-public static int leftFollowerCANID = 0;
-public static int rightFollowerCANID = 0;
+public static int leftLeaderDeviceNumber = 0;
+public static int rightLeaderDeviceNumber = 0;
+public static int leftFollowerDeviceNumber = 0;
+public static int rightFollowerDeviceNumber = 0;
 
   }
 

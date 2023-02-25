@@ -13,7 +13,7 @@ import frc.robot.RobotMap;
 
 public class Spindexer extends SubsystemBase {
 
-CANSparkMax Spinner;
+public CANSparkMax Spinner;
 
   /** Creates a new Spindexer. */
   public Spindexer() {

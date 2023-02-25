@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -18,10 +20,10 @@ import frc.robot.RobotMap;
 
 public class DriveTrain extends SubsystemBase {
 
-CANSparkMax leftLeader;
-CANSparkMax rightLeader;
-CANSparkMax leftFollower;
-CANSparkMax rightFollower;
+public WPI_TalonSRX leftLeader;
+public WPI_TalonSRX rightLeader;
+public WPI_TalonSRX leftFollower;
+public WPI_TalonSRX rightFollower;
 
 DifferentialDrive differentialDrive;
 
@@ -30,15 +32,15 @@ AHRS gyro;
   /** Creates a new DriveTrain. */
   public DriveTrain() {
 
-CANSparkMax leftLeader = new CANSparkMax(RobotMap.DriveTrainMap.leftLeaderCANID, MotorType.kBrushless);
-CANSparkMax rightLeader = new CANSparkMax(RobotMap.DriveTrainMap.rightLeaderCANID, MotorType.kBrushless);
-CANSparkMax leftFollower = new CANSparkMax(RobotMap.DriveTrainMap.leftFollowerCANID, MotorType.kBrushless);
-CANSparkMax rightFollower = new CANSparkMax(RobotMap.DriveTrainMap.rightFollowerCANID, MotorType.kBrushless);
+WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainMap.leftLeaderDeviceNumber);
+WPI_TalonSRX rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainMap.rightLeaderDeviceNumber);
+WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainMap.leftFollowerDeviceNumber);
+WPI_TalonSRX rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainMap.rightFollowerDeviceNumber);
 
-leftLeader.setIdleMode(IdleMode.kBrake);
-rightLeader.setIdleMode(IdleMode.kBrake);
-leftFollower.setIdleMode(IdleMode.kBrake);
-rightFollower.setIdleMode(IdleMode.kBrake);
+leftLeader.setNeutralMode(NeutralMode.Brake);
+rightLeader.setNeutralMode(NeutralMode.Brake);
+leftFollower.setNeutralMode(NeutralMode.Brake);
+rightFollower.setNeutralMode(NeutralMode.Brake);
     
 rightLeader.setInverted(true);
 rightFollower.setInverted(true);
