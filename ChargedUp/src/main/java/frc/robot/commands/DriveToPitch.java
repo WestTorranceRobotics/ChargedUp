@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveTrain;
 
-public class DriveToYaw extends CommandBase {
+public class DriveToPitch extends CommandBase {
 
 JoystickButton leftTrigger;
 DriveTrain driveTrain;
 
   /** Creates a new DriveToYaw. */
-  public DriveToYaw(JoystickButton leftTrigger, DriveTrain driveTrain) {
+  public DriveToPitch(JoystickButton leftTrigger, DriveTrain driveTrain) {
 
 this.leftTrigger = leftTrigger;
 this.driveTrain = driveTrain;
@@ -31,15 +31,15 @@ addRequirements(driveTrain);
   @Override
   public void execute() {
 
-double currentYaw = driveTrain.getYaw();
+double currentPitch = driveTrain.getPitch();
 
-if (currentYaw > 0){
+if (currentPitch > 0){
 
 driveTrain.tankDrive(-0.1, -0.1);
 
 }
 
-if (currentYaw < 0){
+if (currentPitch < 0){
 
 driveTrain.tankDrive(0.1, 0.1);
 

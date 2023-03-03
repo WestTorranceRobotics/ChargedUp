@@ -17,9 +17,9 @@ public final class RobotMap {
   public static class DriveTrainMap{
 
 public static int leftLeaderCANID = 0;
-public static int rightLeaderCANID = 0;
-public static int leftFollowerCANID = 0;
-public static int rightFollowerCANID = 0;
+public static int rightLeaderCANID = 1;
+public static int leftFollowerCANID = 2;
+public static int rightFollowerCANID = 3;
 
   }
 }

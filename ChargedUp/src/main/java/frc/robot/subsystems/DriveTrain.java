@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,37 +19,37 @@ import frc.robot.RobotMap;
 
 public class DriveTrain extends SubsystemBase {
 
-CANSparkMax leftLeader;
-CANSparkMax rightLeader;
-CANSparkMax leftFollower;
-CANSparkMax rightFollower;
+// CANSparkMax leftLeader;
+// CANSparkMax rightLeader;
+// CANSparkMax leftFollower;
+// CANSparkMax rightFollower;
 
-DifferentialDrive differentialDrive;
+// DifferentialDrive differentialDrive;
 
-AHRS gyro;
+AHRS gyro = new AHRS(SPI.Port.kOnboardCS0);
 
   /** Creates a new DriveTrain. */
   public DriveTrain() {
 
-CANSparkMax leftLeader = new CANSparkMax(RobotMap.DriveTrainMap.leftLeaderCANID, MotorType.kBrushless);
-CANSparkMax rightLeader = new CANSparkMax(RobotMap.DriveTrainMap.rightLeaderCANID, MotorType.kBrushless);
-CANSparkMax leftFollower = new CANSparkMax(RobotMap.DriveTrainMap.leftFollowerCANID, MotorType.kBrushless);
-CANSparkMax rightFollower = new CANSparkMax(RobotMap.DriveTrainMap.rightFollowerCANID, MotorType.kBrushless);
+// CANSparkMax leftLeader = new CANSparkMax(RobotMap.DriveTrainMap.leftLeaderCANID, MotorType.kBrushless);
+// CANSparkMax rightLeader = new CANSparkMax(RobotMap.DriveTrainMap.rightLeaderCANID, MotorType.kBrushless);
+// CANSparkMax leftFollower = new CANSparkMax(RobotMap.DriveTrainMap.leftFollowerCANID, MotorType.kBrushless);
+// CANSparkMax rightFollower = new CANSparkMax(RobotMap.DriveTrainMap.rightFollowerCANID, MotorType.kBrushless);
 
-leftLeader.setIdleMode(IdleMode.kBrake);
-rightLeader.setIdleMode(IdleMode.kBrake);
-leftFollower.setIdleMode(IdleMode.kBrake);
-rightFollower.setIdleMode(IdleMode.kBrake);
+// leftLeader.setIdleMode(IdleMode.kBrake);
+// rightLeader.setIdleMode(IdleMode.kBrake);
+// leftFollower.setIdleMode(IdleMode.kBrake);
+// rightFollower.setIdleMode(IdleMode.kBrake);
     
-rightLeader.setInverted(true);
-rightFollower.setInverted(true);
+// rightLeader.setInverted(true);
+// rightFollower.setInverted(true);
 
-leftFollower.follow(leftLeader);
-rightFollower.follow(rightLeader);
+// leftFollower.follow(leftLeader);
+// rightFollower.follow(rightLeader);
 
-DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
+// DifferentialDrive differentialDrive = new DifferentialDrive(leftLeader, rightLeader);
 
-AHRS gyro = new AHRS(SPI.Port.kMXP);
+//gyro = new AHRS(SPI.Port.kMXP);
 
 gyro.reset();
 gyro.zeroYaw();
@@ -57,7 +58,7 @@ gyro.zeroYaw();
 
   public void tankDrive(double leftPower, double rightPower){
 
-differentialDrive.tankDrive(leftPower, rightPower);
+// differentialDrive.tankDrive(leftPower, rightPower);
 
   }
 
@@ -65,6 +66,10 @@ differentialDrive.tankDrive(leftPower, rightPower);
 
 return gyro.getYaw();
 
+  }
+
+  public double getPitch(){
+    return gyro.getPitch();
   }
   @Override
   public void periodic() {

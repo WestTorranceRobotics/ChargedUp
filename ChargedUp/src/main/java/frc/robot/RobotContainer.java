@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveToYaw;
+import frc.robot.commands.DriveToPitch;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 
@@ -23,12 +23,12 @@ import frc.robot.subsystems.DriveTrain;
  */
 public class RobotContainer {
 
-Joystick leftstick;
+Joystick leftStick;
 Joystick rightStick;
 
 JoystickButton leftTrigger;
 
-DriveTrain driveTrain;
+DriveTrain driveTrain = new DriveTrain();
 
 TankDrive tankDrive;
 
@@ -40,8 +40,8 @@ TankDrive tankDrive;
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
 
-Joystick leftStick = new Joystick(0);
-Joystick rightStick = new Joystick(0);
+    leftStick = new Joystick(0);
+    rightStick = new Joystick(0);
 
 ShuffleboardTab display;
 
@@ -63,27 +63,27 @@ ShuffleboardTab display;
    */
   private void configureBindings() {
 
-leftTrigger.whileTrue(new DriveToYaw(leftTrigger, driveTrain));
+//leftTrigger.whileTrue(new DriveToPitch(leftTrigger, driveTrain));
 
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
+    // Schedule `exampleMethodCommfrand` when the Xbox controller's B button is pressed,
     // cancelling on release.
 
   }
 
   private void configureDefaultCommands(){
 
-driveTrain.setDefaultCommand(new TankDrive(leftstick, rightStick, driveTrain));
+driveTrain.setDefaultCommand(new TankDrive(leftStick, rightStick, driveTrain));
 
   }
 
   private void configureShuffleBoard(){
 
-ShuffleboardTab display = Shuffleboard.getTab("GyroYaw");
+ShuffleboardTab display = Shuffleboard.getTab("GyroPitch");
 
-display.addNumber("GyroYaw", driveTrain::getYaw);
+display.addNumber("GyroPitch", driveTrain::getPitch);
 
   }
   /**
