@@ -5,10 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.LimeLight;
 
 public class PointToLime extends CommandBase {
+
+DriveTrain driveTrain;
+LimeLight limeLight;
+
   /** Creates a new PointToLime. */
-  public PointToLime() {
+  public PointToLime(DriveTrain driveTrain,LimeLight limeLight) {
+
+this.driveTrain = driveTrain;
+this.limeLight = limeLight;
+addRequirements(driveTrain,limeLight);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -18,15 +28,23 @@ public class PointToLime extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    driveTrain.TankDrive(limeLight.pidCaluculation(), limeLight.pidCaluculation()*-1);
+
+  
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    driveTrain.TankDrive(0, 0);
+    limeLight.reset();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return limeLight.getIsFinished();
   }
 }
