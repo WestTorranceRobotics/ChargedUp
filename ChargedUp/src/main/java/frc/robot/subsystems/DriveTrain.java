@@ -3,30 +3,35 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.math.MathUtil;
 
 
 public class DriveTrain extends SubsystemBase {
-  TalonSRX leftLeader;
-  TalonSRX leftFollower;
-  TalonSRX rightLeader;
-  TalonSRX rightFollower;
 
+  AHRS driveGyro;
+    
   Encoder rightFollowerEncoder;
   Encoder rightLeaderEncoder;
   Encoder leftLeaderEncoder;
@@ -36,33 +41,58 @@ public class DriveTrain extends SubsystemBase {
   DifferentialDrive drive;
   /** Creates a new DriveTrain. */
 
-  private ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
+  WPI_TalonSRX rightLeader;
+  WPI_TalonSRX rightFollower;
+  WPI_TalonSRX leftFollower;
+  WPI_TalonSRX leftLeader;
+  PIDController gyroPID;
+  double kP;
+  double kI;
+  double kD;
+
+  
+  ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
-  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 100).withPosition(0,1).withSize(2, 1).getEntry();
-   
+  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 50).withPosition(0,1).withSize(2, 1).getEntry();
+  private GenericEntry SBGyroYaw = drivesTab.add("Gyro Yaw X",0).withPosition(0, 2).getEntry();
+  private GenericEntry SBGyroPitch = drivesTab.add("Gyro Pitch",0).withPosition(1, 2).getEntry();
+  private GenericEntry SBGyroRoll = drivesTab.add("Gyro Roll",0).withPosition(2, 2).getEntry();
+  private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
+  private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
+  private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
+
   
     
   public DriveTrain() {
-    speedPercentage = 100;
+    
+    kP = RobotMap.DriveTrainConstants.gyroPIDkP;
+    kI = RobotMap.DriveTrainConstants.gyroPIDkI;
+    kD = RobotMap.DriveTrainConstants.gyroPIDkD;
+    driveGyro = new AHRS(SPI.Port.kMXP);
+    driveGyro.zeroYaw();
+    driveGyro.reset();
+    speedPercentage = 50;
+    gyroPID = new PIDController(kP, kI, kD);
+    gyroPID.setTolerance(5.0);
     //Variables
 
     SBSpeedPercentage.setDouble(100);
-    WPI_TalonSRX leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
-    WPI_TalonSRX leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
-    WPI_TalonSRX rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
-    WPI_TalonSRX rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
+    leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
+    leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
+    rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
+    rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
     //no encoders on kitbot
     //Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
     //Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
 
-leftLeader.setSafetyEnabled(true);
-leftFollower.setSafetyEnabled(true);
-rightLeader.setSafetyEnabled(true);
-rightFollower.setSafetyEnabled(true);
+// leftLeader.setSafetyEnabled(true);
+// leftFollower.setSafetyEnabled(true);
+// rightLeader.setSafetyEnabled(true);
+// rightFollower.setSafetyEnabled(true);
 
-
+    rightLeader.setInverted(true);
 
     drive = new DifferentialDrive(leftLeader,rightLeader);
 
@@ -101,21 +131,52 @@ rightFollower.setSafetyEnabled(true);
     speedPercentage = percent;
   }
 
+  public void resetGyroPID(double p, double i , double d){
+    gyroPID.setP(p);
+    gyroPID.setI(i);
+    gyroPID.setD(d);
 
 
+  }
 
-  
-  //SBLeftSpeed.setInteger(leftLeaderEncoder.get());
- //SBRightSpeed.setInteger(rightLeaderEncoder.get());
-  
+  public double getYaw(){
+    return driveGyro.getYaw();
+  }
+  public double getRoll(){
+    return driveGyro.getRoll();
+  }
 
+  public double getPitch(){
+    return driveGyro.getPitch();
+  }
+
+  public void gyroPIDDrive(){
+    double calculation = MathUtil.clamp(gyroPID.calculate(getPitch(), 0), -0.75, 0.75);
+    TankDrive(calculation, calculation);
+
+  }
+    
   
 
   @Override
   public void periodic() {
-   if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
-    SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
-   } 
+
+    if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
+      kP = SBGyroKp.getDouble(0);
+      kI = SBGyroKi.getDouble(0);
+      kD = SBGyroKd.getDouble(0);
+      resetGyroPID(kP, kI, kD);
+    }
+    //SBLeftSpeed.setInteger(leftLeaderEncoder.get());
+    //SBRightSpeed.setInteger(rightLeaderEncoder.get());
+
+    SBGyroYaw.setDouble(driveGyro.getYaw());
+    SBGyroPitch.setDouble(driveGyro.getPitch());
+    SBGyroRoll.setDouble(driveGyro.getRoll());
+
+    if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
+      SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
+    } 
     // This method will be called once per scheduler run
   }
 }
