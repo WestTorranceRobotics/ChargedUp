@@ -4,6 +4,7 @@
 
 package frc.robot;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.PointToLime;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.subsystems.DriveTrain;
@@ -30,6 +31,7 @@ public class RobotContainer {
   ArcadeDrive driveBaseArcadeDriveCommand;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
+  PointToLime pointToLimeCommand;
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
@@ -57,14 +59,14 @@ public class RobotContainer {
 
   private void initSubsytems() {
     driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
-    intakesubsystem = new frc.robot.subsystems.Intake();
+    //intakesubsystem = new frc.robot.subsystems.Intake();
   }
 
   private void initCommands(){
     driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
     driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
-    runIntakeCommand = new RunIntake(intakesubsystem);
-    runOuttakeCommand = new RunOuttake(intakesubsystem);
+    //runIntakeCommand = new RunIntake(intakesubsystem);
+    //runOuttakeCommand = new RunOuttake(intakesubsystem);
     driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
 
   }
@@ -80,9 +82,12 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+
+
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    driverLeftTrigger.whileTrue(runIntakeCommand);
-    driverRightTrigger.whileTrue(runOuttakeCommand);
+    //driverLeftTrigger.whileTrue(runIntakeCommand);
+    //driverRightTrigger.whileTrue(runOuttakeCommand);
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
