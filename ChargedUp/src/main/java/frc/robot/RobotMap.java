@@ -23,10 +23,10 @@ public final class RobotMap {
   }
 
   public final class DriveTrainConstants{
-    public static final int leftLeader_ID = 5;
-    public static final int leftFollower_ID = 4;
-    public static final int rightLeader_ID =2;
-    public static final int rightFollower_ID = 3;
+    public static final int leftLeader_ID = 1;
+    public static final int leftFollower_ID = 2;
+    public static final int rightLeader_ID =3;
+    public static final int rightFollower_ID = 4;
 
     public static final int rightLeaderEncoder1 = 5;
     public static final int leftleaderEncoder1 = 6;
@@ -36,6 +36,12 @@ public final class RobotMap {
     public static final int leftleaderEncoder2 = 10;
     public static final int rightFollowerEncoder2 = 11;
     public static final int leftFollowerEncoder2 = 12;
+
+    public static final double gyroPIDkP = 1;
+    public static final double gyroPIDkI = 0;
+    public static final double gyroPIDkD = 0;
+
+
 
 
 }
