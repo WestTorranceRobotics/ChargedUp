@@ -14,6 +14,7 @@ import frc.robot.commands.ShooterPIDController;
 import frc.robot.commands.ShooterSetPower;
 import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.ExtensionArms;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.TankDrive;
@@ -42,6 +43,9 @@ public class RobotContainer {
   Arms armsubsystem;
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
+  ExtensionArms extensionArmsSubSystem;
+  DecreaseArmSetPoint decreaseExtensionArmSetPoint;
+  IncreaseArmSetPoint increaseExtensArmSetPoint;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
   ShooterSetPower runShooterPower;
@@ -89,6 +93,7 @@ public class RobotContainer {
 
     //shootersubsystem = new frc.robot.subsystems.Shooter();
     armsubsystem = new frc.robot.subsystems.Arms();
+    extensionArmsSubSystem= new frc.robot.subsystems.ExtensionArms();
   }
 
   private void initCommands(){
@@ -129,6 +134,7 @@ public class RobotContainer {
     //driverFiveButton.onTrue(increaseArmSetPoint);
     operatorRightBack.onTrue(increaseArmSetPoint);
     operatorRightTrigger.onTrue(decreaseArmSetPoint);
+
     
 
     
@@ -139,8 +145,7 @@ public class RobotContainer {
   }
   
   private void configureShuffleBoard(){
-    
-    
+     
   }
 
   /**

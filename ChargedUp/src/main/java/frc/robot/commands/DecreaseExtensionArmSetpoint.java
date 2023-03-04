@@ -3,33 +3,31 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import frc.robot.subsystems.ExtensionArms;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arms;
 
-public class IncreaseArmSetPoint extends CommandBase {
-  /** Creates a new IncreaseArmSetPoint. */
+public class DecreaseExtensionArmSetpoint extends CommandBase {
+  /** Creates a new DecreaseExtensionArmSetpoint. */
+  ExtensionArms extensionArmsSubSystem;
+  boolean isFinished;
+  public DecreaseExtensionArmSetpoint(ExtensionArms extensionArms) {
+    this.extensionArmsSubSystem = extensionArms;
+    addRequirements(extensionArms);
+    isFinished = false;
 
-  boolean isFinished = false;
-  Arms armsubsystem;
-  public IncreaseArmSetPoint(Arms arms) {
-    armsubsystem = arms;
-    addRequirements(arms);
-    isFinished = true;
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armsubsystem.shuffleSetPoint(true);
-    isFinished = false;
-
+    extensionArmsSubSystem.shuffleSetPoint(false);
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.
