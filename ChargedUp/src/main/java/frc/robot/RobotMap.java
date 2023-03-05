@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
-
+import java.util.HashMap;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -12,7 +12,20 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+import edu.wpi.first.wpilibj2.command.Subsystem;
+
 public final class RobotMap {
+  public static final HashMap<String, Boolean> enable = new HashMap<String, Boolean>();
+
+
+
+  
+
+  
+
+
+  
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
@@ -28,15 +41,12 @@ public final class RobotMap {
     public static final int rightLeader_ID =3;
     public static final int rightFollower_ID = 4;
 
-    public static final int rightLeaderEncoder1 = 5;
-    public static final int leftleaderEncoder1 = 6;
-    public static final int rightFollowerEncoder1 = 7;
-    public static final int leftFollowerEncoder1 = 8;
-    public static final int rightLeaderEncoder2 = 9;
-    public static final int leftleaderEncoder2 = 10;
-    public static final int rightFollowerEncoder2 = 11;
-    public static final int leftFollowerEncoder2 = 12;
+    public static final int rightLeaderEncoder1 = 4;
+    public static final int rightLeaderEncoder2 = 5;
 
+    public static final int leftleaderEncoder1 = 2;
+    public static final int leftleaderEncoder2 = 3;
+    
     public static final double gyroPIDkP = 1;
     public static final double gyroPIDkI = 0;
     public static final double gyroPIDkD = 0;

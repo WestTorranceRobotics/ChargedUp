@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -16,8 +17,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
@@ -31,7 +34,9 @@ import edu.wpi.first.math.MathUtil;
 public class DriveTrain extends SubsystemBase {
 
   AHRS driveGyro;
-    
+  DigitalInput dumblimitswtich;
+  DigitalInput dumblimitswtich2;
+
   Encoder rightFollowerEncoder;
   Encoder rightLeaderEncoder;
   Encoder leftLeaderEncoder;
@@ -49,6 +54,8 @@ public class DriveTrain extends SubsystemBase {
   double kP;
   double kI;
   double kD;
+  Encoder rightEncoder;
+  Encoder leftEncoder;
 
   
   ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
@@ -61,6 +68,8 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
   private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
   private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
+  private GenericEntry SBDumbLimitSwitch = drivesTab.add("Dumb Limit Swithc",false).withPosition(0, 4).getEntry();
+  private GenericEntry SBDumbLimitSwitch2 = drivesTab.add("Dumb Limit Swithc 2",false).withPosition(1, 4).getEntry();
 
   
     
@@ -84,8 +93,10 @@ public class DriveTrain extends SubsystemBase {
     rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
     //no encoders on kitbot
-    //Encoder rightEncoder = new Encoder(RobotMap.DriveTrainConstants.rightLeaderEncoder1,RobotMap.DriveTrainConstants.rightLeaderEncoder2,false);
-    //Encoder leftEncoder = new Encoder(RobotMap.DriveTrainConstants.leftleaderEncoder1,RobotMap.DriveTrainConstants.leftleaderEncoder2,false);
+    rightEncoder = new Encoder(2,3,false,EncodingType.k2X);
+    leftEncoder = new Encoder(4,5,false,EncodingType.k2X);
+    dumblimitswtich = new DigitalInput(9);
+    //dumblimitswtich2 = new DigitalInput(8);
 
 // leftLeader.setSafetyEnabled(true);
 // leftFollower.setSafetyEnabled(true);
@@ -102,7 +113,7 @@ public class DriveTrain extends SubsystemBase {
     leftLeader.setInverted(true);
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
-    
+      
 
   }
 
@@ -155,11 +166,26 @@ public class DriveTrain extends SubsystemBase {
     TankDrive(calculation, calculation);
 
   }
-    
+
+  public double getLeftVelocity(){
+    return leftLeaderEncoder.get();
+  }
+  public double getRightVelocity(){
+    return rightLeaderEncoder.get();
+  }    
   
 
   @Override
   public void periodic() {
+    if (dumblimitswtich.get()){
+      SBDumbLimitSwitch.setBoolean(true);
+
+    }
+    else{
+      SBDumbLimitSwitch.setBoolean(false);
+
+    }
+    //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
     if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
       kP = SBGyroKp.getDouble(0);
@@ -167,8 +193,8 @@ public class DriveTrain extends SubsystemBase {
       kD = SBGyroKd.getDouble(0);
       resetGyroPID(kP, kI, kD);
     }
-    //SBLeftSpeed.setInteger(leftLeaderEncoder.get());
-    //SBRightSpeed.setInteger(rightLeaderEncoder.get());
+    //SBLeftSpeed.setDouble(getLeftVelocity());
+    //SBRightSpeed.setDouble(getRightVelocity());
 
     SBGyroYaw.setDouble(driveGyro.getYaw());
     SBGyroPitch.setDouble(driveGyro.getPitch());
