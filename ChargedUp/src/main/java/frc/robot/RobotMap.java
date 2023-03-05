@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+import java.util.EnumMap;
 import java.util.HashMap;
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -16,15 +17,73 @@ import java.util.HashMap;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public final class RobotMap {
-  public static final HashMap<String, Boolean> enable = new HashMap<String, Boolean>();
-
-
+  
+  public static boolean enableDrivetrain = true;
+  public static boolean enableClaw = true;
+  public static boolean enableIntake = true;
+  public static boolean enableLimelight = true;
+  public static boolean enableSpindexer = true;
+  public static boolean enableArm = true;
+  public static boolean enableExtensionArm = true;
 
   
+  public static int ads = 1;
+  public static class SpindexerMap{
 
+    public static int spinnerCANID = 0;
+  }
+
+  public final class ExtensionArmConstants{
+
+    public static final int armMotorID =9;
+    public static final double kP =  0.0125;
+    public static final double kI = 0.000000125;
+    public static final double kD = 0.065;
+  }
+
+  public final class ArmConstants{
+
+    
+
+
+    public static final int armMotorID =9;
+    public static final double kP =  0.0125;
+    public static final double kI = 0.000000125;
+    public static final double kD = 0.065;
+    
   
+    //Default PID
+    //0.0085
+    //0.00000002
+    // 0.036
+  
+  
+    //Fast and far PID preset
+    // 0.0125
+    //0.000000125
+    ///0.065
+  }
+  
+  
+  public static class ClawMap{
 
-
+    //gear ratios: wheel turn: 10-1       limit switch: 2-1-10-1-80-18
+    
+    public static int controlModuleCANID = 0;
+    
+    public static int motionMotorCANID = 0;
+    public static int powerMotorCANID = 0;
+    
+    public static int leftSolenoidPort = 0;
+    public static int rightSolenoidPort = 0;
+    
+    public static int upLimitSwitchChannel = 0;
+    public static int downLimitSwitchChannel = 0;
+    
+    public static double motionMotorFlipPower = 0.3;
+    public static double motionMotorTurnPower = 0.2;
+    public static double runClawPower = 0.5;
+  }
   
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
@@ -62,7 +121,10 @@ public final class JoyStickConstants{
   public static final int xboxControllerPort = 2;
   public static final int leftJoystickTrigger = 1;
   public static final int rightJoystickTrigger = 1;
+  public static final int rightJoystickThreeButton = 3;
+  public static final int rightJoystickFiveButton = 5;
+  public static final int xboxControllerRightBack = 6;
+  public static final int xboxControllerRightTrigger = 8;
 }
-
 
 }

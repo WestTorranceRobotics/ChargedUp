@@ -3,20 +3,40 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Arms;
+import frc.robot.subsystems.ExtensionArms;
+import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LimeLight;
+
+import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArcadeDrive;
+import frc.robot.commands.ClawInward;
+import frc.robot.commands.ClawOutward;
 import frc.robot.commands.PointToLime;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
-import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.commands.TankDrive;
+import frc.robot.commands.ClawSolenoid;
+import frc.robot.commands.ClawTurning;
+import frc.robot.commands.RunArmPosition;
+import frc.robot.commands.RunArmPower;
+import frc.robot.commands.ToggleArmSetpoint;
+import frc.robot.commands.ToggleExtensionArmSetpoint;
+
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import com.fasterxml.jackson.databind.util.PrimitiveArrayBuilder;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -25,19 +45,55 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 import edu.wpi.first.wpilibj.XboxController;
 public class RobotContainer {
+  
+  Arms armSubsystem;
+  ExtensionArms extensionArmSubsystem;
   DriveTrain driverBaseSubsystem;
+  LimeLight limelightSubsystem;
   Intake intakesubsystem;
+  Spindexer spindexerSubsystem;
+  Claw clawSubsystem;
+
+
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
   PointToLime pointToLimeCommand;
+  ClawSolenoid clawsolenoidExtend;
+  ClawSolenoid clawsolenoidRetract;
+  ClawTurning clawTurningClockwise;
+  ClawTurning clawTurningCounterClockwise; 
+  ClawInward clawInward;
+  ClawOutward clawOutward; 
+  RunArmPosition runArmPosition;
+  RunArmPower runArmPower;
+  ToggleArmSetpoint decreaseArmSetpoint;
+  ToggleExtensionArmSetpoint decreaseExtensionArmSetpoint;
+  ToggleArmSetpoint increaseArmSetpoint;
+  ToggleExtensionArmSetpoint increaseExtensionArmSetpoint;
+
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static final Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
   private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
   private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
+  
+  private JoystickButton operatorXbutton = new JoystickButton(xboxController, 0);
+  private JoystickButton operatorAbutton = new JoystickButton(xboxController, 1);
+  private JoystickButton operatorBbutton = new JoystickButton(xboxController, 2);
+  private JoystickButton operatorYbutton = new JoystickButton(xboxController, 3);
+  private JoystickButton operatorLeftBack = new JoystickButton(xboxController, 4);
+  private JoystickButton operatorRightBack = new JoystickButton(xboxController, 5);
+  private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 6);
+  private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 7);
+  private JoystickButton operatorBack = new JoystickButton(xboxController, 8);
+  private JoystickButton operatorStart = new JoystickButton(xboxController, 9);
+
+  
+
+
 
   // The robot's subsystems and commands are defined here...
 
@@ -58,17 +114,79 @@ public class RobotContainer {
   }
 
   private void initSubsytems() {
-    driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
-    //intakesubsystem = new frc.robot.subsystems.Intake();
-    //limelightSubSystem = new frc.robot.subsystems.LimeLight();
+    if (RobotMap.enableDrivetrain ){
+      driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
+    }
+
+    if (RobotMap.enableClaw){
+      clawSubsystem = new frc.robot.subsystems.Claw();
+    }
+
+    if (RobotMap.enableIntake){
+      intakesubsystem = new frc.robot.subsystems.Intake();
+    }
+
+    if(RobotMap.enableLimelight){
+      limelightSubsystem = new frc.robot.subsystems.LimeLight();
+    }
+
+    if(RobotMap.enableSpindexer){
+      spindexerSubsystem = new frc.robot.subsystems.Spindexer();
+    }
+
+    if (RobotMap.enableArm){
+      armSubsystem = new frc.robot.subsystems.Arms();
+    }
+
+    if(RobotMap.enableExtensionArm){
+      extensionArmSubsystem = new frc.robot.subsystems.ExtensionArms();
+    }
+    
   }
 
   private void initCommands(){
-    driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
-    driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
-    //runIntakeCommand = new RunIntake(intakesubsystem);
-    //runOuttakeCommand = new RunOuttake(intakesubsystem);
-    driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+
+    if (RobotMap.enableDrivetrain ){
+      driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
+      driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
+      driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);
+    }
+
+    if (RobotMap.enableClaw){
+      clawTurningClockwise = new ClawTurning(clawSubsystem, true);
+      clawTurningCounterClockwise = new ClawTurning(clawSubsystem, false);
+      clawsolenoidExtend = new ClawSolenoid(clawSubsystem, true);
+      clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
+      clawInward = new ClawInward(clawSubsystem);
+      clawOutward = new ClawOutward(clawSubsystem);
+
+    }
+
+    if (RobotMap.enableIntake){
+      runIntakeCommand = new RunIntake(intakesubsystem);
+      runOuttakeCommand = new RunOuttake(intakesubsystem);
+    }
+
+    if(RobotMap.enableLimelight && RobotMap.enableDrivetrain){
+      pointToLimeCommand = new PointToLime(driverBaseSubsystem, limelightSubsystem);
+    }
+
+    if(RobotMap.enableSpindexer){
+      
+    }
+
+    if (RobotMap.enableArm){
+      runArmPosition = new RunArmPosition(armSubsystem);
+      runArmPower = new RunArmPower(armSubsystem);
+      increaseArmSetpoint = new ToggleArmSetpoint(armSubsystem, true);
+      decreaseArmSetpoint = new ToggleArmSetpoint(armSubsystem, false);
+    }
+
+    if(RobotMap.enableExtensionArm){
+      increaseExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, true);
+      decreaseExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, false);
+    }
+ 
 
   }
 
@@ -86,12 +204,7 @@ public class RobotContainer {
 
 
 
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    //driverLeftTrigger.whileTrue(runIntakeCommand);
-    //driverRightTrigger.whileTrue(runOuttakeCommand);
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
+   
     
   }
 
