@@ -19,9 +19,13 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PneumaticsControlModule;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.I2C.Port;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer.Range;
 import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
@@ -34,18 +38,18 @@ import edu.wpi.first.math.MathUtil;
 public class DriveTrain extends SubsystemBase {
 
   AHRS driveGyro;
-  DigitalInput dumblimitswtich;
-  DigitalInput dumblimitswtich2;
+
 
   Encoder rightFollowerEncoder;
   Encoder rightLeaderEncoder;
   Encoder leftLeaderEncoder;
   Encoder leftFollowerEncoder;
   double speedPercentage;
+  Solenoid clawsolenoid;
   
   DifferentialDrive drive;
   /** Creates a new DriveTrain. */
-
+  PneumaticsControlModule pneumaticcontrolModule;
   WPI_TalonSRX rightLeader;
   WPI_TalonSRX rightFollower;
   WPI_TalonSRX leftFollower;
@@ -54,8 +58,10 @@ public class DriveTrain extends SubsystemBase {
   double kP;
   double kI;
   double kD;
-  Encoder rightEncoder;
-  Encoder leftEncoder;
+ 
+  Encoder rightEncoder = new Encoder(1,0,false,EncodingType.k2X);
+  //Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
+  
 
   
   ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
@@ -68,13 +74,14 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
   private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
   private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
-  private GenericEntry SBDumbLimitSwitch = drivesTab.add("Dumb Limit Swithc",false).withPosition(0, 4).getEntry();
-  private GenericEntry SBDumbLimitSwitch2 = drivesTab.add("Dumb Limit Swithc 2",false).withPosition(1, 4).getEntry();
-
+ 
   
     
   public DriveTrain() {
     
+    pneumaticcontrolModule = new PneumaticsControlModule(0);
+    clawsolenoid = new Solenoid(0,PneumaticsModuleType.CTREPCM, 0);
+
     kP = RobotMap.DriveTrainConstants.gyroPIDkP;
     kI = RobotMap.DriveTrainConstants.gyroPIDkI;
     kD = RobotMap.DriveTrainConstants.gyroPIDkD;
@@ -93,9 +100,7 @@ public class DriveTrain extends SubsystemBase {
     rightFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightFollower_ID);
     
     //no encoders on kitbot
-    rightEncoder = new Encoder(2,3,false,EncodingType.k2X);
-    leftEncoder = new Encoder(4,5,false,EncodingType.k2X);
-    dumblimitswtich = new DigitalInput(9);
+    
     //dumblimitswtich2 = new DigitalInput(8);
 
 // leftLeader.setSafetyEnabled(true);
@@ -110,11 +115,20 @@ public class DriveTrain extends SubsystemBase {
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
-    leftLeader.setInverted(true);
+    leftLeader.setInverted(false);
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
       
 
+  }
+
+  public void resetEncoder(){
+    //leftEncoder.reset();
+    rightEncoder.reset();
+  }
+
+  public void openClawSolenoid(){
+  
   }
 
 
@@ -168,23 +182,17 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getLeftVelocity(){
-    return leftLeaderEncoder.get();
+    //return leftLeaderEncoder.get();
+    return 0.0;
   }
   public double getRightVelocity(){
-    return rightLeaderEncoder.get();
+    return rightLeaderEncoder.getDistance();
   }    
   
 
   @Override
   public void periodic() {
-    if (dumblimitswtich.get()){
-      SBDumbLimitSwitch.setBoolean(true);
-
-    }
-    else{
-      SBDumbLimitSwitch.setBoolean(false);
-
-    }
+  
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
     if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
@@ -193,8 +201,10 @@ public class DriveTrain extends SubsystemBase {
       kD = SBGyroKd.getDouble(0);
       resetGyroPID(kP, kI, kD);
     }
-    //SBLeftSpeed.setDouble(getLeftVelocity());
-    //SBRightSpeed.setDouble(getRightVelocity());
+
+    SBRightSpeed.setDouble(getRightVelocity());
+    //SBLeftSpeed.setDouble(getLeftVelocity());    
+   
 
     SBGyroYaw.setDouble(driveGyro.getYaw());
     SBGyroPitch.setDouble(driveGyro.getPitch());
