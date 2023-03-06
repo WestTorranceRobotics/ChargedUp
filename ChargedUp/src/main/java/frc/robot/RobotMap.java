@@ -29,8 +29,10 @@ public final class RobotMap {
   
   public static int ads = 1;
   public static class SpindexerMap{
-
     public static int spinnerCANID = 0;
+    public static double motorRevToRotation = 1/100;
+    public static double spindexerSpeed = 0.75;
+    public static boolean clockwise = true;
   }
 
   public final class ExtensionArmConstants{
