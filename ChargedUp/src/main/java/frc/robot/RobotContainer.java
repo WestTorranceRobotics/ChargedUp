@@ -19,6 +19,8 @@ import frc.robot.commands.ClawOutward;
 import frc.robot.commands.PointToLime;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
+import frc.robot.commands.SpindexerClockwise;
+import frc.robot.commands.SpindexerCounterclockwise;
 import frc.robot.commands.ClawSolenoid;
 import frc.robot.commands.ClawTurning;
 import frc.robot.commands.RunArmPosition;
@@ -30,6 +32,7 @@ import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.fasterxml.jackson.databind.util.PrimitiveArrayBuilder;
@@ -68,10 +71,16 @@ public class RobotContainer {
   ClawOutward clawOutward; 
   RunArmPosition runArmPosition;
   RunArmPower runArmPower;
-  ToggleArmSetpoint decreaseArmSetpoint;
+  ToggleArmSetpoint startingArmSetpoint;
+  ToggleArmSetpoint rightPerpendicularArmSetpoint;
+  ToggleArmSetpoint leftPerpendicularArmSetpoint;
+  ToggleArmSetpoint leftFourtyFiveArmSetpoint;
+
   ToggleExtensionArmSetpoint decreaseExtensionArmSetpoint;
-  ToggleArmSetpoint increaseArmSetpoint;
   ToggleExtensionArmSetpoint increaseExtensionArmSetpoint;
+
+  SpindexerClockwise spindexerClockwise;
+  SpindexerCounterclockwise spindexerCounterClockwise;
 
 
   private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
@@ -90,6 +99,13 @@ public class RobotContainer {
   private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 7);
   private JoystickButton operatorBack = new JoystickButton(xboxController, 8);
   private JoystickButton operatorStart = new JoystickButton(xboxController, 9);
+
+  private POVButton operatorPOV90 = new POVButton(xboxController, 90);
+  private POVButton operatorPOV180 = new POVButton(xboxController, 180);
+  private POVButton operatorPOV270 = new POVButton(xboxController, 270);
+  private POVButton operatorPOV360 = new POVButton(xboxController, 360);
+
+  
 
   
 
@@ -174,14 +190,21 @@ public class RobotContainer {
     }
 
     if(RobotMap.enableSpindexer){
+      spindexerClockwise = new SpindexerClockwise(spindexerSubsystem);
+      spindexerCounterClockwise = new SpindexerCounterclockwise(spindexerSubsystem);
       
     }
 
     if (RobotMap.enableArm){
-      runArmPosition = new RunArmPosition(armSubsystem);
+      runArmPosition = new RunArmPosition(armSubsystem,xboxController);
+      armSubsystem.setDefaultCommand(runArmPosition);
+
       runArmPower = new RunArmPower(armSubsystem);
-      increaseArmSetpoint = new ToggleArmSetpoint(armSubsystem, true);
-      decreaseArmSetpoint = new ToggleArmSetpoint(armSubsystem, false);
+      startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0);
+      rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem, 1);
+      leftPerpendicularArmSetpoint = new ToggleArmSetpoint(armSubsystem, 2);
+      leftFourtyFiveArmSetpoint = new ToggleArmSetpoint(armSubsystem, 3);
+      
     }
 
     if(RobotMap.enableExtensionArm){
@@ -203,6 +226,27 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    //Operator -Ask Ishan
+
+    operatorLeftTrigger.whileTrue(startingArmSetpoint);
+    operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
+    operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
+    operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
+
+    operatorXbutton.whileTrue(clawInward);
+    operatorBbutton.whileTrue(clawOutward);
+    operatorYbutton.whileTrue(clawsolenoidExtend);
+    operatorAbutton.whileTrue(clawsolenoidRetract);
+
+    operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
+    operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
+    operatorPOV180.whileTrue(clawTurningClockwise);
+    operatorPOV360.whileTrue(clawTurningCounterClockwise);
+    operatorStart.whileTrue(spindexerClockwise);
+    operatorBack.whileTrue(spindexerCounterClockwise);
+    
+
 
 
 

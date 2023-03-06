@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.net.http.HttpResponse.PushPromiseHandler;
+
 import com.fasterxml.jackson.databind.node.ArrayNode;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -13,11 +15,11 @@ import frc.robot.subsystems.Arms;
 public class ToggleArmSetpoint extends CommandBase {
   boolean isFinished;
   Arms armsubsystem;
-  boolean increase;
+  int setpoint;
   /** Creates a new ToggleArmSetpoint. */
-  public ToggleArmSetpoint(Arms arms,boolean increase) {
-    this.increase = increase;
+  public ToggleArmSetpoint(Arms arms,int point) {
     this.armsubsystem = arms;
+    this.setpoint = point;
     isFinished = false;
     addRequirements(arms);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +32,10 @@ public class ToggleArmSetpoint extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armsubsystem.shuffleSetPoint(increase);
+    armsubsystem.setSetPoint(setpoint);
+    armsubsystem.toggleSetpoint(1);
+    armsubsystem.togglePosition(0);
+    
     isFinished = true;
   }
 

@@ -5,11 +5,14 @@
 package frc.robot.commands;
 import frc.robot.subsystems.Arms;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class RunArmPosition extends CommandBase {
   /** Creates a new RunArmPosition. */
   Arms armsubsystem;
-  public RunArmPosition(Arms armss) {
+  XboxController controller;
+  public RunArmPosition(Arms armss,XboxController Xbox) {
+    controller = Xbox;
     armsubsystem =armss;
     addRequirements(armss);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,13 +25,27 @@ public class RunArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    armsubsystem.runArmPosition(armsubsystem.getTargettedPosition());
+    if (controller.getLeftY() >= 0.1){
+      double currenttargetposition = armsubsystem.getTargettedPosition();
+      currenttargetposition += (controller.getLeftY()*5);
+      armsubsystem.toggleSetpoint(0);
+      armsubsystem.setTargttedPosition(currenttargetposition);
+      armsubsystem.togglePosition(1);
+      
+    }
+
+    else if (controller.getLeftY() <= -0.1){
+      double currenttargetposition = armsubsystem.getTargettedPosition();
+      currenttargetposition -= (controller.getLeftY()*5);
+      armsubsystem.toggleSetpoint(0);
+      armsubsystem.setTargttedPosition(currenttargetposition);
+      armsubsystem.togglePosition(1);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    armsubsystem.runArmPower(0);
   }
 
   // Returns true when the command should end.

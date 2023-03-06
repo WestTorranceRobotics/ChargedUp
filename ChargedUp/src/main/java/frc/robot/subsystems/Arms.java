@@ -63,30 +63,27 @@ public class Arms extends SubsystemBase {
     armMotorController.set(Percentage);
   }
 
-
-  
-  public void shuffleSetPoint(boolean increase){
-    if (increase){
-      if (targettedSetPoint +1 >=4){
-        targettedPosition = 0;
-      }
-      else{
-        targettedSetPoint += 1;
-      }
-
-      
-    }
-    else{
-      if(targettedSetPoint -1 <=-1){
-        targettedSetPoint = 3;
-      }
-      else{
-        targettedSetPoint -= 1;
-      }
-    }
+  public void setTargttedPosition(double target){
+    targettedPosition = target;
+    SBArmTargettedPosition.setDouble(target);
   }
 
-  public double getPoint(){
+  public void toggleSetpoint(int toggling){
+    SBArmSetPointEnable.setInteger(toggling);
+  }
+  public void togglePosition(int toggling){
+    SBArmHeldPID.setInteger(toggling);
+  }
+
+
+
+
+  
+  public void setSetPoint(int setpoint){
+    targettedSetPoint = setpoint;
+  }
+
+  public double getTargettedSetPoint(){
     return targettedSetPoint; 
   }
 
@@ -115,7 +112,8 @@ public class Arms extends SubsystemBase {
 
     }
 
-    runArmPosition(targettedPosition);
+    armMotorController.getPIDController().setReference(targettedPosition, ControlType.kPosition);
+
     
  
 
@@ -126,9 +124,16 @@ public class Arms extends SubsystemBase {
     armMotorController.getPIDController().setReference(Position, ControlType.kPosition);
   }
 
+  public void increaseTargettedPosition(double increase){
+    SBArmTargettedPosition.setDouble(SBArmTargettedPosition.getDouble(0)+increase);
+    targettedPosition += increase;
+  }
+
+
  public double getPosition(){
   return armMotorController.getEncoder().getPosition();
  } 
+
  public double getVelocity(){
   return armMotorController.getEncoder().getVelocity();
  }
@@ -164,9 +169,11 @@ public class Arms extends SubsystemBase {
     if (SBResetArmPosition.getDouble(0) ==1){
       armMotorController.getEncoder().setPosition(0);
     }
+
     if ((SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getP()) || (SBArmPIDI.getDouble(0)!= armMotorController.getPIDController().getI())||(SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getD(0))){
       setPID(SBArmPIDP.getDouble(0), SBArmPIDI.getDouble(0), SBArmPIDD.getDouble(0));
     }
+
 
     if (targettedPowerVelocity != SBArmTargettedPowerSpeed.getDouble(0)){
       targettedPowerVelocity = SBArmTargettedPowerSpeed.getDouble(0);
@@ -178,7 +185,7 @@ public class Arms extends SubsystemBase {
 
     SBArmCurrentPosition.setDouble(armMotorController.getEncoder().getPosition());
     SBArmCurrentSpeed.setDouble(armMotorController.getEncoder().getVelocity());
-    SBCurrentArmSetPoint.setDouble(getPoint());
+    SBCurrentArmSetPoint.setDouble(getTargettedSetPoint());
 
     
     
