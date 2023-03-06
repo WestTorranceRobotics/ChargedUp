@@ -130,3 +130,34 @@ public final class JoyStickConstants{
 }
 
 }
+
+
+/**
+
+spinnerCANID
+armMotorID
+controlModuleCANID = 0;
+    
+ motionMotorCANID = 0;
+ powerMotorCANID = 0;
+    
+   leftSolenoidPort = 0;
+rightSolenoidPort = 0;
+    
+ upLimitSwitchChannel = 0;
+ downLimitSwitchChannel = 0;
+ intakeMotor1_ID
+ intakeMotor2_ID
+
+ leftLeader_ID = 1;
+ leftFollower_ID = 2;
+rightLeader_ID =3;
+rightFollower_ID = 4;
+
+rightLeaderEncoder1 = 4;
+rightLeaderEncoder2 = 5;
+
+ leftleaderEncoder1 = 2;
+
+ leftleaderEncoder2 = 3;
+ */
