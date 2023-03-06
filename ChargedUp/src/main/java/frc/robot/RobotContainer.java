@@ -239,11 +239,14 @@ public class RobotContainer {
 
     operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
     operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
-    operatorPOV180.whileTrue(spindexerClockwise);
-    operatorPOV360.whileTrue(spindexerCounterClockwise);
-
-
+    operatorPOV180.whileTrue(clawTurningClockwise);
+    operatorPOV360.whileTrue(clawTurningCounterClockwise);
+    operatorStart.whileTrue(spindexerClockwise);
+    operatorBack.whileTrue(spindexerCounterClockwise);
     
+
+
+
 
    
     
