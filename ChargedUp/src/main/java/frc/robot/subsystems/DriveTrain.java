@@ -59,7 +59,7 @@ public class DriveTrain extends SubsystemBase {
   double kI;
   double kD;
  
-  Encoder rightEncoder = new Encoder(1,0,false,EncodingType.k2X);
+  Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
   //Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
   
 
