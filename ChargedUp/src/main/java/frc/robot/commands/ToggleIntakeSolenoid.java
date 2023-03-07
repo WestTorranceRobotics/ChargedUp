@@ -5,27 +5,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
-
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  DriveTrain drivetrain;
-
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
-    this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
-    addRequirements(drivetrain);
+import frc.robot.subsystems.Intake;
 
 
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  public TankDrive() {
-
+public class ToggleIntakeSolenoid extends CommandBase {
+  Intake intakeSubsystem;
+  /** Creates a new ToggleIntakeSolenoid. */
+  public ToggleIntakeSolenoid(Intake intake) {
+    this.intakeSubsystem = intake;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,24 +23,12 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    drivetrain.TankDrive(leftjoystick.getY(),rightjoystick.getY());
-
-
-
-    int x = 0;
-
+    intakeSubsystem.toggleSolenoid((!intakeSubsystem.getSolenoid()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-
-  public void end(boolean interrupted) {
-    drivetrain.StopDrive();
-  }
-
   public void end(boolean interrupted) {}
-
 
   // Returns true when the command should end.
   @Override

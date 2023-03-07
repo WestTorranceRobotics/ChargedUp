@@ -5,27 +5,20 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-
 import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.LimeLight;
 
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  DriveTrain drivetrain;
+public class PointToLime extends CommandBase {
 
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
-    this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
-    addRequirements(drivetrain);
+DriveTrain driveTrain;
+LimeLight limeLight;
 
+  /** Creates a new PointToLime. */
+  public PointToLime(DriveTrain driveTrain,LimeLight limeLight) {
 
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  public TankDrive() {
-
+this.driveTrain = driveTrain;
+this.limeLight = limeLight;
+addRequirements(driveTrain,limeLight);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,28 +29,22 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    driveTrain.TankDrive(limeLight.pidCaluculation(), limeLight.pidCaluculation()*-1);
 
-    drivetrain.TankDrive(leftjoystick.getY(),rightjoystick.getY());
-
-
-
-    int x = 0;
+  
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
-
   public void end(boolean interrupted) {
-    drivetrain.StopDrive();
+    driveTrain.TankDrive(0, 0);
+    limeLight.reset();
   }
-
-  public void end(boolean interrupted) {}
-
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return limeLight.getIsFinished();
   }
 }

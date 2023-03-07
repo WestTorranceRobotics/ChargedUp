@@ -3,29 +3,21 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import frc.robot.subsystems.Claw;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
-
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  DriveTrain drivetrain;
-
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
-    this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
-    addRequirements(drivetrain);
-
-
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  public TankDrive() {
-
+public class ClawTurning extends CommandBase {
+  /** Creates a new ClawTurning. */
+  Claw clawsubsystem;
+  boolean spindirection;
+  boolean isFinished;
+  public ClawTurning(Claw claw,boolean direction) {
+    this.clawsubsystem = claw;
+    this.spindirection = direction;
+    this.isFinished = false;
+    addRequirements(clawsubsystem);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,28 +28,29 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (spindirection){
+      clawsubsystem.clockFlip();
+      if (clawsubsystem.getUpSwitch()){
+        isFinished = true;
+      }
+    }
 
-    drivetrain.TankDrive(leftjoystick.getY(),rightjoystick.getY());
-
-
-
-    int x = 0;
-
+    else{
+      clawsubsystem.counterClockFlip();
+      if (clawsubsystem.getDownSwitch()){
+        isFinished = true;
+      }
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-
-  public void end(boolean interrupted) {
-    drivetrain.StopDrive();
-  }
-
   public void end(boolean interrupted) {}
-
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }
