@@ -10,10 +10,10 @@ import frc.robot.subsystems.ExtensionArms;
 public class ToggleExtensionArmSetpoint extends CommandBase {
   /** Creates a new ToggleExtensionArmSetpoint. */
   ExtensionArms extensionarmsubsystem;
-  boolean increase;
+  int setpoint;
   boolean isFinished;
-  public ToggleExtensionArmSetpoint(ExtensionArms extensionArms, boolean increase) {
-    this.increase = increase;
+  public ToggleExtensionArmSetpoint(ExtensionArms extensionArms, int point) {
+    this.setpoint = point;
     this.extensionarmsubsystem = extensionArms;
     isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
@@ -26,7 +26,9 @@ public class ToggleExtensionArmSetpoint extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    extensionarmsubsystem.shuffleSetPoint(increase);
+    extensionarmsubsystem.toggleArmPosition(0);
+    extensionarmsubsystem.shuffleSetPoint(setpoint);
+    extensionarmsubsystem.toggleArmSetpoint(1);
     isFinished = true;
   }
 

@@ -25,6 +25,7 @@ import frc.robot.commands.ClawSolenoid;
 import frc.robot.commands.ClawTurning;
 import frc.robot.commands.RunArmPosition;
 import frc.robot.commands.RunArmPower;
+import frc.robot.commands.RunExtensionArmPosition;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 
@@ -76,8 +77,13 @@ public class RobotContainer {
   ToggleArmSetpoint leftPerpendicularArmSetpoint;
   ToggleArmSetpoint leftFourtyFiveArmSetpoint;
 
-  ToggleExtensionArmSetpoint decreaseExtensionArmSetpoint;
-  ToggleExtensionArmSetpoint increaseExtensionArmSetpoint;
+  ToggleExtensionArmSetpoint startingExtensionArmSetpoint;
+  ToggleExtensionArmSetpoint midExtensionArmSetpoint;
+  ToggleExtensionArmSetpoint highExtensionArmSetpoint;
+
+
+  
+  RunExtensionArmPosition runExtensionArmPosition;
 
   SpindexerClockwise spindexerClockwise;
   SpindexerCounterclockwise spindexerCounterClockwise;
@@ -208,8 +214,12 @@ public class RobotContainer {
     }
 
     if(RobotMap.enableExtensionArm){
-      increaseExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, true);
-      decreaseExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, false);
+      runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, xboxController);
+      extensionArmSubsystem.setDefaultCommand(runExtensionArmPosition);
+      startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 0);
+      midExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 1);
+      highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 2);
+      
     }
  
 
@@ -228,16 +238,32 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Operator -Ask Ishan
-
-   // operatorLeftTrigger.whileTrue(startingArmSetpoint);
-    //operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
-    //operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
-    //operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
-
+    if (RobotMap.enableArm){
+    operatorLeftTrigger.whileTrue(startingArmSetpoint);
+    operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
+    operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
+    operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
+    }
+   
+    if (RobotMap.enableClaw){
     operatorXbutton.whileTrue(clawInward);
     operatorBbutton.whileTrue(clawOutward);
     operatorYbutton.whileTrue(clawsolenoidExtend);
     operatorAbutton.whileTrue(clawsolenoidRetract);
+    operatorPOV180.whileTrue(clawTurningClockwise);
+    operatorPOV360.whileTrue(clawTurningCounterClockwise);
+    }
+
+    if (RobotMap.enableSpindexer){
+    operatorStart.whileTrue(spindexerClockwise);
+    operatorBack.whileTrue(spindexerCounterClockwise);
+    }
+
+    if (RobotMap.enableExtensionArm){
+      operatorPOV90.whileTrue(startingArmSetpoint);
+      operatorPOV270.whileTrue(highExtensionArmSetpoint);
+    }
+
 
     //operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
     //operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
