@@ -25,21 +25,25 @@ public class RunArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double currenttargetposition = armsubsystem.getTargettedPosition();
+
     if (controller.getLeftY() >= 0.1){
-      double currenttargetposition = armsubsystem.getTargettedPosition();
+      if (currenttargetposition +(controller.getLeftY()*5) <= 300){
       currenttargetposition += (controller.getLeftY()*5);
       armsubsystem.toggleSetpoint(0);
       armsubsystem.setTargttedPosition(currenttargetposition);
       armsubsystem.togglePosition(1);
+      }
       
     }
 
     else if (controller.getLeftY() <= -0.1){
-      double currenttargetposition = armsubsystem.getTargettedPosition();
-      currenttargetposition -= (controller.getLeftY()*5);
-      armsubsystem.toggleSetpoint(0);
-      armsubsystem.setTargttedPosition(currenttargetposition);
-      armsubsystem.togglePosition(1);
+      if (currenttargetposition -(controller.getLeftY()*5) >= -300){
+        currenttargetposition -= (controller.getLeftY()*5);
+        armsubsystem.toggleSetpoint(0);
+        armsubsystem.setTargttedPosition(currenttargetposition);
+        armsubsystem.togglePosition(1);
+      }
     }
   }
 

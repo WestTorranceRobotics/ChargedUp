@@ -83,22 +83,22 @@ public class RobotContainer {
   SpindexerCounterclockwise spindexerCounterClockwise;
 
 
-  private static final XboxController xboxController = new XboxController(RobotMap.JoyStickConstants.xboxControllerPort);
+  private static final XboxController xboxController = new XboxController(3);
   private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
   private static final Joystick rightJoystick = new Joystick(RobotMap.JoyStickConstants.rightJoystickPort);
   private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
   private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
   
-  private JoystickButton operatorXbutton = new JoystickButton(xboxController, 0);
-  private JoystickButton operatorAbutton = new JoystickButton(xboxController, 1);
-  private JoystickButton operatorBbutton = new JoystickButton(xboxController, 2);
-  private JoystickButton operatorYbutton = new JoystickButton(xboxController, 3);
-  private JoystickButton operatorLeftBack = new JoystickButton(xboxController, 4);
-  private JoystickButton operatorRightBack = new JoystickButton(xboxController, 5);
-  private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 6);
-  private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 7);
-  private JoystickButton operatorBack = new JoystickButton(xboxController, 8);
-  private JoystickButton operatorStart = new JoystickButton(xboxController, 9);
+  private JoystickButton operatorXbutton = new JoystickButton(xboxController, 1);
+  private JoystickButton operatorAbutton = new JoystickButton(xboxController, 2);
+  private JoystickButton operatorBbutton = new JoystickButton(xboxController, 3);
+  private JoystickButton operatorYbutton = new JoystickButton(xboxController, 4);
+  private JoystickButton operatorLeftBack = new JoystickButton(xboxController, 5);
+  private JoystickButton operatorRightBack = new JoystickButton(xboxController, 6);
+  private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
+  private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
+  private JoystickButton operatorBack = new JoystickButton(xboxController, 9);
+  private JoystickButton operatorStart = new JoystickButton(xboxController, 10);
 
   private POVButton operatorPOV90 = new POVButton(xboxController, 90);
   private POVButton operatorPOV180 = new POVButton(xboxController, 180);
@@ -229,22 +229,22 @@ public class RobotContainer {
 
     //Operator -Ask Ishan
 
-    operatorLeftTrigger.whileTrue(startingArmSetpoint);
-    operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
-    operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
-    operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
+   // operatorLeftTrigger.whileTrue(startingArmSetpoint);
+    //operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
+    //operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
+    //operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
 
     operatorXbutton.whileTrue(clawInward);
     operatorBbutton.whileTrue(clawOutward);
     operatorYbutton.whileTrue(clawsolenoidExtend);
     operatorAbutton.whileTrue(clawsolenoidRetract);
 
-    operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
-    operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
-    operatorPOV180.whileTrue(clawTurningClockwise);
-    operatorPOV360.whileTrue(clawTurningCounterClockwise);
-    operatorStart.whileTrue(spindexerClockwise);
-    operatorBack.whileTrue(spindexerCounterClockwise);
+    //operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
+    //operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
+    //operatorPOV180.whileTrue(clawTurningClockwise);
+    //operatorPOV360.whileTrue(clawTurningCounterClockwise);
+    //operatorStart.whileTrue(spindexerClockwise);
+    //operatorBack.whileTrue(spindexerCounterClockwise);
     
 
 

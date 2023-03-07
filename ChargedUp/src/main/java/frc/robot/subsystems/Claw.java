@@ -43,7 +43,7 @@ CANSparkMax motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, Mot
 CANSparkMax powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
 
 Solenoid leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.leftSolenoidPort);
-Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
+//Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
 DigitalInput upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
 DigitalInput downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
@@ -59,7 +59,7 @@ powerMotor.set(power);
 public void extendClaw(boolean bol){
 
 leftSolenoid.set(bol);
-rightSolenoid.set(bol);
+//rightSolenoid.set(bol);
 
 }
 

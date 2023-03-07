@@ -60,7 +60,7 @@ public class DriveTrain extends SubsystemBase {
   double kD;
  
   Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
-  //Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
+  // Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
   
 
   
@@ -160,7 +160,7 @@ public class DriveTrain extends SubsystemBase {
     gyroPID.setP(p);
     gyroPID.setI(i);
     gyroPID.setD(d);
-
+    
 
   }
 
@@ -192,7 +192,8 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
+
+    System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
     if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
