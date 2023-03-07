@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.ExtensionArms;
@@ -29,6 +30,7 @@ import frc.robot.commands.RunExtensionArmPosition;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
+
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -137,7 +139,9 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
 
+
   XboxController controller = new XboxController(1);
+
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   //private final CommandXboxController m_driverController =
@@ -152,7 +156,7 @@ public class RobotContainer {
     initSubsytems();
     initCommands();
     // Configure the trigger bindings
-    configureBindings();
+    configureButtonBindings();
   }
 
   private void initSubsytems() {
@@ -256,6 +260,7 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
 
     //Operator -Ask Ishan
@@ -311,7 +316,7 @@ public class RobotContainer {
 
 
    
-    
+
   }
 
   /**

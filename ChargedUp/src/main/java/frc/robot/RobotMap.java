@@ -3,8 +3,10 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot;
+
 import java.util.EnumMap;
 import java.util.HashMap;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -161,3 +163,9 @@ rightLeaderEncoder2 = 5;
 
  leftleaderEncoder2 = 3;
  */
+
+public final class RobotMap {
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = 0;
+  }
+}

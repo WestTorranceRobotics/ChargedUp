@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -214,6 +215,7 @@ public class DriveTrain extends SubsystemBase {
     if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
       SetSpeedPercentage(SBSpeedPercentage.getDouble(100));
     } 
+
     // This method will be called once per scheduler run
   }
 }

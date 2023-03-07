@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -19,6 +20,12 @@ public class TankDrive extends CommandBase {
     this.leftjoystick = leftJoystick;
     this.rightjoystick = rightJoystick;
     addRequirements(drivetrain);
+
+
+public class TankDrive extends CommandBase {
+  /** Creates a new TankDrive. */
+  public TankDrive() {
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,17 +36,24 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     drivetrain.TankDrive(leftjoystick.getY(),rightjoystick.getY());
 
 
+
+    int x = 0;
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
+
   public void end(boolean interrupted) {
     drivetrain.StopDrive();
   }
+
+  public void end(boolean interrupted) {}
+
 
   // Returns true when the command should end.
   @Override
