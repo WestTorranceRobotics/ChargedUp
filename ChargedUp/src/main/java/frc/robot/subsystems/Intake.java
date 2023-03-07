@@ -52,6 +52,13 @@ public class Intake extends SubsystemBase {
     intakeMotor2.set(0);
   }
 
+  public void toggleSolenoid(Boolean bol){
+    solenoid.set(bol);
+  }
+
+  public boolean getSolenoid(){
+    return solenoid.get();
+  }
 
   @Override
   public void periodic() {

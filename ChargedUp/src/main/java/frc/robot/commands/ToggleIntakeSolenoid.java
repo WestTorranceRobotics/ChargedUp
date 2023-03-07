@@ -3,36 +3,32 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.Intake;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 
-public class RunIntake extends CommandBase {
-  Intake intakesubsystem;
-  /** Creates a new RunIntake. */
-  public RunIntake(Intake it) {
-    this.intakesubsystem = it;
-    addRequirements(it);
 
+public class ToggleIntakeSolenoid extends CommandBase {
+  Intake intakeSubsystem;
+  /** Creates a new ToggleIntakeSolenoid. */
+  public ToggleIntakeSolenoid(Intake intake) {
+    this.intakeSubsystem = intake;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakesubsystem.runIntake(false);
+    intakeSubsystem.toggleSolenoid((!intakeSubsystem.getSolenoid()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intakesubsystem.stopIntake();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
