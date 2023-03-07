@@ -25,7 +25,7 @@ public final class RobotMap {
   public static boolean enableSpindexer = false;
   public static boolean enableArm = false;
   public static boolean enableExtensionArm = false;
-
+                                                                       
   
   public static int ads = 1;
   public static class SpindexerMap{
@@ -73,14 +73,14 @@ public final class RobotMap {
     
     public static int controlModuleCANID = 0;
     
-    public static int motionMotorCANID = 0;
-    public static int powerMotorCANID = 0;
+    public static int motionMotorCANID = 7;
+    public static int powerMotorCANID = 11;
     
     public static int leftSolenoidPort = 0;
     public static int rightSolenoidPort = 0;
     
-    public static int upLimitSwitchChannel = 0;
-    public static int downLimitSwitchChannel = 0;
+    public static int upLimitSwitchChannel = 5;
+    public static int downLimitSwitchChannel = 6;
     
     public static double motionMotorFlipPower = 0.3;
     public static double motionMotorTurnPower = 0.2;
