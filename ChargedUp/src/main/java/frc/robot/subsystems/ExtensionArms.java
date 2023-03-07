@@ -30,6 +30,7 @@ public class ExtensionArms extends SubsystemBase {
   private double targettedPosition;
   private double targettedSetPoint;
   
+  
 
   private ShuffleboardTab extensionarmTab = Shuffleboard.getTab("Extension Arm");
   private GenericEntry SBArmCurrentSpeed = extensionarmTab.add("Arm Current Velocity", 0).withPosition(0, 0).getEntry();
@@ -64,25 +65,20 @@ public class ExtensionArms extends SubsystemBase {
     m_extensionarm.set(Percentage);
   }
 
-  public void shuffleSetPoint(boolean increase){
-    if (increase){
-      if (targettedSetPoint +1 >=4){
-        targettedPosition = 0;
-      }
-      else{
-        targettedSetPoint += 1;
-      }
+  public void shuffleSetPoint(int point){
+    targettedSetPoint = point;
+  }
 
-      
-    }
-    else{
-      if(targettedSetPoint -1 <=-1){
-        targettedSetPoint = 3;
-      }
-      else{
-        targettedSetPoint -= 1;
-      }
-    }
+  public void toggleArmSetpoint(int i){
+    SBArmSetPointEnable.setInteger(i);
+  }
+
+  public void toggleArmPosition(int i){
+    SBArmHeldPID.setInteger(i);
+  }
+
+  public void setTargettedPosition(double pos){
+    targettedPosition = pos;
   }
 
   public double getPoint(){
@@ -114,7 +110,8 @@ public class ExtensionArms extends SubsystemBase {
 
     }
 
-    runArmPosition(targettedPosition);
+    m_extensionarm.getPIDController().setReference(targettedPosition, ControlType.kPosition);
+
     
  
 
@@ -180,11 +177,11 @@ public class ExtensionArms extends SubsystemBase {
     
     
 
-    if(SBArmHeldPID.getDouble(0) == 1){
+    if(SBArmHeldPID.getInteger(0) == 1){
       runArmPosition(targettedPosition);
     }
 
-    if(SBArmSetPointEnable.getDouble(0) == 1){
+    if(SBArmSetPointEnable.getInteger(0) == 1){
       runSetPoint();
     }
      // This method will be called once per scheduler run
