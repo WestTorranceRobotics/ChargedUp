@@ -28,7 +28,7 @@ import frc.robot.commands.RunArmPower;
 import frc.robot.commands.RunExtensionArmPosition;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
-
+import frc.robot.commands.ToggleIntakeSolenoid;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -63,6 +63,7 @@ public class RobotContainer {
   ArcadeDrive driveBaseArcadeDriveCommand;
   RunIntake runIntakeCommand;
   RunOuttake runOuttakeCommand;
+  ToggleIntakeSolenoid toggleIntakeSolenoid;
   PointToLime pointToLimeCommand;
   ClawSolenoid clawsolenoidExtend;
   ClawSolenoid clawsolenoidRetract;
@@ -110,6 +111,23 @@ public class RobotContainer {
   private POVButton operatorPOV180 = new POVButton(xboxController, 180);
   private POVButton operatorPOV270 = new POVButton(xboxController, 270);
   private POVButton operatorPOV360 = new POVButton(xboxController, 360);
+
+  private JoystickButton driverLeftTopLeft = new JoystickButton(leftJoystick, 5);
+  private JoystickButton driverLeftTopRight = new JoystickButton(leftJoystick, 6);
+  private JoystickButton driverLeftBottomLeft = new JoystickButton(leftJoystick, 3);
+  private JoystickButton driverLeftBottomRight = new JoystickButton(leftJoystick, 4);
+  private JoystickButton driverLeftSide = new JoystickButton(leftJoystick, 2);
+
+  private JoystickButton driverRightTopLeft = new JoystickButton(rightJoystick, 5);
+  private JoystickButton driverRightTopRight = new JoystickButton(rightJoystick, 6);
+  private JoystickButton driverRightBottomLeft = new JoystickButton(rightJoystick, 3);
+  private JoystickButton driverRightBottomRight = new JoystickButton(rightJoystick, 4);
+  private JoystickButton driverRightSide = new JoystickButton(rightJoystick, 2);
+
+
+
+
+
 
   
 
@@ -187,8 +205,11 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableIntake){
+      toggleIntakeSolenoid = new ToggleIntakeSolenoid(intakesubsystem);
       runIntakeCommand = new RunIntake(intakesubsystem);
       runOuttakeCommand = new RunOuttake(intakesubsystem);
+      
+
     }
 
     if(RobotMap.enableLimelight && RobotMap.enableDrivetrain){
@@ -263,6 +284,19 @@ public class RobotContainer {
       operatorPOV90.whileTrue(startingArmSetpoint);
       operatorPOV270.whileTrue(highExtensionArmSetpoint);
     }
+
+    if (RobotMap.enableIntake){
+      driverLeftTrigger.whileTrue(runOuttakeCommand);
+      driverRightTrigger.whileTrue(runIntakeCommand);
+      driverRightTopLeft.whileTrue(toggleIntakeSolenoid);
+      
+    }
+
+    if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
+      driverLeftTopRight.whileTrue(pointToLimeCommand);
+    }
+
+    
 
 
     //operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
