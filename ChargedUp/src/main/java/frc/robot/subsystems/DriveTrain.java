@@ -61,13 +61,15 @@ public class DriveTrain extends SubsystemBase {
   double kD;
  
   Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
-  // Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
+  Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
   
 
   
   ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
+  private GenericEntry SBRightPosition =  drivesTab.add("Right Distance", 0).withPosition(2, 0).getEntry();
+  private GenericEntry SBLeftPosition =  drivesTab.add("Left Distance", 0).withPosition(3, 0).getEntry();
   private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 50).withPosition(0,1).withSize(2, 1).getEntry();
   private GenericEntry SBGyroYaw = drivesTab.add("Gyro Yaw X",0).withPosition(0, 2).getEntry();
   private GenericEntry SBGyroPitch = drivesTab.add("Gyro Pitch",0).withPosition(1, 2).getEntry();
@@ -176,6 +178,14 @@ public class DriveTrain extends SubsystemBase {
     return driveGyro.getPitch();
   }
 
+  public double getRightDistance(){
+    return rightEncoder.getDistance();
+  }
+
+  public double getLeftDistance(){
+    return leftEncoder.getDistance();
+  }
+
   public void gyroPIDDrive(){
     double calculation = MathUtil.clamp(gyroPID.calculate(getPitch(), 0), -0.75, 0.75);
     TankDrive(calculation, calculation);
@@ -187,14 +197,14 @@ public class DriveTrain extends SubsystemBase {
     return 0.0;
   }
   public double getRightVelocity(){
-    return rightLeaderEncoder.getDistance();
+    return rightEncoder.getDistance();
   }    
   
 
   @Override
   public void periodic() {
 
-    System.out.println("Right Encoder: " + rightEncoder.get());
+    //System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
     if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
@@ -205,12 +215,16 @@ public class DriveTrain extends SubsystemBase {
     }
 
     SBRightSpeed.setDouble(getRightVelocity());
-    //SBLeftSpeed.setDouble(getLeftVelocity());    
+    SBLeftSpeed.setDouble(getLeftVelocity());
+    SBRightPosition.setDouble(getRightDistance());
+    SBLeftPosition.setDouble(getLeftDistance());
    
 
     SBGyroYaw.setDouble(driveGyro.getYaw());
     SBGyroPitch.setDouble(driveGyro.getPitch());
     SBGyroRoll.setDouble(driveGyro.getRoll());
+
+    //drivesTab.addDouble("HI", this::getRightVelocity);
 
     if (speedPercentage!= SBSpeedPercentage.getDouble(100)){
       SetSpeedPercentage(SBSpeedPercentage.getDouble(100));

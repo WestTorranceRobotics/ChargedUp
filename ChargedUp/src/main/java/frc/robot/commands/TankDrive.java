@@ -20,13 +20,6 @@ public class TankDrive extends CommandBase {
     this.leftjoystick = leftJoystick;
     this.rightjoystick = rightJoystick;
     addRequirements(drivetrain);
-
-
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  public TankDrive() {
-
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -51,9 +44,6 @@ public class TankDrive extends CommandBase {
   public void end(boolean interrupted) {
     drivetrain.StopDrive();
   }
-
-  public void end(boolean interrupted) {}
-
 
   // Returns true when the command should end.
   @Override
