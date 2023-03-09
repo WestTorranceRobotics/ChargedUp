@@ -20,14 +20,14 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public final class RobotMap {
   
-  public static boolean enableDrivetrain = false;
-  public static boolean enableClaw = true;
+  public static boolean enableDrivetrain = true;
+  public static boolean enableClaw = false;
   public static boolean enableIntake = false;
   public static boolean enableLimelight = false;
   public static boolean enableSpindexer = false;
   public static boolean enableArm = false;
   public static boolean enableExtensionArm = false;
-                                                                       
+                                                                     
   
   public static int ads = 1;
   public static class SpindexerMap{
@@ -149,7 +149,7 @@ rightSolenoidPort = 0;
  upLimitSwitchChannel = 0;
  downLimitSwitchChannel = 0;
  intakeMotor1_ID
- intakeMotor2_ID
+ intakeMotor2_I
 
  leftLeader_ID = 1;
  leftFollower_ID = 2;
@@ -163,9 +163,3 @@ rightLeaderEncoder2 = 5;
 
  leftleaderEncoder2 = 3;
  */
-
-public final class RobotMap {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-}
