@@ -15,18 +15,18 @@ import frc.robot.RobotMap;
 public class Spindexer extends SubsystemBase {
 
   public CANSparkMax Spinner;
-  private RelativeEncoder encoder;
+  //private RelativeEncoder encoder;
 
   /** Creates a new Spindexer. */
   public Spindexer() {
-    CANSparkMax Spinner = new CANSparkMax(RobotMap.SpindexerMap.spinnerCANID, MotorType.kBrushless);
+    Spinner = new CANSparkMax(RobotMap.SpindexerMap.spinnerCANID, MotorType.kBrushless);
 
     Spinner.setIdleMode(IdleMode.kBrake);
     Spinner.setInverted(RobotMap.SpindexerMap.clockwise);
 
-    encoder = Spinner.getEncoder();
-    encoder.setPositionConversionFactor(RobotMap.SpindexerMap.motorRevToRotation);
-    encoder.setInverted(RobotMap.SpindexerMap.clockwise);
+    // encoder = Spinner.getEncoder();
+    // encoder.setPositionConversionFactor(RobotMap.SpindexerMap.motorRevToRotation);
+    // encoder.setInverted(RobotMap.SpindexerMap.clockwise);
   }
   
   public void spin(double power){
@@ -34,11 +34,11 @@ public class Spindexer extends SubsystemBase {
   }
 
   public double GetPosition(){
-    return encoder.getPosition();
+    return Spinner.getEncoder().getPosition();
   }
 
   public void ResetPosition(){
-    encoder.setPosition(0);
+    Spinner.getEncoder().setPosition(0);
   }
 
   @Override

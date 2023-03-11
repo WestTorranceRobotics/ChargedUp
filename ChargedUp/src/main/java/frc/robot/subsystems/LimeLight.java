@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LimeLight extends SubsystemBase {
   private PIDController limePIDController;
   private boolean isFinished;
-
+  
 
   /** Creates a new LimeLight. */
   public LimeLight() {
@@ -27,6 +27,12 @@ public class LimeLight extends SubsystemBase {
 
   public double getTX() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+  }
+
+  public void setPipeline(int pipline){
+
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").setInteger(pipline);
+
   }
 
   public double pidCaluculation(){

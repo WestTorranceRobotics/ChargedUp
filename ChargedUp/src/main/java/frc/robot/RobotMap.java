@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.EnumMap;
 import java.util.HashMap;
 
+import org.ejml.dense.row.decompose.TriangularSolver_CDRM;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -20,13 +22,13 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public final class RobotMap {
   
-  public static boolean enableDrivetrain = true;
-  public static boolean enableClaw = false;
+  public static boolean enableDrivetrain = false;
+  public static boolean enableClaw = true;
   public static boolean enableIntake = false;
   public static boolean enableLimelight = false;
   public static boolean enableSpindexer = false;
   public static boolean enableArm = false;
-  public static boolean enableExtensionArm = false;
+  public static boolean enableExtensionArm = true;
                                                                      
   
   public static int ads = 1;
@@ -39,7 +41,7 @@ public final class RobotMap {
 
   public final class ExtensionArmConstants{
 
-    public static final int armMotorID =9;
+    public static final int armMotorID =14;
     public static final double kP =  0.0125;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
@@ -50,8 +52,8 @@ public final class RobotMap {
     
 
 
-    public static final int armMotorID =9;
-    public static final double kP =  0.0125;
+    public static final int armMotorID =6;
+    public static final double kP =  0.025;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
     
@@ -75,11 +77,11 @@ public final class RobotMap {
     
     public static int controlModuleCANID = 0;
     
-    public static int motionMotorCANID = 7;
-    public static int powerMotorCANID = 11;
+    public static int motionMotorCANID = 11;
+    public static int powerMotorCANID = 7;
     
-    public static int leftSolenoidPort = 0;
-    public static int rightSolenoidPort = 0;
+    public static int leftSolenoidPort = 1;
+    public static int rightSolenoidPort = 1;
     
     public static int upLimitSwitchChannel = 5;
     public static int downLimitSwitchChannel = 6;
@@ -94,8 +96,8 @@ public final class RobotMap {
   }
 
   public final class IntakeConstants{
-    public static final int intakeMotor1_ID = 6;
-    public static final int intakeMotor2_ID = 7;
+    public static final int intakeMotor1_ID = 5;
+    public static final int intakeMotor2_ID = 8;
   }
 
   public final class DriveTrainConstants{

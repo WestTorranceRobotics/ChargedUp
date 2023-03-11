@@ -10,9 +10,11 @@ import frc.robot.subsystems.Intake;
 
 public class ToggleIntakeSolenoid extends CommandBase {
   Intake intakeSubsystem;
+  boolean isFinished;
   /** Creates a new ToggleIntakeSolenoid. */
   public ToggleIntakeSolenoid(Intake intake) {
     this.intakeSubsystem = intake;
+    this.isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -24,6 +26,7 @@ public class ToggleIntakeSolenoid extends CommandBase {
   @Override
   public void execute() {
     intakeSubsystem.toggleSolenoid((!intakeSubsystem.getSolenoid()));
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +36,6 @@ public class ToggleIntakeSolenoid extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

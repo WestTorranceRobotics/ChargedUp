@@ -10,9 +10,11 @@ import frc.robot.subsystems.Claw;
 public class ClawInward extends CommandBase {
   /** Creates a new ClawInward. */
   Claw clawSubsystem;
+  Boolean isFinished;
   public ClawInward(Claw claw) {
     this.clawSubsystem = claw;
     addRequirements(claw);
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,12 +25,15 @@ public class ClawInward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawSubsystem.runClaw(0.5);
+    clawSubsystem.runClaw(-0.5);
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    clawSubsystem.runClaw(0);
+  }
 
   // Returns true when the command should end.
   @Override

@@ -82,8 +82,8 @@ public class DriveTrain extends SubsystemBase {
     
   public DriveTrain() {
     
-    pneumaticcontrolModule = new PneumaticsControlModule(0);
-    clawsolenoid = new Solenoid(0,PneumaticsModuleType.CTREPCM, 0);
+    //pneumaticcontrolModule = new PneumaticsControlModule(0);
+    //clawsolenoid = new Solenoid(0,PneumaticsModuleType.CTREPCM, 0);
 
     kP = RobotMap.DriveTrainConstants.gyroPIDkP;
     kI = RobotMap.DriveTrainConstants.gyroPIDkI;

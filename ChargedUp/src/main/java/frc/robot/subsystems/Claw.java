@@ -9,6 +9,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -18,6 +19,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.networktables.GenericEntry;
+
+
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 
@@ -34,19 +41,27 @@ boolean direction;
 DigitalInput upLimitSwitch;
 DigitalInput downLimitSwitch;
 
+private ShuffleboardTab clawTab = Shuffleboard.getTab("ClawTab");
+private GenericEntry SBLeftLimit = clawTab.add("Left limit switch", false).withPosition(0, 0).getEntry();
+private GenericEntry SBRightLimit = clawTab.add("Right limit switch", false).withPosition(1, 0).getEntry();
+
+
+
   /** Creates a new Claw. */
   public Claw() {
+    PneumaticsControlModule controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
 
-PneumaticsControlModule controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
+    // controlModule.enableCompressorAnalog(110, 120);
 direction = true;
-CANSparkMax motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
-CANSparkMax powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
-
-Solenoid leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.leftSolenoidPort);
+motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
+powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
+powerMotor.setIdleMode(IdleMode.kBrake);
+motionMotor.setIdleMode(IdleMode.kBrake);
+leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
-DigitalInput upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
-DigitalInput downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
+upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
+downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
 
   }
 
@@ -96,6 +111,12 @@ motionMotor.set(RobotMap.ClawMap.motionMotorFlipPower);
 if (getDownSwitch() == true){
   motionMotor.stopMotor();
 }
+
+}
+@Override
+public void periodic() {
+  SBLeftLimit.setBoolean(getDownSwitch());
+  SBRightLimit.setBoolean(getUpSwitch());
 
 }
 }
