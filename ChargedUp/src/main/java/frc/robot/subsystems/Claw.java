@@ -11,6 +11,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsControlModule;
@@ -25,6 +26,8 @@ public class Claw extends SubsystemBase {
 
 PneumaticsControlModule controlModule;
 
+Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
+
 CANSparkMax motionMotor;
 CANSparkMax powerMotor;
 
@@ -33,16 +36,18 @@ Solenoid rightSolenoid;
 boolean direction;
 DigitalInput upLimitSwitch;
 DigitalInput downLimitSwitch;
+//PneumaticsControlModule controlModule
 
   /** Creates a new Claw. */
   public Claw() {
+    controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
 
-PneumaticsControlModule controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
-direction = true;
-CANSparkMax motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
-CANSparkMax powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
-
-Solenoid leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.leftSolenoidPort);
+compressor.enableDigital();
+ direction = true;
+ motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
+ powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
+powerMotor.restoreFactoryDefaults();
+//Solenoid leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.leftSolenoidPort);
 //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
 DigitalInput upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
@@ -58,7 +63,7 @@ powerMotor.set(power);
 
 public void extendClaw(boolean bol){
 
-leftSolenoid.set(bol);
+//leftSolenoid.set(bol);
 //rightSolenoid.set(bol);
 
 }

@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     intakeMotor1 = new WPI_TalonSRX(RobotMap.IntakeConstants.intakeMotor1_ID) ;
     intakeMotor2 = new WPI_TalonSRX(RobotMap.IntakeConstants.intakeMotor2_ID) ;
-    solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+   // solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
     intakeMotor1.setInverted(false);
     intakeMotor2.setInverted(false);
@@ -37,12 +37,12 @@ public class Intake extends SubsystemBase {
 
   public void runIntake(boolean inverted){
     if (inverted){
-    intakeMotor1.set(0.8);
-    intakeMotor2.set(-0.8);
+    intakeMotor1.set(0.6);
+    intakeMotor2.set(-0.6);
     }
     else{ 
-    intakeMotor1.set(-0.8);
-    intakeMotor2.set(0.8);
+    intakeMotor1.set(-0.6);
+    intakeMotor2.set(0.6);
     }
  
   }
@@ -52,12 +52,36 @@ public class Intake extends SubsystemBase {
     intakeMotor2.set(0);
   }
 
+
   public void toggleSolenoid(Boolean bol){
-    solenoid.set(bol);
+    //solenoid.set(bol);
   }
 
   public boolean getSolenoid(){
-    return solenoid.get();
+    //return solenoid.get();
+    return false;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
   @Override

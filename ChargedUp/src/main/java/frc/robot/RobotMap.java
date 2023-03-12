@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public final class RobotMap {
   
-  public static boolean enableDrivetrain = false;
-  public static boolean enableClaw = true;
+  public static boolean enableDrivetrain = true;
+  public static boolean enableClaw = false;
   public static boolean enableIntake = false;
   public static boolean enableLimelight = false;
   public static boolean enableSpindexer = false;
@@ -29,7 +29,7 @@ public final class RobotMap {
   
   public static int ads = 1;
   public static class SpindexerMap{
-    public static int spinnerCANID = 0;
+    public static int spinnerCANID = 10;
     public static double motorRevToRotation = 1/100;
     public static double spindexerSpeed = 0.75;
     public static boolean clockwise = true;
@@ -37,7 +37,7 @@ public final class RobotMap {
 
   public final class ExtensionArmConstants{
 
-    public static final int armMotorID =9;
+    public static final int armMotorID =6;
     public static final double kP =  0.0125;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
@@ -48,7 +48,7 @@ public final class RobotMap {
     
 
 
-    public static final int armMotorID =9;
+    public static final int armMotorID =6;
     public static final double kP =  0.0125;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
@@ -92,22 +92,18 @@ public final class RobotMap {
   }
 
   public final class IntakeConstants{
-    public static final int intakeMotor1_ID = 6;
-    public static final int intakeMotor2_ID = 7;
+    public static final int intakeMotor1_ID = 5;
+    public static final int intakeMotor2_ID = 8;
   }
 
   public final class DriveTrainConstants{
+    public static final boolean isKitBot = true;
+
     public static final int leftLeader_ID = 1;
     public static final int leftFollower_ID = 2;
     public static final int rightLeader_ID =3;
     public static final int rightFollower_ID = 4;
 
-    public static final int rightLeaderEncoder1 = 4;
-    public static final int rightLeaderEncoder2 = 5;
-
-    public static final int leftleaderEncoder1 = 2;
-    public static final int leftleaderEncoder2 = 3;
-    
     public static final double gyroPIDkP = 1;
     public static final double gyroPIDkI = 0;
     public static final double gyroPIDkD = 0;
@@ -119,8 +115,8 @@ public final class RobotMap {
 
 public final class JoyStickConstants{
   public static final int leftJoystickPort = 0;
-  public static final int rightJoystickPort = 1;
-  public static final int xboxControllerPort = 2;
+  public static final int rightJoystickPort = 2;
+  public static final int xboxControllerPort = 1;
   public static final int leftJoystickTrigger = 1;
   public static final int rightJoystickTrigger = 1;
   public static final int rightJoystickThreeButton = 3;

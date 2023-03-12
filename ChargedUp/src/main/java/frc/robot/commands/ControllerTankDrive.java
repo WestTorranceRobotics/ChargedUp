@@ -8,18 +8,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.hal.util.BoundaryException;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
-public class TankDrive extends CommandBase {
+public class ControllerTankDrive extends CommandBase {
   /** Creates a new TankDrive. */
   DriveTrain drivetrain;
 
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
+  private XboxController controller;
 
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
+  public ControllerTankDrive(XboxController controller, DriveTrain dt) {
     this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
+    this.controller = controller;
     addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -31,18 +30,19 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftSpeed = leftjoystick.getY();
-    double rightSpeed = rightjoystick.getY();
+    double leftSpeed = controller.getRawAxis(1);
+    double rightSpeed = controller.getRawAxis(3);
 
     //new tankDrive System 
-    double slowRange = 0.7;
+    double slowRange = 0.5;
     double threshold = 0.90;
+    double maxSpeed = 0.6;
 
     if(Math.abs(leftSpeed) < threshold){ leftSpeed *= slowRange/threshold; }
-    else {leftSpeed *= 0.8/Math.abs(leftSpeed);}
+    else {leftSpeed *= maxSpeed/Math.abs(leftSpeed);}
 
     if(Math.abs(rightSpeed) < threshold){ rightSpeed *= slowRange/threshold; }
-    else {rightSpeed *= 0.8/Math.abs(rightSpeed);}
+    else {rightSpeed *= maxSpeed/Math.abs(rightSpeed);}
     //End Of new tankDrive System
 
 

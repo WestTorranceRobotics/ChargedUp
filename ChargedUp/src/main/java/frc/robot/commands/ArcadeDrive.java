@@ -32,7 +32,7 @@ public class ArcadeDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.arcadeDrive(leftJoysticklocal.getLeftY(),leftJoysticklocal.getLeftX());
+    drivetrain.arcadeDrive(leftJoysticklocal.getLeftY(),-leftJoysticklocal.getLeftX());
     drivetrain.periodic();
 
     

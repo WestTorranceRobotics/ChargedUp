@@ -6,38 +6,51 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
-
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LimeLight extends SubsystemBase {
   private PIDController limePIDController;
-  private boolean isFinished;
-
+    private boolean isFinished;
+  private ShuffleboardTab limelightTab = Shuffleboard.getTab("limelighttab");
+  private GenericEntry SBspeedout =  limelightTab.add("Speed out",0).withPosition(0, 0).getEntry();
+  private double speedout;
 
   /** Creates a new LimeLight. */
   public LimeLight() {
-    limePIDController = new PIDController(0.1, 0, 0);
-    limePIDController.setTolerance(2.0);
+    speedout = 0;
+    limePIDController = new PIDController(1, 0, 0);
+    limePIDController.setTolerance(1.0);
     isFinished = false;
 
 
   }
+
 
   public double getTX() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
   }
 
   public double pidCaluculation(){
-    double calulation = MathUtil.clamp(limePIDController.calculate(getTX(), 0), -0.8, 0.8);
 
+    if (getTX() == 0){
+      speedout = 100;
+      return 0.5;
+
+    }
+    double calculation = MathUtil.clamp(limePIDController.calculate(getTX(), 0), -0.8, 0.8);
+    speedout = calculation;
     if(limePIDController.atSetpoint()){
       isFinished = true;
+    
       return 0.0;
     }
     else{
-      return Math.signum(calulation)*Math.max(calulation, 0.1);
+      return Math.signum(calculation)*Math.max(calculation, 0.1);
     }
 
   }
@@ -53,6 +66,7 @@ public class LimeLight extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SBspeedout.setDouble(speedout);
     // This method will be called once per scheduler run
   }
 }

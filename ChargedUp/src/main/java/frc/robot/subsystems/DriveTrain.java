@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -59,7 +60,7 @@ public class DriveTrain extends SubsystemBase {
   double kI;
   double kD;
  
-  Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
+  // Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
   // Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
   
 
@@ -67,20 +68,20 @@ public class DriveTrain extends SubsystemBase {
   ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
-  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 50).withPosition(0,1).withSize(2, 1).getEntry();
+  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 100).withPosition(0,1).withSize(2, 1).getEntry();
   private GenericEntry SBGyroYaw = drivesTab.add("Gyro Yaw X",0).withPosition(0, 2).getEntry();
   private GenericEntry SBGyroPitch = drivesTab.add("Gyro Pitch",0).withPosition(1, 2).getEntry();
   private GenericEntry SBGyroRoll = drivesTab.add("Gyro Roll",0).withPosition(2, 2).getEntry();
   private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
   private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
   private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
- 
-  
+  private GenericEntry maxGyroDriveSpeed = drivesTab.add("Max Gyro Drive Speed",0.5).withPosition(0, 4).getEntry();
+
     
   public DriveTrain() {
     
-    pneumaticcontrolModule = new PneumaticsControlModule(0);
-    clawsolenoid = new Solenoid(0,PneumaticsModuleType.CTREPCM, 0);
+//    pneumaticcontrolModule = new PneumaticsControlModule(0);
+  //  clawsolenoid = new Solenoid(0,PneumaticsModuleType.CTREPCM, 0);
 
     kP = RobotMap.DriveTrainConstants.gyroPIDkP;
     kI = RobotMap.DriveTrainConstants.gyroPIDkI;
@@ -88,9 +89,12 @@ public class DriveTrain extends SubsystemBase {
     driveGyro = new AHRS(SPI.Port.kMXP);
     driveGyro.zeroYaw();
     driveGyro.reset();
-    speedPercentage = 50;
+    driveGyro.resetDisplacement();
+    driveGyro.calibrate();
+    
+    speedPercentage = 100;
     gyroPID = new PIDController(kP, kI, kD);
-    gyroPID.setTolerance(5.0);
+    gyroPID.setTolerance(3.0);
     //Variables
 
     SBSpeedPercentage.setDouble(100);
@@ -118,20 +122,27 @@ public class DriveTrain extends SubsystemBase {
     leftLeader.setInverted(false);
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
-      
 
+    leftLeader.setNeutralMode(NeutralMode.Brake);
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    rightLeader.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
+      
+    
   }
 
   public void resetEncoder(){
     //leftEncoder.reset();
-    rightEncoder.reset();
+    //rightEncoder.reset();
   }
 
   public void openClawSolenoid(){
   
   }
 
-
+  public AHRS getGyro(){
+    return driveGyro;
+  }
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){
@@ -141,7 +152,14 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void TankDrive(double InputLeftSpeed, double InputRightSpeed){
-    drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+    if(RobotMap.DriveTrainConstants.isKitBot)
+    {
+      drive.tankDrive(InputRightSpeed*(speedPercentage/100), InputLeftSpeed*(speedPercentage/100));
+    }
+    else
+    {
+      drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+    }
   }
 
   public int GetLeftSpeed(){
@@ -176,8 +194,8 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void gyroPIDDrive(){
-    double calculation = MathUtil.clamp(gyroPID.calculate(getPitch(), 0), -0.75, 0.75);
-    TankDrive(calculation, calculation);
+    double calculation = MathUtil.clamp(gyroPID.calculate(getRoll(), 1.6), -maxGyroDriveSpeed.getDouble(0.5), maxGyroDriveSpeed.getDouble(0.5));
+    TankDrive(-calculation, -calculation);
 
   }
 
@@ -192,8 +210,7 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-
-    System.out.println("Right Encoder: " + rightEncoder.get());
+   // System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
     if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
@@ -203,7 +220,7 @@ public class DriveTrain extends SubsystemBase {
       resetGyroPID(kP, kI, kD);
     }
 
-    SBRightSpeed.setDouble(getRightVelocity());
+   // SBRightSpeed.setDouble(getRightVelocity());
     //SBLeftSpeed.setDouble(getLeftVelocity());    
    
 
