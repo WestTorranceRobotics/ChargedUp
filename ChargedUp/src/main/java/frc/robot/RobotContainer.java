@@ -119,10 +119,10 @@ public class RobotContainer {
 
   
 
-  private POVButton operatorPOV90 = new POVButton(xboxController, 90);
-  private POVButton operatorPOV180 = new POVButton(xboxController, 180);
-  private POVButton operatorPOV270 = new POVButton(xboxController, 270);
-  private POVButton operatorPOV360 = new POVButton(xboxController, 0);
+  private POVButton operatorPOVRight = new POVButton(xboxController, 90);
+  private POVButton operatorPOVDown = new POVButton(xboxController, 180);
+  private POVButton operatorPOVLeft = new POVButton(xboxController, 270);
+  private POVButton operatorPOVUp = new POVButton(xboxController, 0);
 
   private JoystickButton driverLeftTopLeft = new JoystickButton(leftJoystick, 5);
   private JoystickButton driverLeftTopRight = new JoystickButton(leftJoystick, 6);
@@ -279,20 +279,6 @@ public class RobotContainer {
     //Operator -Ask Ishan
     if (RobotMap.enableArm){
 
-    //Main Commands
-    //operatorPOV360.whileTrue(startingArmSetpoint);
-    //operatorPOV90.whileTrue(rightPerpendicularArmSetpoint);
-    //operatorPOV180.whileTrue(leftPerpendicularArmSetpoint);
-    //operatorPOV270.whileTrue(leftFourtyFiveArmSetpoint);
-
-
-
-    //Test Commands
-    //operatorLeftBack.whileTrue(runArmPower);
-    //operatorLeftTrigger.whileTrue(startingArmSetpoint);
-    //operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
-    //operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
-    //operatorRightBack.whileTrue(leftFourtyFiveArmSetpoint);
     }
    
     if (RobotMap.enableClaw){
