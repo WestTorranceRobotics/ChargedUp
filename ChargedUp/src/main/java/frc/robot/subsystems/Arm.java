@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
 import edu.wpi.first.networktables.GenericEntry;
 
 
-public class Arms extends SubsystemBase {
+public class Arm extends SubsystemBase {
   private CANSparkMax armMotorController;
 
   private double targettedPowerVelocity;
@@ -46,7 +46,7 @@ public class Arms extends SubsystemBase {
   
   
   /** Creates a new Arms. */
-  public Arms() {
+  public Arm() {
     armMotorController = new CANSparkMax(RobotMap.ArmConstants.armMotorID, MotorType.kBrushless);
     armMotorController.restoreFactoryDefaults();
     armMotorController.getEncoder().setPosition(0);

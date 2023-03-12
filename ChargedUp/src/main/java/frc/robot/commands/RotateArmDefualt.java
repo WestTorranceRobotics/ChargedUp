@@ -4,25 +4,20 @@
 
 package frc.robot.commands;
 
-import java.net.http.HttpResponse.PushPromiseHandler;
-
-import com.fasterxml.jackson.databind.node.ArrayNode;
-
-import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ToggleArmSetpoint extends CommandBase {
-  boolean isFinished;
-  Arm armsubsystem;
-  int setpoint;
-  /** Creates a new ToggleArmSetpoint. */
-  public ToggleArmSetpoint(Arm arms,int point) {
-    this.armsubsystem = arms;
-    this.setpoint = point;
-    isFinished = false;
-    addRequirements(arms);
+public class RotateArmDefualt extends CommandBase {
+  Arm arm;
+  XboxController controller;
+  /** Creates a new RotateArmDefualt. */
+  public RotateArmDefualt(Arm arm, XboxController controller) {
+    this.arm = arm;
+    this.controller = controller;
+
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -31,21 +26,31 @@ public class ToggleArmSetpoint extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    armsubsystem.setSetPoint(setpoint);
-    armsubsystem.toggleSetpoint(1);
-    armsubsystem.togglePosition(0);
-    
-    isFinished = true;
+  public void execute() 
+  {
+    if(controller.getLeftTriggerAxis() > 0.5)
+    {
+      arm.runArmPower(0.2);
+    }
+    else if(controller.getRightTriggerAxis() > 0.5){
+      arm.runArmPower(-0.2);
+    }
+    else 
+    {
+      arm.runArmPower(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) 
+  {
+    arm.runArmPower(0);
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

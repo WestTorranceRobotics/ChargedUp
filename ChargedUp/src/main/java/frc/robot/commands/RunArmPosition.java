@@ -3,15 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.Arms;
+import frc.robot.subsystems.Arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class RunArmPosition extends CommandBase {
   /** Creates a new RunArmPosition. */
-  Arms armsubsystem;
+  Arm armsubsystem;
   XboxController controller;
-  public RunArmPosition(Arms armss,XboxController Xbox) {
+  public RunArmPosition(Arm armss,XboxController Xbox) {
     controller = Xbox;
     armsubsystem =armss;
     addRequirements(armss);

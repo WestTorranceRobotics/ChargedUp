@@ -3,38 +3,33 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.Arm;
-
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Claw;
 
-public class RunArmPower extends CommandBase {
-  Arm arm;
-  double speed;
-
-  /** Creates a new RunArmPower. */
-  public RunArmPower(Arm arm, double speed) {
-    this.arm = arm;
-    this.speed = speed;
-
+public class ExtenedClaw extends CommandBase {
+  Claw claw;
+  /** Creates a new ToggleClaw. */
+  public ExtenedClaw(Claw claw) {
+    this.claw = claw;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    claw.extendClaw(true);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    arm.runArmPower(speed);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.runArmPower(0);
+    claw.extendClaw(false);
   }
 
   // Returns true when the command should end.
