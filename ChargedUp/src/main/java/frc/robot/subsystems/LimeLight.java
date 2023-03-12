@@ -18,8 +18,8 @@ public class LimeLight extends SubsystemBase {
 
   /** Creates a new LimeLight. */
   public LimeLight() {
-    limePIDController = new PIDController(0.1, 0, 0);
-    limePIDController.setTolerance(2.0);
+    limePIDController = new PIDController(0.2, 0, 0);
+    limePIDController.setTolerance(3.0);
     isFinished = false;
 
 
@@ -36,7 +36,7 @@ public class LimeLight extends SubsystemBase {
   }
 
   public double pidCaluculation(){
-    double calulation = MathUtil.clamp(limePIDController.calculate(getTX(), 0), -0.8, 0.8);
+    double calulation = MathUtil.clamp(limePIDController.calculate(getTX(), 0), -0.7, 0.7);
 
     if(limePIDController.atSetpoint()){
       isFinished = true;

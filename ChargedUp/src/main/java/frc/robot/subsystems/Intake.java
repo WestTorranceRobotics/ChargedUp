@@ -30,8 +30,8 @@ public class Intake extends SubsystemBase {
 
   private ShuffleboardTab intakeTab =  Shuffleboard.getTab("Intake");
   private GenericEntry SBSolenoidDeployed = intakeTab.add("Solenoid",false).withPosition(0, 0).getEntry();
-  private GenericEntry SBSpeedIntake =  intakeTab.add("Speed",1.0).withPosition(1, 0).getEntry();
-  private GenericEntry SBSpeedIntake2 =  intakeTab.add("Speed 2",1.0).withPosition(2, 0).getEntry();
+  private GenericEntry SBSpeedIntake =  intakeTab.add("Speed",0.7).withPosition(1, 0).getEntry();
+  private GenericEntry SBSpeedIntake2 =  intakeTab.add("Speed 2",0.7).withPosition(2, 0).getEntry();
 
 
 

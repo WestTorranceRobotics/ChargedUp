@@ -4,22 +4,20 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Claw;
 
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
-
-public class TankDrive extends CommandBase {
-  /** Creates a new TankDrive. */
-  DriveTrain drivetrain;
-
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
-    this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
-    addRequirements(drivetrain);
+public class ClawRotation extends CommandBase {
+  Claw clawsubsystem;
+  XboxController controller;
+  /** Creates a new ClawRotation. */
+  public ClawRotation(Claw claw,XboxController xbox) {
+    this.clawsubsystem = claw;
+    this.controller = xbox;
+    addRequirements(claw);
+    
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -29,20 +27,24 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double leftTrigger =controller.getLeftTriggerAxis();
+    double rightTrigger = controller.getRightTriggerAxis();
 
-    drivetrain.TankDrive(-leftjoystick.getY(),-rightjoystick.getY());
+    if(leftTrigger >= 0.5){
+      clawsubsystem.clockFlip();
+    }
+   
 
+    if (rightTrigger >= 0.5){
+      clawsubsystem.counterClockFlip();
 
-
-  
-
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-
   public void end(boolean interrupted) {
-    drivetrain.StopDrive();
+    clawsubsystem.stopRotate();
   }
 
   // Returns true when the command should end.

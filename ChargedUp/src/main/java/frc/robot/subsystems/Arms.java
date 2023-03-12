@@ -89,25 +89,25 @@ public class Arms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(-2);
-      targettedPosition = -2;
+      SBArmTargettedPosition.setDouble(2);
+      targettedPosition = 2;
     }
 
     else if (targettedSetPoint==1){
-      SBArmTargettedPosition.setDouble(14);
-      targettedPosition = 14;
+      SBArmTargettedPosition.setDouble(-19);
+      targettedPosition = -19;
     }
 
     else if (targettedSetPoint == 2){
-      SBArmTargettedPosition.setDouble(69);
-      targettedPosition = 69;
+      SBArmTargettedPosition.setDouble(-52);
+      targettedPosition = -52;
     }
     else if (targettedSetPoint ==3){
-      SBArmTargettedPosition.setDouble(91);
-      targettedPosition = 91;
+      SBArmTargettedPosition.setDouble(-67);
+      targettedPosition = -67;
     }
 
-    if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()<=3)){
+    if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()<=-1)){
       armMotorController.getEncoder().setPosition(0);
 
     }
@@ -168,6 +168,7 @@ public class Arms extends SubsystemBase {
   public void periodic() {
     if (SBResetArmPosition.getDouble(0) ==1){
       armMotorController.getEncoder().setPosition(0);
+      SBResetArmPosition.setDouble(1);
     }
 
     if ((SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getP()) || (SBArmPIDI.getDouble(0)!= armMotorController.getPIDController().getI())||(SBArmPIDD.getDouble(0)!= armMotorController.getPIDController().getD(0))){

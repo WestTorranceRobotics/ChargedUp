@@ -78,6 +78,7 @@ public class ExtensionArms extends SubsystemBase {
   }
 
   public void setTargettedPosition(double pos){
+    SBArmTargettedPosition.setDouble(pos);
     targettedPosition = pos;
   }
 
@@ -87,23 +88,10 @@ public class ExtensionArms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(-2);
-      targettedPosition = -2;
+      SBArmTargettedPosition.setDouble(0);
+      targettedPosition = 0;
     }
 
-    else if (targettedSetPoint==1){
-      SBArmTargettedPosition.setDouble(14);
-      targettedPosition = 14;
-    }
-
-    else if (targettedSetPoint == 2){
-      SBArmTargettedPosition.setDouble(69);
-      targettedPosition = 69;
-    }
-    else if (targettedSetPoint ==3){
-      SBArmTargettedPosition.setDouble(91);
-      targettedPosition = 91;
-    }
 
     if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()<=3)){
       m_extensionarm.getEncoder().setPosition(0);

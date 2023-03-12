@@ -21,13 +21,14 @@ public class SpindexerCounterclockwise extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    spindexer.ResetPosition();
-    spindexer.spin(-RobotMap.SpindexerMap.spindexerSpeed);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    spindexer.spin(-0.3);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,9 +39,6 @@ public class SpindexerCounterclockwise extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(spindexer.GetPosition() <= -5){
-      return true;
-    }
-    return false;
+   return false;
   }
 }

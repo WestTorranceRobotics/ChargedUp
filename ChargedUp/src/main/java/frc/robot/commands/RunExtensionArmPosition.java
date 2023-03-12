@@ -28,11 +28,15 @@ public class RunExtensionArmPosition extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currenttargetposition = extensionArmSubsystem.getTargettedPosition();
+    
+    double y = -controller.getRightY();
 
-    if (controller.getLeftY() >= 0.1){
-      if (currenttargetposition +(controller.getRightY()*5) <= 300){
-      currenttargetposition += (controller.getRightY()*5);
+    if (y >= 0.1){
+      //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());
+      double currenttargetposition = extensionArmSubsystem.getTargettedPosition();
+
+      if (currenttargetposition +(y*1.5) <= 0.5){
+      currenttargetposition += (y*1.5);
       extensionArmSubsystem.toggleArmSetpoint(0);
       extensionArmSubsystem.setTargettedPosition(currenttargetposition);
       extensionArmSubsystem.toggleArmPosition(1);
@@ -40,9 +44,11 @@ public class RunExtensionArmPosition extends CommandBase {
       
     }
 
-    else if (controller.getLeftY() <= -0.1){
-      if (currenttargetposition -(controller.getRightY()*5) >= -300){
-        currenttargetposition -= (controller.getRightY()*5);
+    else if (y <= -0.1){
+      //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());
+      double currenttargetposition = extensionArmSubsystem.getTargettedPosition();
+      if (currenttargetposition +(y*1.5) >= -380){
+        currenttargetposition += (y*1.5);
         extensionArmSubsystem.toggleArmSetpoint(0);
         extensionArmSubsystem.setTargettedPosition(currenttargetposition);
         extensionArmSubsystem.toggleArmPosition(1);

@@ -44,6 +44,10 @@ DigitalInput downLimitSwitch;
 private ShuffleboardTab clawTab = Shuffleboard.getTab("ClawTab");
 private GenericEntry SBLeftLimit = clawTab.add("Left limit switch", false).withPosition(0, 0).getEntry();
 private GenericEntry SBRightLimit = clawTab.add("Right limit switch", false).withPosition(1, 0).getEntry();
+private GenericEntry SBClawPosition = clawTab.add("Claw Position", 0).withPosition(2, 0).getEntry();
+private GenericEntry SBClawSpeed = clawTab.add("Claw Speed", 0).withPosition(3, 0).getEntry();
+private GenericEntry SBClawTargetSpeed = clawTab.add("Claw Target Speed", 0).withPosition(0, 1).getEntry();
+private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPosition(1, 1).getEntry();
 
 
 
@@ -54,6 +58,7 @@ private GenericEntry SBRightLimit = clawTab.add("Right limit switch", false).wit
     // controlModule.enableCompressorAnalog(110, 120);
 direction = true;
 motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
+motionMotor.getEncoder().setPosition(0);
 powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
 powerMotor.setIdleMode(IdleMode.kBrake);
 motionMotor.setIdleMode(IdleMode.kBrake);
@@ -71,6 +76,8 @@ powerMotor.set(power);
 
 }
 
+
+
 public void extendClaw(boolean bol){
 
 leftSolenoid.set(bol);
@@ -80,43 +87,60 @@ leftSolenoid.set(bol);
 
 
 
+public void rotateArm(){
+  motionMotor.set(SBClawTargetSpeed.getDouble(0));
+
+}
+
+public void stopRotate(){
+  motionMotor.set(0);
+}
 
 public boolean getUpSwitch(){
 
-return upLimitSwitch.get();
+return !upLimitSwitch.get();
 
 }
 
 public boolean getDownSwitch(){
 
-return downLimitSwitch.get();
+return !downLimitSwitch.get();
 
 }
 
 public void counterClockFlip(){
 
+if ((getUpSwitch() == false) && (motionMotor.getEncoder().getPosition() <= 45)){
+    motionMotor.set(0.15);
 
-motionMotor.set(-RobotMap.ClawMap.motionMotorFlipPower);
-
-if (getUpSwitch() == true){
-  motionMotor.stopMotor();
+  }
+else
+{
+motionMotor.set(0.0);
 }
 
 }
 
 public void clockFlip(){
 
-motionMotor.set(RobotMap.ClawMap.motionMotorFlipPower);
+  if (motionMotor.getEncoder().getPosition()>=0){
+    motionMotor.set(-0.15);
 
-if (getDownSwitch() == true){
-  motionMotor.stopMotor();
+  }
+
+else{
+motionMotor.set(0.0);
 }
+
 
 }
 @Override
 public void periodic() {
+  SBClawSolenoid.setBoolean(leftSolenoid.get());
   SBLeftLimit.setBoolean(getDownSwitch());
   SBRightLimit.setBoolean(getUpSwitch());
+  SBClawPosition.setDouble(motionMotor.getEncoder().getPosition());
+  SBClawSpeed.setDouble(motionMotor.getEncoder().getVelocity());
 
 }
 }

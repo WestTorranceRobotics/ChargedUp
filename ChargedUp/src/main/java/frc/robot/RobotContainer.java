@@ -17,12 +17,14 @@ import frc.robot.commands.TankDrive;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
+import frc.robot.commands.ClawRotation;
 import frc.robot.commands.PointToLime;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.SpindexerClockwise;
 import frc.robot.commands.SpindexerCounterclockwise;
 import frc.robot.commands.ClawSolenoid;
+import frc.robot.commands.ClawSpeed;
 import frc.robot.commands.ClawTurning;
 import frc.robot.commands.RunArmPosition;
 import frc.robot.commands.RunArmPower;
@@ -51,6 +53,8 @@ import edu.wpi.first.wpilibj.Joystick;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.ADXL345_I2C.Axes;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 public class RobotContainer {
   
   Arms armSubsystem;
@@ -86,12 +90,14 @@ public class RobotContainer {
   ToggleExtensionArmSetpoint highExtensionArmSetpoint;
 
   RunExtensionArmPower runExtensionArmPower;
-
+  ClawSpeed clawSpeed;
   
   RunExtensionArmPosition runExtensionArmPosition;
 
   SpindexerClockwise spindexerClockwise;
   SpindexerCounterclockwise spindexerCounterClockwise;
+
+  ClawRotation clawRotation;
 
 
   private static final XboxController xboxController = new XboxController(2);
@@ -106,15 +112,17 @@ public class RobotContainer {
   private JoystickButton operatorYbutton = new JoystickButton(xboxController, 4);
   private JoystickButton operatorLeftBack = new JoystickButton(xboxController, 5);
   private JoystickButton operatorRightBack = new JoystickButton(xboxController, 6);
-  private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
-  private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
-  private JoystickButton operatorBack = new JoystickButton(xboxController, 9);
-  private JoystickButton operatorStart = new JoystickButton(xboxController, 10);
+  //private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
+  //private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
+  private JoystickButton operatorBack = new JoystickButton(xboxController, 7);
+  private JoystickButton operatorStart = new JoystickButton(xboxController, 8);
+
+  
 
   private POVButton operatorPOV90 = new POVButton(xboxController, 90);
   private POVButton operatorPOV180 = new POVButton(xboxController, 180);
   private POVButton operatorPOV270 = new POVButton(xboxController, 270);
-  private POVButton operatorPOV360 = new POVButton(xboxController, 360);
+  private POVButton operatorPOV360 = new POVButton(xboxController, 0);
 
   private JoystickButton driverLeftTopLeft = new JoystickButton(leftJoystick, 5);
   private JoystickButton driverLeftTopRight = new JoystickButton(leftJoystick, 6);
@@ -142,7 +150,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
 
-  XboxController controller = new XboxController(1);
+ // XboxController controller = new XboxController(1);
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
@@ -201,12 +209,15 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableClaw){
+      clawSpeed = new ClawSpeed(clawSubsystem);
       clawTurningClockwise = new ClawTurning(clawSubsystem, true);
       clawTurningCounterClockwise = new ClawTurning(clawSubsystem, false);
       clawsolenoidExtend = new ClawSolenoid(clawSubsystem, true);
       clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
       clawInward = new ClawInward(clawSubsystem);
       clawOutward = new ClawOutward(clawSubsystem);
+      //clawRotation = new ClawRotation(clawSubsystem, xboxController);
+      //clawSubsystem.setDefaultCommand(clawRotation);
 
     }
 
@@ -229,9 +240,9 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableArm){
+      
       runArmPosition = new RunArmPosition(armSubsystem,xboxController);
       armSubsystem.setDefaultCommand(runArmPosition);
-
       runArmPower = new RunArmPower(armSubsystem);
       startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0);
       rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem, 1);
@@ -245,9 +256,8 @@ public class RobotContainer {
       runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, xboxController);
       extensionArmSubsystem.setDefaultCommand(runExtensionArmPosition);
       startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 0);
-      midExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 1);
-      highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 2);
-      
+      highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 1);
+            
     }
  
 
@@ -268,7 +278,17 @@ public class RobotContainer {
 
     //Operator -Ask Ishan
     if (RobotMap.enableArm){
-      operatorRightBack.whileTrue(runArmPower);
+
+    //Main Commands
+    //operatorPOV360.whileTrue(startingArmSetpoint);
+    //operatorPOV90.whileTrue(rightPerpendicularArmSetpoint);
+    //operatorPOV180.whileTrue(leftPerpendicularArmSetpoint);
+    //operatorPOV270.whileTrue(leftFourtyFiveArmSetpoint);
+
+
+
+    //Test Commands
+    //operatorLeftBack.whileTrue(runArmPower);
     //operatorLeftTrigger.whileTrue(startingArmSetpoint);
     //operatorLeftBack.whileTrue(rightPerpendicularArmSetpoint);
     //operatorRightTrigger.whileTrue(leftPerpendicularArmSetpoint);
@@ -276,29 +296,42 @@ public class RobotContainer {
     }
    
     if (RobotMap.enableClaw){
+
+    //Main Command
     operatorXbutton.whileTrue(clawInward);
     operatorBbutton.whileTrue(clawOutward);
     operatorYbutton.whileTrue(clawsolenoidExtend);
     operatorAbutton.whileTrue(clawsolenoidRetract);
-   // operatorPOV180.whileTrue(clawTurningClockwise);
-    //operatorPOV360.whileTrue(clawTurningCounterClockwise);
+
+
+    //Test commands
+    //operatorLeftBack.whileTrue(clawTurningClockwise);
+    //operatorRightBack.whileTrue(clawTurningCounterClockwise);
+    //driverLeftTrigger.whileTrue(clawSpeed);
+    
     }
 
     if (RobotMap.enableSpindexer){
-    operatorStart.whileTrue(spindexerClockwise);
-    operatorBack.whileTrue(spindexerCounterClockwise);
+    operatorStart.onTrue(spindexerClockwise);
+    operatorBack.onTrue(spindexerCounterClockwise);
     }
 
     if (RobotMap.enableExtensionArm){
+      //Main c0mmands
+      operatorRightBack.whileTrue(highExtensionArmSetpoint);
+      operatorLeftBack.whileTrue(startingExtensionArmSetpoint);
+
+
+      //Test c0mmands
      // operatorPOV90.whileTrue(startingArmSetpoint);
       //operatorPOV270.whileTrue(highExtensionArmSetpoint);
-      operatorRightBack.whileTrue(runExtensionArmPower);
+      //operatorRightBack.whileTrue(runExtensionArmPower);
     }
 
     if (RobotMap.enableIntake){
       driverLeftTrigger.whileTrue(runOuttakeCommand);
       driverRightTrigger.whileTrue(runIntakeCommand);
-      driverRightTopRight.whileTrue(toggleIntakeSolenoid);
+      driverRightTopLeft.whileTrue(toggleIntakeSolenoid);
       
     }
 

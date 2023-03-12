@@ -22,18 +22,16 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public final class RobotMap {
   
-  public static boolean enableDrivetrain = false;
+  public static boolean enableDrivetrain = true;
   public static boolean enableClaw = true;
-  public static boolean enableIntake = false;
-  public static boolean enableLimelight = false;
-  public static boolean enableSpindexer = false;
-  public static boolean enableArm = false;
+  public static boolean enableIntake = true;
+  public static boolean enableLimelight = true;
+  public static boolean enableSpindexer = true;
+  public static boolean enableArm = true;
   public static boolean enableExtensionArm = true;
                                                                      
-  
-  public static int ads = 1;
   public static class SpindexerMap{
-    public static int spinnerCANID = 0;
+    public static int spinnerCANID = 10;
     public static double motorRevToRotation = 1/100;
     public static double spindexerSpeed = 0.75;
     public static boolean clockwise = true;

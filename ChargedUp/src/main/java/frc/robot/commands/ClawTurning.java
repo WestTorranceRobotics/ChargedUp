@@ -30,27 +30,21 @@ public class ClawTurning extends CommandBase {
   public void execute() {
     if (spindirection){
       clawsubsystem.clockFlip();
-      if (clawsubsystem.getUpSwitch()){
-        isFinished = true;
       }
-    }
-
     else{
       clawsubsystem.counterClockFlip();
-      if (clawsubsystem.getDownSwitch()){
-        isFinished = true;
-      }
     }
-    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    clawsubsystem.stopRotate();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

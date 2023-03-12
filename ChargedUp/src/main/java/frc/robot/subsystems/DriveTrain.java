@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -121,6 +122,10 @@ public class DriveTrain extends SubsystemBase {
     leftLeader.setInverted(false);
     leftFollower.setInverted(InvertType.FollowMaster);
     rightFollower.setInverted(InvertType.FollowMaster);
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    leftLeader.setNeutralMode(NeutralMode.Brake);
+    rightLeader.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
       
 
   }
