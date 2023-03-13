@@ -68,8 +68,8 @@ public class RobotContainer {
 
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
-  RunIntake runIntakeCommand;
-  RunOuttake runOuttakeCommand;
+  RunIntake outakeCommand;
+  RunOuttake intakeCommand;
   ToggleIntakeSolenoid toggleIntakeSolenoid;
   PointToLime pointToLimeCommand;
   ClawSolenoid clawsolenoidExtend;
@@ -216,15 +216,15 @@ public class RobotContainer {
       clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
       clawInward = new ClawInward(clawSubsystem);
       clawOutward = new ClawOutward(clawSubsystem);
-      //clawRotation = new ClawRotation(clawSubsystem, xboxController);
-      //clawSubsystem.setDefaultCommand(clawRotation);
+      clawRotation = new ClawRotation(clawSubsystem, xboxController);
+      clawSubsystem.setDefaultCommand(clawRotation);
 
     }
 
     if (RobotMap.enableIntake){
       toggleIntakeSolenoid = new ToggleIntakeSolenoid(intakesubsystem);
-      runIntakeCommand = new RunIntake(intakesubsystem);
-      runOuttakeCommand = new RunOuttake(intakesubsystem);
+      outakeCommand = new RunIntake(intakesubsystem);
+      intakeCommand = new RunOuttake(intakesubsystem);
       
 
     }
@@ -278,6 +278,12 @@ public class RobotContainer {
 
     //Operator -Ask Ishan
     if (RobotMap.enableArm){
+      operatorPOVUp.whileTrue(startingArmSetpoint);
+      operatorPOVRight.whileTrue(rightPerpendicularArmSetpoint);
+      operatorPOVDown.whileTrue(leftFourtyFiveArmSetpoint);
+      operatorPOVLeft.whileTrue(leftPerpendicularArmSetpoint);
+
+
 
     }
    
@@ -315,8 +321,8 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableIntake){
-      driverLeftTrigger.whileTrue(runOuttakeCommand);
-      driverRightTrigger.whileTrue(runIntakeCommand);
+      driverLeftTrigger.whileTrue(intakeCommand);
+      driverRightTrigger.whileTrue(outakeCommand);
       driverRightTopLeft.whileTrue(toggleIntakeSolenoid);
       
     }
