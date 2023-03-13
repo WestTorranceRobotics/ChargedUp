@@ -92,8 +92,13 @@ public class ExtensionArms extends SubsystemBase {
       targettedPosition = 0;
     }
 
+    else if (targettedSetPoint ==1){
+      SBArmTargettedPosition.setDouble(-100);
+      targettedPosition = -100;
+    }
 
-    if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()<=3)){
+
+    if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()>=-1)){
       m_extensionarm.getEncoder().setPosition(0);
 
     }

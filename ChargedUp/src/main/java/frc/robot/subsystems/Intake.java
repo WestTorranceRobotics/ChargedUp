@@ -81,7 +81,7 @@ public class Intake extends SubsystemBase {
   }
 
   public boolean getSolenoid(){
-    return leftsolenoid.get();
+    return rightsolenoid.get();
   }
   // public double getAir(){
   //   return compressor.getPressure();

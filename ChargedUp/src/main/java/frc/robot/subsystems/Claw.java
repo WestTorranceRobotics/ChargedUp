@@ -114,28 +114,33 @@ if ((getUpSwitch() == false) && (motionMotor.getEncoder().getPosition() <= 45)){
     motionMotor.set(0.15);
 
   }
-else
-{
-motionMotor.set(0.0);
-}
+  else
+  {
+    motionMotor.set(0.0);
+  }
 
 }
 
 public void clockFlip(){
 
-  if (motionMotor.getEncoder().getPosition()>=0){
+  if ((motionMotor.getEncoder().getPosition()>=0) && (getDownSwitch() == false)){
     motionMotor.set(-0.15);
 
   }
 
-else{
-motionMotor.set(0.0);
+  else{
+    motionMotor.set(0.0);
+  }
 }
 
-
+public boolean IsClosed(){
+  return leftSolenoid.get();
 }
+
 @Override
 public void periodic() {
+  //powerMotor.set(-0.08);
+
   SBClawSolenoid.setBoolean(leftSolenoid.get());
   SBLeftLimit.setBoolean(getDownSwitch());
   SBRightLimit.setBoolean(getUpSwitch());

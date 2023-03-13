@@ -29,14 +29,14 @@ public class RunExtensionArmPosition extends CommandBase {
   @Override
   public void execute() {
     
-    double y = -controller.getRightY();
+    double y = controller.getRightY();
 
     if (y >= 0.1){
       //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());
       double currenttargetposition = extensionArmSubsystem.getTargettedPosition();
 
-      if (currenttargetposition +(y*1.5) <= 0.5){
-      currenttargetposition += (y*1.5);
+      if (currenttargetposition +(y*0.25) <= 0.5){
+      currenttargetposition += (y*0.25);
       extensionArmSubsystem.toggleArmSetpoint(0);
       extensionArmSubsystem.setTargettedPosition(currenttargetposition);
       extensionArmSubsystem.toggleArmPosition(1);
@@ -47,8 +47,8 @@ public class RunExtensionArmPosition extends CommandBase {
     else if (y <= -0.1){
       //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());
       double currenttargetposition = extensionArmSubsystem.getTargettedPosition();
-      if (currenttargetposition +(y*1.5) >= -380){
-        currenttargetposition += (y*1.5);
+      if (currenttargetposition +(y*0.25) >= -100){
+        currenttargetposition += (y*0.25);
         extensionArmSubsystem.toggleArmSetpoint(0);
         extensionArmSubsystem.setTargettedPosition(currenttargetposition);
         extensionArmSubsystem.toggleArmPosition(1);

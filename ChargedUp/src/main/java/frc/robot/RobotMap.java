@@ -25,7 +25,7 @@ public final class RobotMap {
   public static boolean enableDrivetrain = true;
   public static boolean enableClaw = true;
   public static boolean enableIntake = true;
-  public static boolean enableLimelight = true;
+  public static boolean enableLimelight = false;
   public static boolean enableSpindexer = true;
   public static boolean enableArm = true;
   public static boolean enableExtensionArm = true;
@@ -40,7 +40,7 @@ public final class RobotMap {
   public final class ExtensionArmConstants{
 
     public static final int armMotorID =14;
-    public static final double kP =  0.0125;
+    public static final double kP =  0.02;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
   }
@@ -51,7 +51,7 @@ public final class RobotMap {
 
 
     public static final int armMotorID =6;
-    public static final double kP =  0.025;
+    public static final double kP =  0.02;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
     

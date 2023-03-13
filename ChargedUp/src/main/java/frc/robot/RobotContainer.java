@@ -25,7 +25,7 @@ import frc.robot.commands.SpindexerClockwise;
 import frc.robot.commands.SpindexerCounterclockwise;
 import frc.robot.commands.ClawSolenoid;
 import frc.robot.commands.ClawSpeed;
-import frc.robot.commands.ClawTurning;
+//import frc.robot.commands.ClawTurning;
 import frc.robot.commands.RunArmPosition;
 import frc.robot.commands.RunArmPower;
 import frc.robot.commands.RunExtensionArmPosition;
@@ -74,8 +74,8 @@ public class RobotContainer {
   PointToLime pointToLimeCommand;
   ClawSolenoid clawsolenoidExtend;
   ClawSolenoid clawsolenoidRetract;
-  ClawTurning clawTurningClockwise;
-  ClawTurning clawTurningCounterClockwise; 
+ // ClawTurning clawTurningClockwise;
+  //ClawTurning clawTurningCounterClockwise; 
   ClawInward clawInward;
   ClawOutward clawOutward; 
   RunArmPosition runArmPosition;
@@ -210,8 +210,8 @@ public class RobotContainer {
 
     if (RobotMap.enableClaw){
       clawSpeed = new ClawSpeed(clawSubsystem);
-      clawTurningClockwise = new ClawTurning(clawSubsystem, true);
-      clawTurningCounterClockwise = new ClawTurning(clawSubsystem, false);
+      //clawTurningClockwise = new ClawTurning(clawSubsystem, true);
+     // clawTurningCounterClockwise = new ClawTurning(clawSubsystem, false);
       clawsolenoidExtend = new ClawSolenoid(clawSubsystem, true);
       clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
       clawInward = new ClawInward(clawSubsystem);
@@ -278,10 +278,16 @@ public class RobotContainer {
 
     //Operator -Ask Ishan
     if (RobotMap.enableArm){
-      operatorPOVUp.whileTrue(startingArmSetpoint);
-      operatorPOVRight.whileTrue(rightPerpendicularArmSetpoint);
-      operatorPOVDown.whileTrue(leftFourtyFiveArmSetpoint);
-      operatorPOVLeft.whileTrue(leftPerpendicularArmSetpoint);
+
+      operatorPOVDown.whileTrue(startingArmSetpoint);
+      operatorPOVUp.whileTrue(rightPerpendicularArmSetpoint);
+      operatorPOVRight.whileTrue(leftPerpendicularArmSetpoint);
+      operatorPOVLeft.whileTrue(leftFourtyFiveArmSetpoint);
+
+      //operatorPOVUp.whileTrue(startingArmSetpoint);
+      //operatorPOVRight.whileTrue(rightPerpendicularArmSetpoint);
+      //operatorPOVDown.whileTrue(leftFourtyFiveArmSetpoint);
+      //operatorPOVLeft.whileTrue(leftPerpendicularArmSetpoint);
 
 
 
@@ -292,8 +298,8 @@ public class RobotContainer {
     //Main Command
     operatorXbutton.whileTrue(clawInward);
     operatorBbutton.whileTrue(clawOutward);
-    operatorYbutton.whileTrue(clawsolenoidExtend);
-    operatorAbutton.whileTrue(clawsolenoidRetract);
+    operatorYbutton.onTrue(clawsolenoidExtend);
+    operatorAbutton.onTrue(clawsolenoidRetract);
 
 
     //Test commands
@@ -304,8 +310,8 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableSpindexer){
-    operatorStart.onTrue(spindexerClockwise);
-    operatorBack.onTrue(spindexerCounterClockwise);
+    operatorStart.whileTrue(spindexerClockwise);
+    operatorBack.whileTrue(spindexerCounterClockwise);
     }
 
     if (RobotMap.enableExtensionArm){

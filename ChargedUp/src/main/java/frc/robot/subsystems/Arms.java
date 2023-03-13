@@ -89,25 +89,26 @@ public class Arms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(2);
-      targettedPosition = 2;
+      SBArmTargettedPosition.setDouble(0);
+      targettedPosition = 0;
     }
 
     else if (targettedSetPoint==1){
-      SBArmTargettedPosition.setDouble(-19);
-      targettedPosition = -19;
+      SBArmTargettedPosition.setDouble(-20);
+      targettedPosition = -20;
     }
 
     else if (targettedSetPoint == 2){
-      SBArmTargettedPosition.setDouble(-52);
-      targettedPosition = -52;
+      SBArmTargettedPosition.setDouble(-55);
+      targettedPosition = -55;
     }
     else if (targettedSetPoint ==3){
-      SBArmTargettedPosition.setDouble(-67);
-      targettedPosition = -67;
+      
+      SBArmTargettedPosition.setDouble(-70);
+      targettedPosition = -70;
     }
 
-    if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()<=-1)){
+    if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()>=-1)){
       armMotorController.getEncoder().setPosition(0);
 
     }

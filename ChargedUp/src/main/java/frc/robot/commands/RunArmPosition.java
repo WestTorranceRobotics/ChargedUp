@@ -30,8 +30,8 @@ public class RunArmPosition extends CommandBase {
     if (y >= 0.1){
       //armsubsystem.setTargttedPosition(armsubsystem.getPosition());
       double currenttargetposition = armsubsystem.getTargettedPosition();
-      if (currenttargetposition + (y*0.15)<=0){
-      currenttargetposition += (y*0.15);
+      if (currenttargetposition + (y*0.25)<=0){
+      currenttargetposition += (y*0.25);
       armsubsystem.toggleSetpoint(0);
       armsubsystem.setTargttedPosition(currenttargetposition);
       armsubsystem.togglePosition(1);
@@ -42,8 +42,8 @@ public class RunArmPosition extends CommandBase {
     else if (y <= -0.1){
       //armsubsystem.setTargttedPosition(armsubsystem.getPosition());
       double currenttargetposition = armsubsystem.getTargettedPosition();
-      if (currenttargetposition +(y*0.15) >= -72){
-        currenttargetposition += (y*0.15);
+      if (currenttargetposition +(y*0.25) >= -72){
+        currenttargetposition += (y*0.25);
         armsubsystem.toggleSetpoint(0);
         armsubsystem.setTargttedPosition(currenttargetposition);
         armsubsystem.togglePosition(1);
