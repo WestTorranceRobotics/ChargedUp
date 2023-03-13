@@ -56,98 +56,102 @@ private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPo
     PneumaticsControlModule controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
 
     // controlModule.enableCompressorAnalog(110, 120);
-direction = true;
-clawRotateMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
-clawRotateMotor.getEncoder().setPosition(0);
-clawIntakeMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
-clawIntakeMotor.setIdleMode(IdleMode.kBrake);
-clawRotateMotor.setIdleMode(IdleMode.kBrake);
-leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-//Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
+    direction = true;
+    clawRotateMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
+    clawRotateMotor.getEncoder().setPosition(0);
+    clawIntakeMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
+    clawIntakeMotor.setIdleMode(IdleMode.kBrake);
+    clawRotateMotor.setIdleMode(IdleMode.kBrake);
+    leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+    //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
-upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
-downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
-
-  }
-
-public void runClaw(double power){
-
-clawIntakeMotor.set(power);
-
-}
-
-
-
-public void extendClaw(boolean bol){
-
-leftSolenoid.set(bol);
-//rightSolenoid.set(bol);
-
-}
-
-public boolean getDirection(){
-  return direction;
-}
-
-public void ToggleDirection(){
-  direction = !direction;
-}
-
-
-public void rotateArm(double speed){
-  clawRotateMotor.set(speed);
-
-}
-
-public void stopRotate(){
-  clawRotateMotor.set(0);
-}
-
-public boolean getUpSwitch(){
-
-return !upLimitSwitch.get();
-
-}
-
-public boolean getDownSwitch(){
-
-return !downLimitSwitch.get();
-
-}
-
-public void counterClockFlip(){
-
-if ((getUpSwitch() == false) && (clawRotateMotor.getEncoder().getPosition() <= 45)){
-    clawRotateMotor.set(0.15);
-
-  }
-else
-{
-clawRotateMotor.set(0.0);
-}
-
-}
-
-public void clockFlip(){
-
-  if (clawRotateMotor.getEncoder().getPosition()>=0){
-    clawRotateMotor.set(-0.15);
+    upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
+    downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
 
   }
 
-else{
-clawRotateMotor.set(0.0);
-}
+  public void runClaw(double power){
+
+  clawIntakeMotor.set(power);
+
+  }
 
 
-}
-@Override
-public void periodic() {
-  SBClawSolenoid.setBoolean(leftSolenoid.get());
-  SBLeftLimit.setBoolean(getDownSwitch());
-  SBRightLimit.setBoolean(getUpSwitch());
-  SBClawPosition.setDouble(clawRotateMotor.getEncoder().getPosition());
-  SBClawSpeed.setDouble(clawRotateMotor.getEncoder().getVelocity());
 
-}
+  public void extendClaw(boolean bol){
+
+  leftSolenoid.set(bol);
+  //rightSolenoid.set(bol);
+
+  }
+
+  public boolean getDirection(){
+    return direction;
+  }
+
+  public void ToggleDirection(){
+    direction = !direction;
+  }
+
+
+  public void rotateArm(double speed){
+    clawRotateMotor.set(speed);
+
+  }
+
+  public void stopRotate(){
+    clawRotateMotor.set(0);
+  }
+
+  public boolean getUpSwitch(){
+    return !upLimitSwitch.get();
+  }
+
+  public boolean getDownSwitch(){
+
+  return !downLimitSwitch.get();
+
+  }
+
+  public void counterClockFlip(){
+
+    if ((getUpSwitch() == false) && (clawRotateMotor.getEncoder().getPosition() <= 45)){
+      clawRotateMotor.set(0.15);
+
+    }
+    else
+    {
+      clawRotateMotor.set(0.0);
+    }
+
+  }
+
+  public void clockFlip(){
+
+    if (clawRotateMotor.getEncoder().getPosition()>=0){
+      clawRotateMotor.set(-0.15);
+    }
+    else{
+      clawRotateMotor.set(0.0);
+    }
+  }
+  @Override
+  public void periodic() {
+    if(leftSolenoid.get())
+    {
+      runClaw(-0.08);
+    }
+    else
+    {
+      runClaw(-0.05);
+    }
+
+
+    SBClawSolenoid.setBoolean(leftSolenoid.get());
+    SBLeftLimit.setBoolean(getDownSwitch());
+    SBRightLimit.setBoolean(getUpSwitch());
+    SBClawPosition.setDouble(clawRotateMotor.getEncoder().getPosition());
+    SBClawSpeed.setDouble(clawRotateMotor.getEncoder().getVelocity());
+
+  }
 }
