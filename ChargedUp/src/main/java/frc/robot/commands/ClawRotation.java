@@ -27,6 +27,17 @@ public class ClawRotation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    if(clawsubsystem.IsClosed())
+    {
+      clawsubsystem.runClaw(-0.08);
+    }
+    else
+    {
+      clawsubsystem.runClaw(-0.05);
+    }
+
+
     double leftTrigger =controller.getLeftTriggerAxis();
     double rightTrigger = controller.getRightTriggerAxis();
 
