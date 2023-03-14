@@ -18,7 +18,7 @@ public class GrabObjectFromSpindexer extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ToggleArmSetpoint(null, 0)
+      //new ToggleArmSetpoint(null, 0)
     );
   }
 }

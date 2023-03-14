@@ -239,24 +239,24 @@ public class RobotContainer {
       
     }
 
-    if (RobotMap.enableArm){
+    if (RobotMap.enableArm && RobotMap.enableIntake){
       
       runArmPosition = new RunArmPosition(armSubsystem,xboxController);
       armSubsystem.setDefaultCommand(runArmPosition);
       runArmPower = new RunArmPower(armSubsystem);
-      startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0);
-      rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem, 1);
-      leftPerpendicularArmSetpoint = new ToggleArmSetpoint(armSubsystem, 2);
-      leftFourtyFiveArmSetpoint = new ToggleArmSetpoint(armSubsystem, 3);
+      startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, intakesubsystem, 0);
+      rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem,intakesubsystem, 1);
+      leftPerpendicularArmSetpoint = new ToggleArmSetpoint(armSubsystem,intakesubsystem, 2);
+      leftFourtyFiveArmSetpoint = new ToggleArmSetpoint(armSubsystem,intakesubsystem, 3);
       
     }
 
-    if(RobotMap.enableExtensionArm){
+    if((RobotMap.enableExtensionArm) && (RobotMap.enableArm)){
       runExtensionArmPower = new RunExtensionArmPower(extensionArmSubsystem);
       runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, xboxController);
       extensionArmSubsystem.setDefaultCommand(runExtensionArmPosition);
-      startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 0);
-      highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, 1);
+      startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, armSubsystem, 0);
+      highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem,armSubsystem, 1);
             
     }
  
@@ -277,7 +277,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     //Operator -Ask Ishan
-    if (RobotMap.enableArm){
+    if (RobotMap.enableArm && RobotMap.enableClaw){
 
       operatorPOVDown.whileTrue(startingArmSetpoint);
       operatorPOVUp.whileTrue(rightPerpendicularArmSetpoint);
@@ -314,7 +314,7 @@ public class RobotContainer {
     operatorBack.whileTrue(spindexerCounterClockwise);
     }
 
-    if (RobotMap.enableExtensionArm){
+    if (RobotMap.enableExtensionArm && RobotMap.enableArm){
       //Main c0mmands
       operatorRightBack.whileTrue(highExtensionArmSetpoint);
       operatorLeftBack.whileTrue(startingExtensionArmSetpoint);
