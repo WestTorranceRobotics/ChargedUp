@@ -135,9 +135,6 @@ public class DriveTrain extends SubsystemBase {
     rightEncoder.reset();
   }
 
-  public void openClawSolenoid(){
-  
-  }
 
 
 
