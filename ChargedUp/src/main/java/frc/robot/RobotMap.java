@@ -25,7 +25,7 @@ public final class RobotMap {
   public static boolean enableDrivetrain = true;
   public static boolean enableClaw = true;
   public static boolean enableIntake = true;
-  public static boolean enableLimelight = false;
+  public static boolean enableLimelight = true;
   public static boolean enableSpindexer = true;
   public static boolean enableArm = true;
   public static boolean enableExtensionArm = true;
