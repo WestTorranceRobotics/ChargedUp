@@ -160,8 +160,4 @@ rightLeaderEncoder2 = 5;
  leftleaderEncoder2 = 3;
  */
 
-public final class RobotMap {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
-}
+
