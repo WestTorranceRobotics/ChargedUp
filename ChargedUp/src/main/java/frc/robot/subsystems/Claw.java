@@ -65,6 +65,8 @@ private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPo
     leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
     //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
+    leftSolenoid.set(false);
+
     upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
     downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
 
