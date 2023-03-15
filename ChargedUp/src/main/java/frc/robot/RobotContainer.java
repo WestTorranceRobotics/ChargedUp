@@ -33,7 +33,7 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
-
+import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuck;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -43,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.fasterxml.jackson.databind.util.PrimitiveArrayBuilder;
 
+import edu.wpi.first.networktables.EntryBase;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -98,6 +99,8 @@ public class RobotContainer {
   SpindexerCounterclockwise spindexerCounterClockwise;
 
   ClawRotation clawRotation;
+
+  ExtendAndSuck extendAndSuck;
 
 
   private static final XboxController xboxController = new XboxController(2);
@@ -229,6 +232,7 @@ public class RobotContainer {
 
     }
 
+
     if(RobotMap.enableLimelight && RobotMap.enableDrivetrain){
       pointToLimeCommand = new PointToLime(driverBaseSubsystem, limelightSubsystem);
     }
@@ -258,6 +262,10 @@ public class RobotContainer {
       startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, armSubsystem, 0);
       highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem,armSubsystem, 1);
             
+    }
+
+    if (RobotMap.enableAutonomous){
+      extendAndSuck = new ExtendAndSuck(clawSubsystem, extensionArmSubsystem, armSubsystem);
     }
  
 
@@ -337,12 +345,16 @@ public class RobotContainer {
       driverLeftTopRight.whileTrue(pointToLimeCommand);
     }
 
+    if (RobotMap.enableAutonomous){
+      driverLeftBottomRight.onTrue(extendAndSuck);
+    }
+
     
 
 
     //operatorPOV90.whileTrue(increaseExtensionArmSetpoint);
     //operatorPOV270.whileTrue(decreaseExtensionArmSetpoint);
-    //operatorPOV180.whileTrue(clawTurningClockwise);
+    //operatorPOV180.whileTruse(clawTurningClockwise);
     //operatorPOV360.whileTrue(clawTurningCounterClockwise);
     //operatorStart.whileTrue(spindexerClockwise);
     //operatorBack.whileTrue(spindexerCounterClockwise);

@@ -114,6 +114,7 @@ public class DriveTrain extends SubsystemBase {
     speedPercentage = 100;
     gyroPID = new PIDController(kP, kI, kD);
     distancePID = new PIDController(d_kP, d_kI, d_kD);
+    orientationPID = new PIDController(0, 0, 0);
     gyroPID.setTolerance(5.0);
 
     
@@ -154,8 +155,6 @@ public class DriveTrain extends SubsystemBase {
     leftLeader.setNeutralMode(NeutralMode.Brake);
     rightLeader.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
-      
-
   }
 
   public void resetEncoder(){
@@ -193,8 +192,11 @@ public class DriveTrain extends SubsystemBase {
     gyroPID.setP(p);
     gyroPID.setI(i);
     gyroPID.setD(d);
-    
+  }
 
+  public PIDController GetOrientationPID()
+  {
+    return orientationPID;
   }
 
   public void resetDistancePID(double p, double i, double d){
@@ -259,7 +261,7 @@ public class DriveTrain extends SubsystemBase {
       d_kP = SBDistanceKp.getDouble(0);
       d_kI = SBDistanceKi.getDouble(0);
       d_kD = SBDistanceKd.getDouble(0);
-      resetDistancePID(d_kP, d_kI, d_kD);
+      orientationPID.setPID(d_kP, d_kI, d_kD);
     }
 
     SBRightSpeed.setDouble(getRightVelocity());

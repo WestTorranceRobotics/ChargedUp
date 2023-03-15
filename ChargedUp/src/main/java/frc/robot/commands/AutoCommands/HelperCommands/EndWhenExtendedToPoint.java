@@ -4,32 +4,29 @@
 
 package frc.robot.commands.AutoCommands.HelperCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.ExtensionArms;
 
-public class Delay extends CommandBase {
-  Timer timer = new Timer();
-  double delay;
-  /** Creates a new Delay. */
-  public Delay(double delay) {
-    this.delay = delay;
+public class EndWhenExtendedToPoint extends CommandBase {
+  ExtensionArms extensionArms;
+  double target;
+  double tolerence;
+  /** Creates a new EndWhenExtendedToPoint. */
+  public EndWhenExtendedToPoint(ExtensionArms extensionArms, double target) {
+    this.extensionArms = extensionArms;
+    this.target = target;
 
+    tolerence = 1;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {
-    timer.reset();
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    System.out.println(timer.hasElapsed(delay));
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -38,8 +35,7 @@ public class Delay extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(timer.hasElapsed(delay))
-    {
+    if(Math.abs(target - extensionArms.getPosition()) <= tolerence){
       return true;
     }
     return false;

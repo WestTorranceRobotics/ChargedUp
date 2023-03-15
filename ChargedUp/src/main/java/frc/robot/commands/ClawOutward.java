@@ -24,7 +24,7 @@ public class ClawOutward extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawSubsystem.runClaw(0.5);
+    clawSubsystem.runClaw(0.3);
   
   }
 

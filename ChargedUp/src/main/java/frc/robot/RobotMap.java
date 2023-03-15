@@ -29,6 +29,8 @@ public final class RobotMap {
   public static boolean enableSpindexer = true;
   public static boolean enableArm = true;
   public static boolean enableExtensionArm = true;
+  public static boolean enableAutonomous = true;
+
                                                                      
   public static class SpindexerMap{
     public static int spinnerCANID = 10;
