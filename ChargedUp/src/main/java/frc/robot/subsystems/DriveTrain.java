@@ -164,7 +164,13 @@ public class DriveTrain extends SubsystemBase {
   }
 
 
+  public PIDController getOrientationPID(){
+    return orientationPID;
+  }
 
+  public PIDController getDistancePID(){
+    return distancePID;
+  }
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){

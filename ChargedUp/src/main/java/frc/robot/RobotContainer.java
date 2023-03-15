@@ -37,7 +37,7 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
-
+import frc.robot.commands.Test.WorkingTurnInPlace;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -208,7 +208,8 @@ public class RobotContainer {
     if (RobotMap.enableDrivetrain ){
       driveBaseArcadeDriveCommand = new ArcadeDrive(xboxController, driverBaseSubsystem);
       driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
-      driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+      // driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+      driverBaseSubsystem.setDefaultCommand(new WorkingTurnInPlace(xboxController, driverBaseSubsystem));
     }
 
     if (RobotMap.enableClaw){
