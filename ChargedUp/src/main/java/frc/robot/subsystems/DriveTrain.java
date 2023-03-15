@@ -56,10 +56,18 @@ public class DriveTrain extends SubsystemBase {
   WPI_TalonSRX rightFollower;
   WPI_TalonSRX leftFollower;
   WPI_TalonSRX leftLeader;
+
   PIDController gyroPID;
+  PIDController orientationPID;
+  PIDController distancePID;
+
   double kP;
   double kI;
   double kD;
+
+  double d_kP;
+  double d_kI;
+  double d_kD;
  
   Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
   Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
@@ -78,7 +86,11 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
   private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
   private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
- 
+  private GenericEntry SBDistanceKp = drivesTab.add("Distance kP",0).withPosition(0, 4).getEntry();
+  private GenericEntry SBDistanceKi = drivesTab.add("Distance kI",0).withPosition(1, 4).getEntry();
+  private GenericEntry SBDistanceKd = drivesTab.add("Distance kD",0).withPosition(2, 4).getEntry();
+  private GenericEntry SBtargetPosition = drivesTab.add("Target position",0).withPosition(0, 5).getEntry();
+
   
     
   public DriveTrain() {
@@ -89,12 +101,28 @@ public class DriveTrain extends SubsystemBase {
     kP = RobotMap.DriveTrainConstants.gyroPIDkP;
     kI = RobotMap.DriveTrainConstants.gyroPIDkI;
     kD = RobotMap.DriveTrainConstants.gyroPIDkD;
+
+    d_kP = 0;
+    d_kI = 0;
+    d_kD = 0;
+    
+
+    
     driveGyro = new AHRS(SPI.Port.kMXP);
     driveGyro.zeroYaw();
     driveGyro.reset();
-    speedPercentage = 50;
+    speedPercentage = 100;
     gyroPID = new PIDController(kP, kI, kD);
+    distancePID = new PIDController(d_kP, d_kI, d_kD);
     gyroPID.setTolerance(5.0);
+
+    
+
+    // gyroPID = new PIDController(kP, kI, kD);
+    // gyroPID.setTolerance(5.0);
+
+    // gyroPID = new PIDController(kP, kI, kD);
+    // gyroPID.setTolerance(5.0);
     //Variables
 
     SBSpeedPercentage.setDouble(100);
@@ -169,6 +197,12 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
+  public void resetDistancePID(double p, double i, double d){
+    distancePID.setP(p);
+    distancePID.setI(i);
+    distancePID.setD(d);
+  }
+
   public double getYaw(){
     return driveGyro.getYaw();
   }
@@ -194,6 +228,11 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
+  public void distancePIDDrive(){
+    double calculate = MathUtil.clamp(distancePID.calculate(getPitch(), SBtargetPosition.getDouble(0)), -0.75, 0.75);
+    TankDrive(calculate, calculate);
+  }
+
   public double getLeftVelocity(){
     //return leftLeaderEncoder.get();
     return 0.0;
@@ -214,6 +253,13 @@ public class DriveTrain extends SubsystemBase {
       kI = SBGyroKi.getDouble(0);
       kD = SBGyroKd.getDouble(0);
       resetGyroPID(kP, kI, kD);
+    }
+
+    if((d_kP != SBDistanceKp.getDouble(0)) || (d_kI != SBDistanceKi.getDouble(0)) || (d_kD != SBDistanceKd.getDouble(0)) ){
+      d_kP = SBDistanceKp.getDouble(0);
+      d_kI = SBDistanceKi.getDouble(0);
+      d_kD = SBDistanceKd.getDouble(0);
+      resetDistancePID(d_kP, d_kI, d_kD);
     }
 
     SBRightSpeed.setDouble(getRightVelocity());
