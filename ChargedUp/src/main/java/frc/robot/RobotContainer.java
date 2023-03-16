@@ -356,7 +356,7 @@ public class RobotContainer {
     }
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      driverLeftTopRight.whileTrue(pointToLimeCommand);
+      driverLeftTopRight.onTrue(pointToLimeCommand);
     }
 
     if (RobotMap.enableAutonomous){

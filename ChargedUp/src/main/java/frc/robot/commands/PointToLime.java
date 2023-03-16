@@ -24,12 +24,15 @@ addRequirements(driveTrain,limeLight);
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.TankDrive(limeLight.pidCaluculation(), -limeLight.pidCaluculation());
+    System.out.println("running Limelight command");
+    driveTrain.TankDrive(-limeLight.pidCaluculation(), limeLight.pidCaluculation());
 
   
 
