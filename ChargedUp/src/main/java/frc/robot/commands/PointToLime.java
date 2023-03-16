@@ -29,7 +29,7 @@ addRequirements(driveTrain,limeLight);
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.TankDrive(limeLight.pidCaluculation(), limeLight.pidCaluculation()*-1);
+    driveTrain.TankDrive(limeLight.pidCaluculation(), -limeLight.pidCaluculation());
 
   
 

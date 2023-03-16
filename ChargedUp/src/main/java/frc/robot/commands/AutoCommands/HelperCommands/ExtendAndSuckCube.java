@@ -15,27 +15,26 @@ import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ExtensionArms;
 
+
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ExtendAndSuck extends SequentialCommandGroup {
-  /** Creates a new ExtendAndSuck. */
-  public ExtendAndSuck(Claw claw, ExtensionArms extensionArms, Arms arms) {
+public class ExtendAndSuckCube extends SequentialCommandGroup {
+  /** Creates a new ExtendAndSuckCube. */
+  public ExtendAndSuckCube(Claw claw, ExtensionArms extensionArms, Arms arms) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ToggleExtensionArmSetpoint(extensionArms, arms, 2),
+      new ToggleExtensionArmSetpoint(extensionArms, arms, 3),
 
       new ParallelDeadlineGroup(
-        new EndWhenExtendedToPoint(extensionArms, -34),
+        new EndWhenExtendedToPoint(extensionArms, -18),
         new ClawPassive(claw)
       ),
-      new ParallelDeadlineGroup(new Delay(0.3),new ClawPassive(claw), new ClawSolenoid(claw, true)),
       new ParallelDeadlineGroup(     
-      new Delay(0.5),
+      new EndWhenExtendedToPoint(extensionArms, 0),
       new ToggleExtensionArmSetpoint(extensionArms, arms, 0),new ClawPassive(claw)
       )
     );
-
   }
 }

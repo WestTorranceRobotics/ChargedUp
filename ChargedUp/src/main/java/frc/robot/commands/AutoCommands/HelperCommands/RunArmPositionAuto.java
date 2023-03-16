@@ -4,36 +4,35 @@
 
 package frc.robot.commands.AutoCommands.HelperCommands;
 
-import edu.wpi.first.wpilibj.Timer;
+import java.lang.annotation.Target;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotMap.ArmConstants;
+import frc.robot.subsystems.Arms;
 
-public class Delay extends CommandBase {
-  Timer timer = new Timer();
-  double delay;
-  boolean isFinished = false;
-  /** Creates a new Delay. */
-  public Delay(double delay) {
-    this.delay = delay;
-
+public class RunArmPositionAuto extends CommandBase {
+  Arms arms;
+  boolean isFinished;
+  double target;
+  /** Creates a new RunArmPositionAuto. */
+  public RunArmPositionAuto(Arms arms, double target) {
+    this.arms = arms;
+    this.isFinished = false;
+    this.target = target;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {
-    timer.reset();
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(timer.hasElapsed(delay));
-    if(timer.hasElapsed(delay))
-    {
-      isFinished = true;
-    }
+    arms.toggleSetpoint(0);
+    arms.setTargttedPosition(target);
+    arms.togglePosition(1);
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.

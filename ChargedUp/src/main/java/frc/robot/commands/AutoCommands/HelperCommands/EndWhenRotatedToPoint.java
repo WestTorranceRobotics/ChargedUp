@@ -4,37 +4,30 @@
 
 package frc.robot.commands.AutoCommands.HelperCommands;
 
-import edu.wpi.first.wpilibj.Timer;
+import java.util.function.DoubleBinaryOperator;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Arms;
 
-public class Delay extends CommandBase {
-  Timer timer = new Timer();
-  double delay;
-  boolean isFinished = false;
-  /** Creates a new Delay. */
-  public Delay(double delay) {
-    this.delay = delay;
-
+public class EndWhenRotatedToPoint extends CommandBase {
+  double target;
+  double tolerence;
+  Arms arms;
+  /** Creates a new EndWhenRotatedToPoint. */
+  public EndWhenRotatedToPoint(Arms arms,double target ) {
+    this.arms = arms;
+    this.target = target;
+    tolerence = 2;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() 
-  {
-    timer.reset();
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    System.out.println(timer.hasElapsed(delay));
-    if(timer.hasElapsed(delay))
-    {
-      isFinished = true;
-    }
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -43,6 +36,9 @@ public class Delay extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    if(Math.abs(target - arms.getPosition()) <= tolerence){
+      return true;
+    }
+    return false;
   }
 }

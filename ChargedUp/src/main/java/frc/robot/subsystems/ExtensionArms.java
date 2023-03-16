@@ -98,8 +98,13 @@ public class ExtensionArms extends SubsystemBase {
     }
 
     else if (targettedSetPoint ==2){
-      SBArmTargettedPosition.setDouble(-12);
-      targettedPosition = -12;
+      SBArmTargettedPosition.setDouble(-34);
+      targettedPosition = -34;
+    }
+
+    else if (targettedSetPoint == 3){
+      SBArmTargettedPosition.setDouble(-18);
+      targettedPosition = -18;
     }
 
 

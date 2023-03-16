@@ -33,7 +33,10 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
+import frc.robot.commands.AutoCommands.HelperCommands.ConeScoringAutonomous;
+import frc.robot.commands.AutoCommands.HelperCommands.CubeScoringAutonomous;
 import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuck;
+import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuckCube;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -101,6 +104,10 @@ public class RobotContainer {
   ClawRotation clawRotation;
 
   ExtendAndSuck extendAndSuck;
+  ExtendAndSuckCube extendAndSuckCube;
+  CubeScoringAutonomous cubeScoringAutonomous;
+  ConeScoringAutonomous coneScoringAutonomous;
+
 
 
   private static final XboxController xboxController = new XboxController(2);
@@ -266,7 +273,14 @@ public class RobotContainer {
 
     if (RobotMap.enableAutonomous){
       extendAndSuck = new ExtendAndSuck(clawSubsystem, extensionArmSubsystem, armSubsystem);
+      cubeScoringAutonomous = new CubeScoringAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem);
+      coneScoringAutonomous = new ConeScoringAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem);
     }
+
+    if (RobotMap.enableSetpoint){
+      extendAndSuckCube = new ExtendAndSuckCube(clawSubsystem, extensionArmSubsystem, armSubsystem);
+    }
+
  
 
   }
@@ -346,7 +360,10 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableAutonomous){
-      driverLeftBottomRight.onTrue(extendAndSuck);
+      driverLeftBottomRight.onTrue(coneScoringAutonomous);
+    }
+    if (RobotMap.enableSetpoint){
+      driverLeftBottomRight.onTrue(extendAndSuckCube);
     }
 
     
@@ -370,8 +387,8 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
-  //public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-
-  }
-//}
+ // public Command getAutonomousCommand() {
+    //An example command will be run in autonomous
+    //return CubeScoringAutonomous();
+ // }
+}

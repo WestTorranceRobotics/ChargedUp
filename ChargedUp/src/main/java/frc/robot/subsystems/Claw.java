@@ -67,7 +67,7 @@ leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
 upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
 downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
-
+leftSolenoid.set(false);
   }
 
 public void runClaw(double power){
