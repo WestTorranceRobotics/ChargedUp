@@ -18,7 +18,6 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
 import frc.robot.commands.ClawRotation;
-import frc.robot.commands.PointToLime;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
 import frc.robot.commands.SpindexerClockwise;
@@ -33,10 +32,18 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
+import frc.robot.commands.AutoCommands.DriveDistance;
+import frc.robot.commands.AutoCommands.CompleteAutos.BasicGrabSecondCube;
+import frc.robot.commands.AutoCommands.CompleteAutos.ScoringSecondCube;
+import frc.robot.commands.AutoCommands.CompleteAutos.TwoCubeAutonomous;
 import frc.robot.commands.AutoCommands.HelperCommands.ConeScoringAutonomous;
 import frc.robot.commands.AutoCommands.HelperCommands.CubeScoringAutonomous;
 import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuck;
 import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuckCube;
+import frc.robot.commands.AutoCommands.HelperCommands.PlaceConeTop;
+import frc.robot.commands.Limelight.LimelightAlignWithGyro;
+import frc.robot.commands.Limelight.PointToLime;
+import frc.robot.commands.Test.TurnToDirection;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -72,8 +79,8 @@ public class RobotContainer {
 
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
-  RunIntake outakeCommand;
-  RunOuttake intakeCommand;
+  RunIntake intakeCommand;
+  RunOuttake outtakeCommand;
   ToggleIntakeSolenoid toggleIntakeSolenoid;
   PointToLime pointToLimeCommand;
   ClawSolenoid clawsolenoidExtend;
@@ -107,6 +114,7 @@ public class RobotContainer {
   ExtendAndSuckCube extendAndSuckCube;
   CubeScoringAutonomous cubeScoringAutonomous;
   ConeScoringAutonomous coneScoringAutonomous;
+  BasicGrabSecondCube basicGrabSecondCube;
 
 
 
@@ -233,8 +241,8 @@ public class RobotContainer {
 
     if (RobotMap.enableIntake){
       toggleIntakeSolenoid = new ToggleIntakeSolenoid(intakesubsystem);
-      outakeCommand = new RunIntake(intakesubsystem);
-      intakeCommand = new RunOuttake(intakesubsystem);
+      outtakeCommand = new RunOuttake(intakesubsystem);
+      intakeCommand = new RunIntake(intakesubsystem);
       
 
     }
@@ -275,6 +283,7 @@ public class RobotContainer {
       extendAndSuck = new ExtendAndSuck(clawSubsystem, extensionArmSubsystem, armSubsystem);
       cubeScoringAutonomous = new CubeScoringAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem);
       coneScoringAutonomous = new ConeScoringAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem);
+      basicGrabSecondCube = new BasicGrabSecondCube(driverBaseSubsystem, intakesubsystem);
     }
 
     if (RobotMap.enableSetpoint){
@@ -349,21 +358,27 @@ public class RobotContainer {
     }
 
     if (RobotMap.enableIntake){
-      driverLeftTrigger.whileTrue(intakeCommand);
-      driverRightTrigger.whileTrue(outakeCommand);
+      driverLeftTrigger.whileTrue(outtakeCommand);
+      driverRightTrigger.whileTrue(intakeCommand);
       driverRightTopLeft.whileTrue(toggleIntakeSolenoid);
       
     }
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      driverLeftTopRight.onTrue(pointToLimeCommand);
+      // driverLeftTopRight.onTrue(pointToLimeCommand);
+      driverLeftTopRight.onTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+      // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 
     if (RobotMap.enableAutonomous){
-      driverLeftBottomRight.onTrue(coneScoringAutonomous);
+      // driverLeftBottomRight.onTrue(coneScoringAutonomous);
+       driverLeftBottomLeft.onTrue(new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
+      //driverLeftBottomLeft.onTrue(new ScoringSecondCube(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
+      //driverLeftBottomLeft.onTrue(new DriveDistance(driverBaseSubsystem, 2050));
     }
     if (RobotMap.enableSetpoint){
       driverLeftBottomRight.onTrue(extendAndSuckCube);
+      // driverLeftBottomRight.onTrue(new TurnToDirection(driverBaseSubsystem, 0,3));
     }
 
     
@@ -387,8 +402,10 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
- // public Command getAutonomousCommand() {
-    //An example command will be run in autonomous
-    //return CubeScoringAutonomous();
- // }
+  /* 
+ public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem);
+ }
+ */
 }

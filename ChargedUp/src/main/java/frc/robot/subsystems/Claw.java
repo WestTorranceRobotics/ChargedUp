@@ -110,8 +110,8 @@ return !downLimitSwitch.get();
 
 public void counterClockFlip(){
 
-if ((getUpSwitch() == false) && (motionMotor.getEncoder().getPosition() <= 45)){
-    motionMotor.set(0.15);
+  if (!getUpSwitch() && (motionMotor.getEncoder().getPosition() <= 45)){
+    motionMotor.set(0.2);
 
   }
   else
@@ -123,8 +123,8 @@ if ((getUpSwitch() == false) && (motionMotor.getEncoder().getPosition() <= 45)){
 
 public void clockFlip(){
 
-  if ((motionMotor.getEncoder().getPosition()>=0) && (getDownSwitch() == false)){
-    motionMotor.set(-0.15);
+  if ((motionMotor.getEncoder().getPosition()>=0) && !getDownSwitch()){
+    motionMotor.set(-0.2);
 
   }
 

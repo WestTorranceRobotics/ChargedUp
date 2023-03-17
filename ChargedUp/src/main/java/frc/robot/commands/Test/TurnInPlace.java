@@ -38,6 +38,7 @@ public class TurnInPlace extends CommandBase {
     double controllerAngle = controllerAngle(0,1);
     double targetAngle = dt.getYaw() + 99.9;
     if (targetAngle > 180){ targetAngle -= 360; }
+    if (targetAngle < -180){ targetAngle += 360; }
     double shortestAngle = shortestAngle(controllerAngle, targetAngle);
 
     double maxSpeed = 0.75;

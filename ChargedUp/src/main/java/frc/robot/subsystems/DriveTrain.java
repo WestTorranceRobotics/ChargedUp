@@ -72,6 +72,8 @@ public class DriveTrain extends SubsystemBase {
   double a_kP;
   double a_kI;
   double a_kD;
+
+  double startYawOffset;
  
   Encoder rightEncoder = new Encoder(0,1,false,EncodingType.k2X);
   Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
@@ -93,13 +95,13 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBDistanceKp = drivesTab.add("Distance kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 4).getEntry();
   private GenericEntry SBDistanceKi = drivesTab.add("Distance kI",RobotMap.DriveTrainConstants.distancePIDkI).withPosition(1, 4).getEntry();
   private GenericEntry SBDistanceKd = drivesTab.add("Distance kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 4).getEntry();
-  private GenericEntry SBtargetPosition = drivesTab.add("Target position",0).withPosition(0, 5).getEntry();
-  private GenericEntry SBEnablePIDPosition = drivesTab.add("Enable position",0).withPosition(1, 5).getEntry();
+  private GenericEntry SBtargetPosition = drivesTab.add("Target position",0).withPosition(4, 0).getEntry();
+  private GenericEntry SBEnablePIDPosition = drivesTab.add("Enable position",0).withPosition(5, 0).getEntry();
   private GenericEntry SBRotationKp = drivesTab.add("Rotation kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 6).getEntry();
   private GenericEntry SBRotationKi = drivesTab.add("Rotation kI",RobotMap.DriveTrainConstants.distancePIDkI).withPosition(1, 6).getEntry();
   private GenericEntry SBRotationKd = drivesTab.add("Rotation kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 6).getEntry();
   private GenericEntry SBtargetAngle = drivesTab.add("Target angle",0).withPosition(3, 6).getEntry();
-  private GenericEntry SBResetPosition =  drivesTab.add("Reset PID",0).withPosition(0, 7).getEntry();
+  private GenericEntry SBResetPosition =  drivesTab.add("Reset PID",0).withPosition(7, 0).getEntry();
   
   
     
@@ -127,10 +129,11 @@ public class DriveTrain extends SubsystemBase {
     speedPercentage = 100;
     gyroPID = new PIDController(kP, kI, kD);
     distancePID = new PIDController(d_kP, d_kI, d_kD);
-    orientationPID = new PIDController(0, 0, 0);
-    gyroPID.setTolerance(5.0);
+    orientationPID = new PIDController(0.02, 0, 0.003);
+    orientationPID.setTolerance(1);
+    gyroPID.setTolerance(1.0);
 
-    
+    startYawOffset = driveGyro.getYaw();
 
     // gyroPID = new PIDController(kP, kI, kD);
     // gyroPID.setTolerance(5.0);
@@ -154,29 +157,35 @@ public class DriveTrain extends SubsystemBase {
 // rightLeader.setSafetyEnabled(true);
 // rightFollower.setSafetyEnabled(true);
 
-    rightLeader.setInverted(true);
-
     drive = new DifferentialDrive(leftLeader,rightLeader);
 
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
 
     leftLeader.setInverted(false);
-    leftFollower.setInverted(InvertType.FollowMaster);
-    rightFollower.setInverted(InvertType.FollowMaster);
+    leftFollower.setInverted(false);
+    
+    rightLeader.setInverted(true);
+    rightFollower.setInverted(true);
+
     leftFollower.setNeutralMode(NeutralMode.Brake);
     leftLeader.setNeutralMode(NeutralMode.Brake);
     rightLeader.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
+
+    rightEncoder.setReverseDirection(true);
+    leftEncoder.setReverseDirection(false);
   }
 
-  public void resetEncoder(){
-    //leftEncoder.reset();
+  public void resetEncoders(){
+    leftEncoder.reset();
     rightEncoder.reset();
   }
 
 
-
+  public double getStartYawOffset(){
+    return startYawOffset;
+  }
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){
@@ -186,7 +195,27 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void TankDrive(double InputLeftSpeed, double InputRightSpeed){
-    drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+    leftLeader.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
+    leftFollower.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
+
+    rightLeader.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
+    rightFollower.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
+
+    // drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+  }
+
+  public void TankDriveStraight(double speed, double totalDist){
+    double error;
+    double weight = 1;
+
+    if(getRightDistance() < getLeftDistance()){
+      error = (getLeftDistance()-getRightDistance())/totalDist;
+      TankDrive(speed-(error*weight*Math.signum(speed)), speed);
+    }
+    else{
+      error = (getRightDistance()-getLeftDistance())/totalDist;
+      TankDrive(speed, speed-(error*weight*Math.signum(speed)));
+    }
   }
 
   public int GetLeftSpeed(){
@@ -245,9 +274,21 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
-  public void distancePIDDrive(){
-    double calculate = MathUtil.clamp(distancePID.calculate(getLeftDistance(), SBtargetPosition.getDouble(0)), -0.75, 0.75);
+  public void distancePIDDrive(double setpoint){
+    //double error;
+    //double weight = 1;
+    double calculate = MathUtil.clamp(distancePID.calculate(getRightDistance(), setpoint), -0.75, 0.75);
+
+    // if(getRightDistance() < getLeftDistance()){
+    //   error = (getLeftDistance()-getRightDistance())/setpoint;
+    //   TankDrive(calculate-(error*weight*Math.signum(calculate)), calculate);
+    // }
+    // else{
+    //   error = (getRightDistance()-getLeftDistance())/setpoint;
+    //   TankDrive(calculate, calculate-(error*weight*Math.signum(calculate)));
+    // }
     TankDrive(calculate, calculate);
+    
   }
 
   public double getLeftVelocity(){
@@ -259,11 +300,16 @@ public class DriveTrain extends SubsystemBase {
   }    
   
 
+  double counter = 0;
   @Override
   public void periodic() {
-    if (SBEnablePIDPosition.getDouble(0) ==1){
-      distancePIDDrive();
+    if(counter <=5 ){
+      startYawOffset = driveGyro.getYaw();
+      counter += 1;
     }
+    // if (SBEnablePIDPosition.getDouble(0)==1 && Math.abs(getLeftDistance() - SBtargetPosition.getDouble(a_kD))>20){
+    //   distancePIDDrive();
+    // }
 
     //System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
@@ -286,7 +332,7 @@ public class DriveTrain extends SubsystemBase {
       a_kP = SBRotationKp.getDouble(0);
       a_kI = SBRotationKi.getDouble(0);
       a_kD = SBRotationKd.getDouble(0);
-      orientationPID.setPID(a_kP, a_kI, a_kD);
+      distancePID.setPID(a_kP, a_kI, a_kD);
     }
 
 

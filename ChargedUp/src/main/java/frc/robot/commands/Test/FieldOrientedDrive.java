@@ -6,9 +6,9 @@ package frc.robot.commands.Test;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class FieldOrientedClimb extends CommandBase {
+public class FieldOrientedDrive extends CommandBase {
   /** Creates a new FieldOrientedClimb. */
-  public FieldOrientedClimb() {
+  public FieldOrientedDrive() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

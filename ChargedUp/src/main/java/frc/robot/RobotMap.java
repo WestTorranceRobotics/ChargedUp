@@ -19,6 +19,7 @@ import org.ejml.dense.row.decompose.TriangularSolver_CDRM;
  */
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.LimeLight;
 
 public final class RobotMap {
   

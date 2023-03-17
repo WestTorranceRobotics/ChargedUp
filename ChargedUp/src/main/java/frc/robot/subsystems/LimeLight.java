@@ -20,9 +20,9 @@ public class LimeLight extends SubsystemBase {
   private GenericEntry bottomBound = limelightTab.add("Bottom Bound",0).withPosition(2, 2).getEntry();
   private GenericEntry SBIsFinished =  limelightTab.add("Is Finished?",false).withPosition(0, 3).getEntry();
   private GenericEntry SBReturnSpeed =  limelightTab.add("Speed?",0).withPosition(1, 3).getEntry();
-  private GenericEntry SBRotationKp = limelightTab.add("Rotation kP",0.1).withPosition(0, 4).getEntry();
+  private GenericEntry SBRotationKp = limelightTab.add("Rotation kP",0.015).withPosition(0, 4).getEntry();
   private GenericEntry SBRotationKi = limelightTab.add("Rotation kI",0).withPosition(1, 4).getEntry();
-  private GenericEntry SBRotationKd = limelightTab.add("Rotation kD",0.05).withPosition(2, 4).getEntry();
+  private GenericEntry SBRotationKd = limelightTab.add("Rotation kD",0.0008).withPosition(2, 4).getEntry();
   
   private double middle = 22;
 
@@ -47,6 +47,14 @@ public class LimeLight extends SubsystemBase {
 
   public double getTX() {
     return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+  }
+
+  public double getTY() {
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+  }
+
+  public double getTV() {
+    return NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
   }
 
   public void setPipeline(int pipline){
@@ -86,11 +94,11 @@ public class LimeLight extends SubsystemBase {
     SBReturnSpeed.setDouble( Math.signum(calculation)*Math.max(calculation, 0.1));
    
     double boxHeight = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tvert").getDouble(0);
-
-    bottomBound.setDouble(getTX() - boxHeight/2);
-    topBound.setDouble(getTX() + boxHeight/2);
-    topIsOpen.setBoolean(getTX() + boxHeight/2 > middle);
-    bottomIsOpen.setBoolean(getTX() - boxHeight/2 < middle);
+    double ty = getTY() * (320/40);
+    bottomBound.setDouble(ty - boxHeight/2);
+    topBound.setDouble(ty + boxHeight/2);
+    topIsOpen.setBoolean(ty + boxHeight/2 > middle && getTV() == 1);
+    bottomIsOpen.setBoolean(ty - boxHeight/2 < middle && getTV() == 1);
     // This method will be called once per scheduler run
 
     

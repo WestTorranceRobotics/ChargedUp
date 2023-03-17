@@ -11,6 +11,7 @@ import frc.robot.subsystems.Claw;
 public class ClawRotation extends CommandBase {
   Claw clawsubsystem;
   XboxController controller;
+  int dir = 0;
   /** Creates a new ClawRotation. */
   public ClawRotation(Claw claw,XboxController xbox) {
     this.clawsubsystem = claw;
@@ -34,7 +35,7 @@ public class ClawRotation extends CommandBase {
     }
     else
     {
-      clawsubsystem.runClaw(-0.05);
+      clawsubsystem.runClaw(-0.04);
     }
 
 
@@ -43,12 +44,21 @@ public class ClawRotation extends CommandBase {
 
     if(leftTrigger >= 0.5){
       clawsubsystem.clockFlip();
+      dir = 1;
     }
    
 
     if (rightTrigger >= 0.5){
       clawsubsystem.counterClockFlip();
+      dir = -1;
 
+    }
+
+    if(dir == 1 && clawsubsystem.getDownSwitch()){
+      clawsubsystem.stopRotate();
+    }
+    if(dir == -1 && clawsubsystem.getUpSwitch()){
+      clawsubsystem.stopRotate();
     }
   }
 

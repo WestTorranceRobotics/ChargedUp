@@ -16,7 +16,7 @@ public class EndWhenExtendedToPoint extends CommandBase {
     this.extensionArms = extensionArms;
     this.target = target;
 
-    tolerence = 1;
+    tolerence = 2;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

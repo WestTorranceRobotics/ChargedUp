@@ -5,17 +5,16 @@
 package frc.robot.commands.AutoCommands.HelperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Claw;
 
-public class DriveDistance extends CommandBase {
-  DriveTrain dt;
-  double distance;
-  /** Creates a new DriveDistance. */
-  public DriveDistance(DriveTrain dt, double distance) {
-    this.dt = dt;
-    this.distance = distance;
+public class ClawActive extends CommandBase {
+  Claw claw;
+  double speed;
+  /** Creates a new ClawActive. */
+  public ClawActive(Claw claw, double Speed) {
+    this.claw = claw;
+    this.speed = Speed;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(dt);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +23,9 @@ public class DriveDistance extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    claw.runClaw(speed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
