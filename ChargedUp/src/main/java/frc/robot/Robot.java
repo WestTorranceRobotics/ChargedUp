@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    //m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
@@ -180,9 +180,10 @@ public class Robot extends TimedRobot {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       // Calculate the hue - hue is easier for rainbows because the color
       // shape is a circle so only one value needs to precess
-      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      // final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
       // Set the value
-      m_ledBuffer.setHSV(i, hue, 255, 128);
+      // m_ledBuffer.setHSV(i, hue, 255, 128);
+      m_ledBuffer.setHSV(i, 80, 255, 128);
     }
     // Increase by to make the rainbow "move"
     m_rainbowFirstPixelHue += 3;

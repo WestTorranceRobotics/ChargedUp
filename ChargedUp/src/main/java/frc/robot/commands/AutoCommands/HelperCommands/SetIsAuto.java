@@ -2,44 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.AutoCommands.HelperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class ClawInward extends CommandBase {
-  /** Creates a new ClawInward. */
-  Claw clawSubsystem;
-  Boolean isFinished;
-  public ClawInward(Claw claw) {
-    this.clawSubsystem = claw;
-    addRequirements(claw);
-    isFinished = false;
+public class SetIsAuto extends CommandBase {
+  Claw claw;
+  boolean value;
+  boolean isFinished = false;
+  /** Creates a new SetIsAuto. */
+  public SetIsAuto(Claw claw, boolean value) {
+    this.claw = claw;
+    this.value = value;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    clawSubsystem.SetIsAuto(false);
+    claw.SetIsAuto(value);
+    isFinished = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    clawSubsystem.runClaw(0.5);
-    
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    clawSubsystem.runClaw(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

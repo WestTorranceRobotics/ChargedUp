@@ -274,7 +274,7 @@ public class RobotContainer {
       runExtensionArmPower = new RunExtensionArmPower(extensionArmSubsystem);
       runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, xboxController);
       extensionArmSubsystem.setDefaultCommand(runExtensionArmPosition);
-      startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, armSubsystem, 0);
+      startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, armSubsystem, 4);
       highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem,armSubsystem, 1);
             
     }
@@ -327,8 +327,8 @@ public class RobotContainer {
     if (RobotMap.enableClaw){
 
     //Main Command
-    operatorXbutton.whileTrue(clawInward);
-    operatorBbutton.whileTrue(clawOutward);
+    operatorXbutton.whileTrue(clawOutward);
+    operatorBbutton.whileTrue(clawInward);
     operatorYbutton.onTrue(clawsolenoidExtend);
     operatorAbutton.onTrue(clawsolenoidRetract);
 
@@ -366,13 +366,13 @@ public class RobotContainer {
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
       // driverLeftTopRight.onTrue(pointToLimeCommand);
-      driverLeftTopRight.onTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+      // driverLeftTopRight.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 
     if (RobotMap.enableAutonomous){
       // driverLeftBottomRight.onTrue(coneScoringAutonomous);
-       driverLeftBottomLeft.onTrue(new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
+      // driverLeftBottomLeft.onTrue(new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
       //driverLeftBottomLeft.onTrue(new ScoringSecondCube(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
       //driverLeftBottomLeft.onTrue(new DriveDistance(driverBaseSubsystem, 2050));
     }
@@ -402,10 +402,10 @@ public class RobotContainer {
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    */
-  /* 
+  
  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem);
  }
- */
+ 
 }

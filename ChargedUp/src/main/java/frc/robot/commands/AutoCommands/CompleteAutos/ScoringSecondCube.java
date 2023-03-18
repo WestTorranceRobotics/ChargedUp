@@ -33,7 +33,8 @@ public class ScoringSecondCube extends ParallelCommandGroup {
     addCommands(new ParallelCommandGroup(
       
     new SequentialCommandGroup( 
-    new ParallelDeadlineGroup( new BasicGrabSecondCube(driveTrain, intake), new RunArmPositionAuto(arms, -25)),
+    new ParallelDeadlineGroup( new BasicGrabSecondCube(driveTrain, intake), new RunArmPositionAuto(arms, 0))
+   /* 
     new RunArmPositionAuto(arms, 0),
     new ExtendAndSuckCube(claw, extensionArms, arms),
     new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-60),new ClawPassive(claw),new RunArmPositionAuto(arms, -60)),
@@ -42,5 +43,7 @@ public class ScoringSecondCube extends ParallelCommandGroup {
    // new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0)  ,new ToggleExtensionArmSetpoint(extensionArms, arms, 0)),
     new ParallelCommandGroup(new EndWhenRotatedToPoint(arms, 0), new ToggleArmSetpoint(arms, intake, 0))),
     new ClawPassive(claw)));
+    */
+    )));
   }
 }

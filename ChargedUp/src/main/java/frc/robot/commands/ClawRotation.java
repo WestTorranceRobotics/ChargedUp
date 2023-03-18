@@ -28,16 +28,16 @@ public class ClawRotation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if(clawsubsystem.IsClosed())
-    {
-      clawsubsystem.runClaw(-0.08);
+    if(!clawsubsystem.GetIsAuto()){
+      if(clawsubsystem.IsClosed())
+      {
+        clawsubsystem.runClaw(-0.08);
+      }
+      else
+      {
+        clawsubsystem.runClaw(-0.04);
+      }
     }
-    else
-    {
-      clawsubsystem.runClaw(-0.04);
-    }
-
 
     double leftTrigger =controller.getLeftTriggerAxis();
     double rightTrigger = controller.getRightTriggerAxis();
@@ -53,13 +53,15 @@ public class ClawRotation extends CommandBase {
       dir = -1;
 
     }
-
-    if(dir == 1 && clawsubsystem.getDownSwitch()){
+//!
+// clawsubsystem.getDownSwitch()
+    if(dir == 1 && ((clawsubsystem.getPosition()>=45))){
       clawsubsystem.stopRotate();
     }
-    if(dir == -1 && clawsubsystem.getUpSwitch()){
+    if(dir == -1 && ((clawsubsystem.getPosition() <= 0))){
       clawsubsystem.stopRotate();
     }
+    
   }
 
   // Called once the command ends or is interrupted.

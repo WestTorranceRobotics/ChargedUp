@@ -19,6 +19,7 @@ public class LimelightAlignWithGyro extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TurnToDirection(dt, 0, 3),
+      new PointToLime(dt, limeLight),
       new PointToLime(dt, limeLight)
     );
   }

@@ -17,6 +17,7 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.ExtensionArms;
 import frc.robot.subsystems.Intake;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AutoCommands.HelperCommands.*;
@@ -30,14 +31,19 @@ public class TwoCubeAutonomous extends ParallelCommandGroup {
   public TwoCubeAutonomous(Claw claw, ExtensionArms extensionArms, Arms arms, Intake intake, DriveTrain driveTrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new SequentialCommandGroup(new ToggleIntakeSolenoid(intake),
-    new ExtendAndSuckCube(claw, extensionArms, arms),
-    new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53),new ClawPassive(claw),new RunArmPositionAuto(arms, -53), new ClawPassive(claw)),
-    new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
-    new ParallelDeadlineGroup(new Delay(0.25), new ClawActive(claw,0.2)),
-    new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms, 0)),
-    new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain)
+    addCommands(new SequentialCommandGroup(
+      new SetIsAuto(claw, true),
+      new InstantCommand(driveTrain::setStartYawOffset),
+      new ToggleIntakeSolenoid(intake),
+      new ExtendAndSuckCube(claw, extensionArms, arms),
+      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53),new ClawPassive(claw),new RunArmPositionAuto(arms, -53), new ClawPassive(claw)),
+      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
+      new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.2)),
+      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms, 0)),
+      new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
+      new SetIsAuto(claw, false)
     //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, -25), new RunArmPositionAuto(arms, -25))
     ));
   }
 }
+

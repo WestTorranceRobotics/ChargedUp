@@ -49,6 +49,7 @@ private GenericEntry SBClawSpeed = clawTab.add("Claw Speed", 0).withPosition(3, 
 private GenericEntry SBClawTargetSpeed = clawTab.add("Claw Target Speed", 0).withPosition(0, 1).getEntry();
 private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPosition(1, 1).getEntry();
 
+boolean isAuto = false;
 
 
   /** Creates a new Claw. */
@@ -68,6 +69,7 @@ leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
 downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
 leftSolenoid.set(false);
+
   }
 
 public void runClaw(double power){
@@ -76,7 +78,14 @@ powerMotor.set(power);
 
 }
 
+public boolean GetIsAuto(){
+  return isAuto;
+}
 
+public void SetIsAuto(boolean newVal)
+{
+  isAuto = newVal;
+}
 
 public void extendClaw(boolean bol){
 
@@ -110,8 +119,8 @@ return !downLimitSwitch.get();
 
 public void counterClockFlip(){
 
-  if (!getUpSwitch() && (motionMotor.getEncoder().getPosition() <= 45)){
-    motionMotor.set(0.2);
+  if ((motionMotor.getEncoder().getPosition()>= 0)){
+    motionMotor.set(-0.2);
 
   }
   else
@@ -123,14 +132,17 @@ public void counterClockFlip(){
 
 public void clockFlip(){
 
-  if ((motionMotor.getEncoder().getPosition()>=0) && !getDownSwitch()){
-    motionMotor.set(-0.2);
+  if ((motionMotor.getEncoder().getPosition()<=45)){
+    motionMotor.set(0.2);
 
   }
 
   else{
     motionMotor.set(0.0);
   }
+}
+public double getPosition(){
+  return motionMotor.getEncoder().getPosition();
 }
 
 public boolean IsClosed(){

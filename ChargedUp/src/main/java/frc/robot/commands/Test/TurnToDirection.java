@@ -26,7 +26,7 @@ public class TurnToDirection extends CommandBase {
     this.targetAngle = target;
     // this.startYawOffset = dt.getStartYawOffset();
 
-    this.startYawOffset = -81.66;
+    this.startYawOffset = 138.42;
     this.tolerence = tolerence;
 
     PID = dt.GetOrientationPID();

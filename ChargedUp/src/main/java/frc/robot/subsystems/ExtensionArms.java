@@ -5,10 +5,14 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import javax.lang.model.element.Element;
+
 import com.revrobotics.CANSparkMax;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.commands.AutoCommands.HelperCommands.Delay;
 
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -88,13 +92,13 @@ public class ExtensionArms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(0);
-      targettedPosition = 0;
+      SBArmTargettedPosition.setDouble(-1);
+      targettedPosition = -1;
     }
 
     else if (targettedSetPoint ==1){
-      SBArmTargettedPosition.setDouble(-100);
-      targettedPosition = -100;
+      SBArmTargettedPosition.setDouble(-95);
+      targettedPosition = -95;
     }
 
     else if (targettedSetPoint ==2){
@@ -107,12 +111,19 @@ public class ExtensionArms extends SubsystemBase {
       targettedPosition = -18;
     }
 
+    else if (targettedSetPoint == 4){
+      SBArmTargettedPosition.setDouble(6);
+      targettedPosition = 6;
+      
+    }
+    
 
-    if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()>=-1)){
+/* 
+    if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()>=-0.25)){
       m_extensionarm.getEncoder().setPosition(0);
 
     }
-
+*/
     m_extensionarm.getPIDController().setReference(targettedPosition, ControlType.kPosition);
 
     
@@ -178,7 +189,14 @@ public class ExtensionArms extends SubsystemBase {
     SBCurrentArmSetPoint.setDouble(getPoint());
 
     
-    
+    if (m_extensionarm.getEncoder().getPosition() >= 5){
+
+      m_extensionarm.getEncoder().setPosition(0);
+      targettedSetPoint = 0;
+      setTargettedPosition(0);
+   
+
+    }
 
     if(SBArmHeldPID.getInteger(0) == 1){
       runArmPosition(targettedPosition);

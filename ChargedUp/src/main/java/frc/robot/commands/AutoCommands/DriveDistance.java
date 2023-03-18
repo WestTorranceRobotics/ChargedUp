@@ -30,17 +30,17 @@ public class DriveDistance extends CommandBase {
   @Override
   public void execute() {
     if (distance >= 0 ){
-      if (dt.getLeftDistance() >= distance){
+      if (dt.getLeftDistance() >= distance-10 ){
         isFinished = true;
       }
     }
     else if (distance < 0 ){
-      if (dt.getLeftDistance() <= distance){
+      if (dt.getLeftDistance() <= distance+50){
         isFinished = true;
       }
     }
     // dt.distancePIDDrive(distance);
-    dt.TankDrive(0.525 * Math.signum(distance), 0.5 * Math.signum(distance));
+    dt.TankDrive(0.85 * Math.signum(distance), 0.85 * Math.signum(distance));
   }
 
   // Called once the command ends or is interrupted.

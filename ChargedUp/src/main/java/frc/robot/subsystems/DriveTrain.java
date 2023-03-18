@@ -299,6 +299,9 @@ public class DriveTrain extends SubsystemBase {
     return rightEncoder.getDistance();
   }    
   
+  public void setStartYawOffset(){
+    startYawOffset = driveGyro.getYaw();
+  }
 
   double counter = 0;
   @Override
