@@ -4,8 +4,6 @@
 
 package frc.robot.commands.Test;
 
-import javax.xml.namespace.QName;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,17 +11,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.DriveTrain;
 
-public class WorkingTurnInPlace extends CommandBase {
+public class TurnInPlace extends CommandBase {
   /** Creates a new FieldOrientedDrive. */
   XboxController controller;
   DriveTrain dt;
   PIDController PID;
 
-  public WorkingTurnInPlace(XboxController controller, DriveTrain dt) {
+  public TurnInPlace(XboxController controller, DriveTrain dt) {
     this.controller = controller;
     this.dt = dt;
 
-    PID = dt.getOrientationPID();
+    PID = dt.GetOrientationPID();
     PID.setTolerance(1);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(dt);
@@ -40,6 +38,7 @@ public class WorkingTurnInPlace extends CommandBase {
     double controllerAngle = controllerAngle(0,1);
     double targetAngle = dt.getYaw() + 99.9;
     if (targetAngle > 180){ targetAngle -= 360; }
+    if (targetAngle < -180){ targetAngle += 360; }
     double shortestAngle = shortestAngle(controllerAngle, targetAngle);
 
     double maxSpeed = 0.75;

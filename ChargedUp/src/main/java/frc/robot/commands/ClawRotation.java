@@ -11,6 +11,7 @@ import frc.robot.subsystems.Claw;
 public class ClawRotation extends CommandBase {
   Claw clawsubsystem;
   XboxController controller;
+  int dir = 0;
   /** Creates a new ClawRotation. */
   public ClawRotation(Claw claw,XboxController xbox) {
     this.clawsubsystem = claw;
@@ -27,18 +28,40 @@ public class ClawRotation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(!clawsubsystem.GetIsAuto()){
+      if(clawsubsystem.IsClosed())
+      {
+        clawsubsystem.runClaw(-0.1);
+      }
+      else
+      {
+        clawsubsystem.runClaw(-0.06);
+      }
+    }
+
     double leftTrigger =controller.getLeftTriggerAxis();
     double rightTrigger = controller.getRightTriggerAxis();
 
     if(leftTrigger >= 0.5){
       clawsubsystem.clockFlip();
+      dir = 1;
     }
    
 
     if (rightTrigger >= 0.5){
       clawsubsystem.counterClockFlip();
+      dir = -1;
 
     }
+//!
+// clawsubsystem.getDownSwitch()
+    if(dir == 1 && ((clawsubsystem.getPosition()>=45))){
+      clawsubsystem.stopRotate();
+    }
+    if(dir == -1 && ((clawsubsystem.getPosition() <= 0))){
+      clawsubsystem.stopRotate();
+    }
+    
   }
 
   // Called once the command ends or is interrupted.

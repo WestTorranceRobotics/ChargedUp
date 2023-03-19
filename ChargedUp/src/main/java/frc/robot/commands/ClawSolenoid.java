@@ -10,10 +10,12 @@ public class ClawSolenoid extends CommandBase {
   /** Creates a new ClawSolenoid. */
   Claw clawsubsystem;
   boolean direction;
+  boolean isFinished;
   
   public ClawSolenoid(Claw claw, boolean dir) {
     this.clawsubsystem = claw;
     this.direction = dir;
+    this.isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,6 +27,7 @@ public class ClawSolenoid extends CommandBase {
   @Override
   public void execute() {
     clawsubsystem.extendClaw(direction);
+    isFinished = true;
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +37,6 @@ public class ClawSolenoid extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return isFinished;
   }
 }

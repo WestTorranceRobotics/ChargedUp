@@ -10,19 +10,23 @@ import frc.robot.subsystems.Claw;
 public class ClawOutward extends CommandBase {
   /** Creates a new ClawOutward. */
   Claw clawSubsystem;
+  boolean isFinished;
   public ClawOutward(Claw claw) {
     this.clawSubsystem = claw;
+    isFinished = false;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    clawSubsystem.SetIsAuto(false);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawSubsystem.runClaw(0.5);
+    clawSubsystem.runClaw(-0.3);
   
   }
 

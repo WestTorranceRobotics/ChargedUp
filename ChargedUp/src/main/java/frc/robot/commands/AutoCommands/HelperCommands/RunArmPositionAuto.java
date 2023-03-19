@@ -2,20 +2,23 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.AutoCommands.HelperCommands;
+
+import java.lang.annotation.Target;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.RobotMap.ArmConstants;
+import frc.robot.subsystems.Arms;
 
-
-public class ToggleIntakeSolenoid extends CommandBase {
-  Intake intakeSubsystem;
+public class RunArmPositionAuto extends CommandBase {
+  Arms arms;
   boolean isFinished;
-  /** Creates a new ToggleIntakeSolenoid. */
-  public ToggleIntakeSolenoid(Intake intake) {
-    this.intakeSubsystem = intake;
+  double target;
+  /** Creates a new RunArmPositionAuto. */
+  public RunArmPositionAuto(Arms arms, double target) {
+    this.arms = arms;
     this.isFinished = false;
-    addRequirements(intake);
+    this.target = target;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,7 +29,9 @@ public class ToggleIntakeSolenoid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intakeSubsystem.toggleSolenoid((!intakeSubsystem.getSolenoid()));
+    arms.toggleSetpoint(0);
+    arms.setTargttedPosition(target);
+    arms.togglePosition(1);
     isFinished = true;
   }
 

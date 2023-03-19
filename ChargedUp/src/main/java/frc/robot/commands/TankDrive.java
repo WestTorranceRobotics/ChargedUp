@@ -7,11 +7,15 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class TankDrive extends CommandBase {
   /** Creates a new TankDrive. */
   DriveTrain drivetrain;
+  double zeroTolerence = 0.15;
+  double maxTolerence = 0.9;
+  double notMaxTopSpeed = 0.8;
 
   private Joystick leftjoystick;
   private Joystick rightjoystick;
@@ -29,13 +33,25 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    drivetrain.TankDrive(-leftjoystick.getY(),-rightjoystick.getY());
+    double leftSpeed = calculate(-leftjoystick.getY());
+    double rightSpeed = calculate(-rightjoystick.getY());
+    drivetrain.TankDrive(leftSpeed,rightSpeed);
 
 
 
   
 
+  }
+
+  double calculate(double speed){
+    double abs = Math.abs(speed);
+    if (abs < zeroTolerence){return 0;}
+    return speed;
+    // else if (abs < maxTolerence){return 1;}
+    // else {
+    //   double scaled = abs * notMaxTopSpeed / maxTolerence;
+    //   return scaled * Math.signum(speed);
+    // }
   }
 
   // Called once the command ends or is interrupted.

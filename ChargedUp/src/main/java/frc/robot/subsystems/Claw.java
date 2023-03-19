@@ -32,9 +32,9 @@ public class Claw extends SubsystemBase {
 
 PneumaticsControlModule controlModule;
 
-CANSparkMax clawRotateMotor;
-CANSparkMax clawIntakeMotor;
-
+CANSparkMax motionMotor;
+CANSparkMax powerMotor;
+boolean clawstate;
 Solenoid leftSolenoid;
 Solenoid rightSolenoid;
 boolean direction;
@@ -49,6 +49,7 @@ private GenericEntry SBClawSpeed = clawTab.add("Claw Speed", 0).withPosition(3, 
 private GenericEntry SBClawTargetSpeed = clawTab.add("Claw Target Speed", 0).withPosition(0, 1).getEntry();
 private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPosition(1, 1).getEntry();
 
+boolean isAuto = false;
 
 
   /** Creates a new Claw. */
@@ -56,104 +57,113 @@ private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPo
     PneumaticsControlModule controlModule = new PneumaticsControlModule(RobotMap.ClawMap.controlModuleCANID);
 
     // controlModule.enableCompressorAnalog(110, 120);
-    direction = true;
-    clawRotateMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
-    clawRotateMotor.getEncoder().setPosition(0);
-    clawIntakeMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
-    clawIntakeMotor.setIdleMode(IdleMode.kBrake);
-    clawRotateMotor.setIdleMode(IdleMode.kBrake);
-    leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
-    //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
+direction = true;
+clawstate = true;
+motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
+motionMotor.getEncoder().setPosition(0);
+powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
+powerMotor.setIdleMode(IdleMode.kBrake);
+motionMotor.setIdleMode(IdleMode.kBrake);
+leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+//Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
 
-    leftSolenoid.set(false);
-
-    upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
-    downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
-
-  }
-
-  public void runClaw(double power){
-
-  clawIntakeMotor.set(power);
+upLimitSwitch = new DigitalInput(RobotMap.ClawMap.upLimitSwitchChannel);
+downLimitSwitch = new DigitalInput(RobotMap.ClawMap.downLimitSwitchChannel);
+leftSolenoid.set(false);
 
   }
 
+public void runClaw(double power){
+
+powerMotor.set(power);
+
+}
+
+public boolean GetIsAuto(){
+  return isAuto;
+}
+
+public void SetIsAuto(boolean newVal)
+{
+  isAuto = newVal;
+}
+
+public void extendClaw(boolean bol){
+
+leftSolenoid.set(bol);
+//rightSolenoid.set(bol);
+
+}
 
 
-  public void extendClaw(boolean bol){
 
-  leftSolenoid.set(bol);
-  //rightSolenoid.set(bol);
+public void rotateArm(){
+  motionMotor.set(SBClawTargetSpeed.getDouble(0));
+
+}
+
+public void stopRotate(){
+  motionMotor.set(0);
+}
+
+public boolean getUpSwitch(){
+
+return !upLimitSwitch.get();
+
+}
+
+public boolean getDownSwitch(){
+
+return !downLimitSwitch.get();
+
+}
+
+public void counterClockFlip(){
+
+  if ((motionMotor.getEncoder().getPosition()>= 0)){
+    motionMotor.set(-0.2);
+    clawstate = true;
+
+  }
+  else
+  {
+    motionMotor.set(0.0);
+  }
+
+}
+
+public void clockFlip(){
+
+  if ((motionMotor.getEncoder().getPosition()<=45)){
+    motionMotor.set(0.2);
+    clawstate = false;
 
   }
 
-  public boolean getDirection(){
-    return direction;
+  else{
+    motionMotor.set(0.0);
   }
+}
+public double getPosition(){
+  return motionMotor.getEncoder().getPosition();
+}
 
-  public void ToggleDirection(){
-    direction = !direction;
-  }
+public boolean IsClosed(){
+  return leftSolenoid.get();
+}
+public boolean getClawState(){
+  return clawstate;
+}
 
+@Override
+public void periodic() {
+  //powerMotor.set(-0.08);
 
-  public void rotateArm(double speed){
-    clawRotateMotor.set(speed);
+  SBClawSolenoid.setBoolean(leftSolenoid.get());
+  SBLeftLimit.setBoolean(getDownSwitch());
+  SBRightLimit.setBoolean(getUpSwitch());
+  SBClawPosition.setDouble(motionMotor.getEncoder().getPosition());
+  SBClawSpeed.setDouble(motionMotor.getEncoder().getVelocity());
 
-  }
-
-  public void stopRotate(){
-    clawRotateMotor.set(0);
-  }
-
-  public boolean getUpSwitch(){
-    return !upLimitSwitch.get();
-  }
-
-  public boolean getDownSwitch(){
-
-  return !downLimitSwitch.get();
-
-  }
-
-  public void counterClockFlip(){
-
-    if ((getUpSwitch() == false) && (clawRotateMotor.getEncoder().getPosition() <= 45)){
-      clawRotateMotor.set(0.15);
-
-    }
-    else
-    {
-      clawRotateMotor.set(0.0);
-    }
-
-  }
-
-  public void clockFlip(){
-
-    if (clawRotateMotor.getEncoder().getPosition()>=0){
-      clawRotateMotor.set(-0.15);
-    }
-    else{
-      clawRotateMotor.set(0.0);
-    }
-  }
-  @Override
-  public void periodic() {
-    if(leftSolenoid.get())
-    {
-      runClaw(-0.08);
-    }
-    else
-    {
-      runClaw(-0.05);
-    }
-
-
-    SBClawSolenoid.setBoolean(leftSolenoid.get());
-    SBLeftLimit.setBoolean(getDownSwitch());
-    SBRightLimit.setBoolean(getUpSwitch());
-    SBClawPosition.setDouble(clawRotateMotor.getEncoder().getPosition());
-    SBClawSpeed.setDouble(clawRotateMotor.getEncoder().getVelocity());
-
-  }
+}
 }

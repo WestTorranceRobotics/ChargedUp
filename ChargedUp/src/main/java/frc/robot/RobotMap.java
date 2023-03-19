@@ -19,16 +19,20 @@ import org.ejml.dense.row.decompose.TriangularSolver_CDRM;
  */
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.subsystems.LimeLight;
 
 public final class RobotMap {
   
   public static boolean enableDrivetrain = true;
   public static boolean enableClaw = true;
-  public static boolean enableIntake = true;
+  public static boolean enableIntake = false;
   public static boolean enableLimelight = true;
   public static boolean enableSpindexer = true;
   public static boolean enableArm = true;
   public static boolean enableExtensionArm = true;
+  public static boolean enableAutonomous = true;
+  public static boolean enableSetpoint = true;
+
                                                                      
   public static class SpindexerMap{
     public static int spinnerCANID = 10;
@@ -40,7 +44,7 @@ public final class RobotMap {
   public final class ExtensionArmConstants{
 
     public static final int armMotorID =14;
-    public static final double kP =  0.0125;
+    public static final double kP =  0.02;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
   }
@@ -51,7 +55,7 @@ public final class RobotMap {
 
 
     public static final int armMotorID =6;
-    public static final double kP =  0.025;
+    public static final double kP =  0.02;
     public static final double kI = 0.000000125;
     public static final double kD = 0.065;
     
@@ -113,6 +117,10 @@ public final class RobotMap {
     public static final double gyroPIDkP = 1;
     public static final double gyroPIDkI = 0;
     public static final double gyroPIDkD = 0;
+
+    public static final double distancePIDkP = 0.1;
+    public static final double distancePIDkI = 0.075;
+    public static final double distancePIDkD = 0.0003;
 
 
 

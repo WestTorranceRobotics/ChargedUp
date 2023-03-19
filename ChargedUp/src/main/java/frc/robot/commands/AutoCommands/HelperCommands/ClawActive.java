@@ -2,22 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
-import frc.robot.subsystems.Claw;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+package frc.robot.commands.AutoCommands.HelperCommands;
 
-public class ClawTurning extends CommandBase {
-  /** Creates a new ClawTurning. */
-  Claw clawsubsystem;
-  boolean spindirection;
-  boolean isFinished;
-  public ClawTurning(Claw claw,boolean direction) {
-    this.clawsubsystem = claw;
-    this.spindirection = direction;
-    this.isFinished = false;
-    addRequirements(clawsubsystem);
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Claw;
+
+public class ClawActive extends CommandBase {
+  Claw claw;
+  double speed;
+  /** Creates a new ClawActive. */
+  public ClawActive(Claw claw, double Speed) {
+    this.claw = claw;
+    this.speed = Speed;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -28,19 +24,12 @@ public class ClawTurning extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (spindirection){
-      clawsubsystem.clockFlip();
-      }
-    else{
-      clawsubsystem.counterClockFlip();
-    }
+    claw.runClaw(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    clawsubsystem.stopRotate();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

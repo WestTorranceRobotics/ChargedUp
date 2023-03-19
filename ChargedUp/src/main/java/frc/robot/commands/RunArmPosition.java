@@ -3,15 +3,15 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Arms;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.XboxController;
 
 public class RunArmPosition extends CommandBase {
   /** Creates a new RunArmPosition. */
-  Arm armsubsystem;
+  Arms armsubsystem;
   XboxController controller;
-  public RunArmPosition(Arm armss,XboxController Xbox) {
+  public RunArmPosition(Arms armss,XboxController Xbox) {
     controller = Xbox;
     armsubsystem =armss;
     addRequirements(armss);
@@ -30,8 +30,8 @@ public class RunArmPosition extends CommandBase {
     if (y >= 0.1){
       //armsubsystem.setTargttedPosition(armsubsystem.getPosition());
       double currenttargetposition = armsubsystem.getTargettedPosition();
-      if (currenttargetposition + (y*0.15)<=0){
-      currenttargetposition += (y*0.15);
+      if (currenttargetposition + (y*0.25)<=0){
+      currenttargetposition += (y*0.25);
       armsubsystem.toggleSetpoint(0);
       armsubsystem.setTargttedPosition(currenttargetposition);
       armsubsystem.togglePosition(1);
@@ -42,8 +42,8 @@ public class RunArmPosition extends CommandBase {
     else if (y <= -0.1){
       //armsubsystem.setTargttedPosition(armsubsystem.getPosition());
       double currenttargetposition = armsubsystem.getTargettedPosition();
-      if (currenttargetposition +(y*0.15) >= -72){
-        currenttargetposition += (y*0.15);
+      if (currenttargetposition +(y*0.25) >= -72){
+        currenttargetposition += (y*0.25);
         armsubsystem.toggleSetpoint(0);
         armsubsystem.setTargttedPosition(currenttargetposition);
         armsubsystem.togglePosition(1);

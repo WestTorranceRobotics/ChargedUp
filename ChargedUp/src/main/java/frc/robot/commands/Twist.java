@@ -4,20 +4,15 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Claw;
 
-public class RotateArmDefualt extends CommandBase {
-  Arm arm;
-  XboxController controller;
-  /** Creates a new RotateArmDefualt. */
-  public RotateArmDefualt(Arm arm, XboxController controller) {
-    this.arm = arm;
-    this.controller = controller;
-
+public class Twist extends CommandBase {
+  Claw claw;
+  /** Creates a new Twist. */
+  public Twist(Claw claw) {
+    this.claw = claw;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
@@ -26,27 +21,18 @@ public class RotateArmDefualt extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() 
-  {
-    if(controller.getLeftTriggerAxis() > 0.5)
-    {
-      arm.runArmPower(0.2);
+  public void execute() {
+    if (claw.getClawState()){
+      claw.clockFlip();
     }
-    else if(controller.getRightTriggerAxis() > 0.5){
-      arm.runArmPower(-0.2);
-    }
-    else 
-    {
-      arm.runArmPower(0);
+    else{
+      claw.counterClockFlip();
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) 
-  {
-    arm.runArmPower(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
