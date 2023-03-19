@@ -22,7 +22,7 @@ public class DriveForwardAndBalance extends SequentialCommandGroup {
     addCommands(
       //new DriveDistancePID(driveTrain,1150)
     new DriveDistance(driveTrain, 2070),
-    new DriveDistance(driveTrain, -1195),
+    new DriveDistance(driveTrain, -1185),
     new HoldInPlacePID(driveTrain)
     );
   }
