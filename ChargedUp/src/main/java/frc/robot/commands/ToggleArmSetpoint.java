@@ -19,12 +19,12 @@ public class ToggleArmSetpoint extends CommandBase {
   Intake intakeSubsystem;
   int setpoint;
   /** Creates a new ToggleArmSetpoint. */
-  public ToggleArmSetpoint(Arms arms,Intake intake, int point) {
+  public ToggleArmSetpoint(Arms arms, int point) {
     this.armsubsystem = arms;
     this.setpoint = point;
-    this.intakeSubsystem = intake;
+   // this.intakeSubsystem = intake;
     isFinished = false;
-    addRequirements(arms,intake);
+    addRequirements(arms);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -36,26 +36,28 @@ public class ToggleArmSetpoint extends CommandBase {
   @Override
   public void execute() {
 
-    if (intakeSubsystem.getSolenoid()){
+   // if (intakeSubsystem.getSolenoid()){
+   
     armsubsystem.setSetPoint(setpoint);
     armsubsystem.toggleSetpoint(1);
     armsubsystem.togglePosition(0);
-    
     isFinished = true;
-    }
+    
 
-    else{
-      if ((armsubsystem.getTargettedSetPoint()!=0)&&(armsubsystem.getPosition()>=-10)){
-        if (setpoint !=0){
-          armsubsystem.setSetPoint(setpoint);
-          armsubsystem.toggleSetpoint(1);
-          armsubsystem.togglePosition(0);
-          isFinished = true;
-        }
+    
+
+    // else{
+    //   if ((armsubsystem.getTargettedSetPoint()!=0)&&(armsubsystem.getPosition()>=-10)){
+    //     if (setpoint !=0){
+    //       armsubsystem.setSetPoint(setpoint);
+    //       armsubsystem.toggleSetpoint(1);
+    //       armsubsystem.togglePosition(0);
+    //       isFinished = true;
+    //     }
         
-      }
-      isFinished = true;
-    }
+    //   }
+    //   isFinished = true;
+    // }
   }
 
   // Called once the command ends or is interrupted.

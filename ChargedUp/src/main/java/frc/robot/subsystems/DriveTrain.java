@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.PneumaticsControlModule;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -92,9 +93,9 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBGyroKp = drivesTab.add("Gyro kP",RobotMap.DriveTrainConstants.gyroPIDkP).withPosition(0, 3).getEntry();
   private GenericEntry SBGyroKi = drivesTab.add("Gyro kI",RobotMap.DriveTrainConstants.gyroPIDkI).withPosition(1, 3).getEntry();
   private GenericEntry SBGyroKd = drivesTab.add("Gyro kD",RobotMap.DriveTrainConstants.gyroPIDkD).withPosition(2, 3).getEntry();
-  private GenericEntry SBDistanceKp = drivesTab.add("Distance kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 4).getEntry();
-  private GenericEntry SBDistanceKi = drivesTab.add("Distance kI",RobotMap.DriveTrainConstants.distancePIDkI).withPosition(1, 4).getEntry();
-  private GenericEntry SBDistanceKd = drivesTab.add("Distance kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 4).getEntry();
+  // private GenericEntry SBDistanceKp = drivesTab.add("Distance kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 4).getEntry();
+  // private GenericEntry SBDistanceKi = drivesTab.add("Distance kI",RobotMap.DriveTrainConstants.distancePIDkI).withPosition(1, 4).getEntry();
+  // private GenericEntry SBDistanceKd = drivesTab.add("Distance kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 4).getEntry();
   private GenericEntry SBtargetPosition = drivesTab.add("Target position",0).withPosition(4, 0).getEntry();
   private GenericEntry SBEnablePIDPosition = drivesTab.add("Enable position",0).withPosition(5, 0).getEntry();
   private GenericEntry SBRotationKp = drivesTab.add("Rotation kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 6).getEntry();
@@ -102,9 +103,13 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBRotationKd = drivesTab.add("Rotation kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 6).getEntry();
   private GenericEntry SBtargetAngle = drivesTab.add("Target angle",0).withPosition(3, 6).getEntry();
   private GenericEntry SBResetPosition =  drivesTab.add("Reset PID",0).withPosition(7, 0).getEntry();
-  
-  
+  private GenericEntry SBstartingGyro =  drivesTab.add("Starting Pitch",0).withPosition(4, 0).getEntry();
     
+  private GenericEntry SB005 = drivesTab.add("0.05 Delay",0).withPosition(1, 4).getEntry();
+  private GenericEntry SB01 = drivesTab.add("0.1 Delay",0).withPosition(2, 4).getEntry();
+  Timer timer = new Timer();
+  
+
   public DriveTrain() {
     
     //pneumaticcontrolModule = new PneumaticsControlModule(0);
@@ -127,11 +132,13 @@ public class DriveTrain extends SubsystemBase {
     driveGyro.zeroYaw();
     driveGyro.reset();
     speedPercentage = 100;
-    gyroPID = new PIDController(kP, kI, kD);
+    gyroPID = new PIDController(0.02, 0, 0.003);
     distancePID = new PIDController(d_kP, d_kI, d_kD);
     orientationPID = new PIDController(0.02, 0, 0.003);
     orientationPID.setTolerance(1);
     gyroPID.setTolerance(1.0);
+
+    
 
     startYawOffset = driveGyro.getYaw();
 
@@ -185,6 +192,9 @@ public class DriveTrain extends SubsystemBase {
 
   public double getStartYawOffset(){
     return startYawOffset;
+  }
+  public void displayPitch(double pitch){
+    SBstartingGyro.setDouble(pitch);
   }
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
@@ -268,8 +278,8 @@ public class DriveTrain extends SubsystemBase {
     return leftEncoder.getDistance();
   }
 
-  public void gyroPIDDrive(){
-    double calculation = MathUtil.clamp(gyroPID.calculate(getPitch(), 0), -0.75, 0.75);
+  public void gyroPIDDrive(double setpoint){
+    double calculation = MathUtil.clamp(gyroPID.calculate(getPitch(),setpoint),-0.75, 0.75);
     TankDrive(calculation, calculation);
 
   }
@@ -291,6 +301,10 @@ public class DriveTrain extends SubsystemBase {
     
   }
 
+  public AHRS getGyro(){
+    return driveGyro;
+  }
+
   public double getLeftVelocity(){
     //return leftLeaderEncoder.get();
     return 0.0;
@@ -301,6 +315,10 @@ public class DriveTrain extends SubsystemBase {
   
   public void setStartYawOffset(){
     startYawOffset = driveGyro.getYaw();
+  }
+
+  public PIDController getGyroPID(){
+    return gyroPID;
   }
 
   double counter = 0;
@@ -317,19 +335,19 @@ public class DriveTrain extends SubsystemBase {
     //System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
 
-    if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
-      kP = SBGyroKp.getDouble(0);
-      kI = SBGyroKi.getDouble(0);
-      kD = SBGyroKd.getDouble(0);
-      resetGyroPID(kP, kI, kD);
-    }
+    // if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
+    //   kP = SBGyroKp.getDouble(0);
+    //   kI = SBGyroKi.getDouble(0);
+    //   kD = SBGyroKd.getDouble(0);
+    //   resetGyroPID(kP, kI, kD);
+    // }
 
-    if((d_kP != SBDistanceKp.getDouble(0)) || (d_kI != SBDistanceKi.getDouble(0)) || (d_kD != SBDistanceKd.getDouble(0)) ){
-      d_kP = SBDistanceKp.getDouble(0);
-      d_kI = SBDistanceKi.getDouble(0);
-      d_kD = SBDistanceKd.getDouble(0);
-      resetDistancePID(d_kP, d_kI, d_kD);
-    }
+    // if((d_kP != SBDistanceKp.getDouble(0)) || (d_kI != SBDistanceKi.getDouble(0)) || (d_kD != SBDistanceKd.getDouble(0)) ){
+    //   d_kP = SBDistanceKp.getDouble(0);
+    //   d_kI = SBDistanceKi.getDouble(0);
+    //   d_kD = SBDistanceKd.getDouble(0);
+    //   resetDistancePID(d_kP, d_kI, d_kD);
+    // }
 
     if ((a_kP != SBRotationKp.getDouble(0)) || (a_kI != SBRotationKi.getDouble(0)) || (a_kD != SBRotationKd.getDouble(0))){
       a_kP = SBRotationKp.getDouble(0);

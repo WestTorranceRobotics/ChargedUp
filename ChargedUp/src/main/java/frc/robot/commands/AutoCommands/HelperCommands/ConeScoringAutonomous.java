@@ -32,7 +32,7 @@ public class ConeScoringAutonomous extends ParallelCommandGroup {
     new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
     new ParallelDeadlineGroup(new Delay(0.25),new ClawSolenoid(claw, false)),
     new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0)  ,new ToggleExtensionArmSetpoint(extensionArms, arms, 0)),
-    new ParallelCommandGroup(new EndWhenRotatedToPoint(arms, 0), new ToggleArmSetpoint(arms, intake, 0))
+    new ParallelCommandGroup(new EndWhenRotatedToPoint(arms, 0), new ToggleArmSetpoint(arms, 0))
     ),new ClawPassive(claw) );
   }
 }

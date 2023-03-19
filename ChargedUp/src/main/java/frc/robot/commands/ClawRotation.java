@@ -31,11 +31,11 @@ public class ClawRotation extends CommandBase {
     if(!clawsubsystem.GetIsAuto()){
       if(clawsubsystem.IsClosed())
       {
-        clawsubsystem.runClaw(-0.08);
+        clawsubsystem.runClaw(-0.1);
       }
       else
       {
-        clawsubsystem.runClaw(-0.04);
+        clawsubsystem.runClaw(-0.06);
       }
     }
 

@@ -189,7 +189,7 @@ public class ExtensionArms extends SubsystemBase {
     SBCurrentArmSetPoint.setDouble(getPoint());
 
     
-    if (m_extensionarm.getEncoder().getPosition() >= 5){
+    if (m_extensionarm.getEncoder().getPosition() >= 2){
 
       m_extensionarm.getEncoder().setPosition(0);
       targettedSetPoint = 0;

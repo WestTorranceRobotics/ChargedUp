@@ -34,7 +34,7 @@ PneumaticsControlModule controlModule;
 
 CANSparkMax motionMotor;
 CANSparkMax powerMotor;
-
+boolean clawstate;
 Solenoid leftSolenoid;
 Solenoid rightSolenoid;
 boolean direction;
@@ -58,6 +58,7 @@ boolean isAuto = false;
 
     // controlModule.enableCompressorAnalog(110, 120);
 direction = true;
+clawstate = true;
 motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
 motionMotor.getEncoder().setPosition(0);
 powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
@@ -121,6 +122,7 @@ public void counterClockFlip(){
 
   if ((motionMotor.getEncoder().getPosition()>= 0)){
     motionMotor.set(-0.2);
+    clawstate = true;
 
   }
   else
@@ -134,6 +136,7 @@ public void clockFlip(){
 
   if ((motionMotor.getEncoder().getPosition()<=45)){
     motionMotor.set(0.2);
+    clawstate = false;
 
   }
 
@@ -147,6 +150,9 @@ public double getPosition(){
 
 public boolean IsClosed(){
   return leftSolenoid.get();
+}
+public boolean getClawState(){
+  return clawstate;
 }
 
 @Override

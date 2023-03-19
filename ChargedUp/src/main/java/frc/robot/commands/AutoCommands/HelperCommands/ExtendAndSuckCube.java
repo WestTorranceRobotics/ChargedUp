@@ -33,7 +33,7 @@ public class ExtendAndSuckCube extends SequentialCommandGroup {
       ),
       new ParallelDeadlineGroup(     
       new EndWhenExtendedToPoint(extensionArms, 0),
-      new ToggleExtensionArmSetpoint(extensionArms, arms, 0),new ClawPassive(claw)
+      new ToggleExtensionArmSetpoint(extensionArms, arms, 4),new ClawPassive(claw)
       )
     );
   }

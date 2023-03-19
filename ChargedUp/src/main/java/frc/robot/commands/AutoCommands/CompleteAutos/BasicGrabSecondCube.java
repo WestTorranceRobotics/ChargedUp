@@ -30,7 +30,7 @@ public class BasicGrabSecondCube extends SequentialCommandGroup {
       // new Delay(0.5),
 
       new ParallelDeadlineGroup(
-        new frc.robot.commands.AutoCommands.DriveDistance(dt, 2050),
+        new frc.robot.commands.DriveTrain.DriveDistance(dt, 2050),
         new RunIntake(intake)
       ),
 

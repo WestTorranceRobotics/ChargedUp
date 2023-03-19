@@ -28,19 +28,24 @@ import frc.robot.commands.AutoCommands.HelperCommands.*;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TwoCubeAutonomous extends ParallelCommandGroup {
   /** Creates a new TwoCubeAutonomous. */
-  public TwoCubeAutonomous(Claw claw, ExtensionArms extensionArms, Arms arms, Intake intake, DriveTrain driveTrain) {
+  public TwoCubeAutonomous(Claw claw, ExtensionArms extensionArms, Arms arms, DriveTrain driveTrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SequentialCommandGroup(
       new SetIsAuto(claw, true),
+      new DisplayStartingGyro(driveTrain),
       new InstantCommand(driveTrain::setStartYawOffset),
-      new ToggleIntakeSolenoid(intake),
+      //new ToggleIntakeSolenoid(intake),
       new ExtendAndSuckCube(claw, extensionArms, arms),
       new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53),new ClawPassive(claw),new RunArmPositionAuto(arms, -53), new ClawPassive(claw)),
       new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
       new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.2)),
-      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms, 0)),
-      new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
+      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms,0)),
+      //new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
+      //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, 0),new RunArmPositionAuto(arms, 0)),
+      new frc.robot.commands.DriveTrain.DriveDistance(driveTrain, 2050),
+
+
       new SetIsAuto(claw, false)
     //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, -25), new RunArmPositionAuto(arms, -25))
     ));

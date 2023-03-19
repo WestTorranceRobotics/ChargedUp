@@ -33,9 +33,6 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("left " + -leftjoystick.getY());
-    System.out.println("right " + -rightjoystick.getY());
-
     double leftSpeed = calculate(-leftjoystick.getY());
     double rightSpeed = calculate(-rightjoystick.getY());
     drivetrain.TankDrive(leftSpeed,rightSpeed);
