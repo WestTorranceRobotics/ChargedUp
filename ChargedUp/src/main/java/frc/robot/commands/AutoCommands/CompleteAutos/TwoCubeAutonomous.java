@@ -34,16 +34,16 @@ public class TwoCubeAutonomous extends ParallelCommandGroup {
     addCommands(new SequentialCommandGroup(
       new SetIsAuto(claw, true),
       new DisplayStartingGyro(driveTrain),
-      new InstantCommand(driveTrain::setStartYawOffset),
+      new InstantCommand(driveTrain::restartYaw),
       //new ToggleIntakeSolenoid(intake),
-      new ExtendAndSuckCube(claw, extensionArms, arms),
+      //new ExtendAndSuckCube(claw, extensionArms, arms),
       new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53),new ClawPassive(claw),new RunArmPositionAuto(arms, -53), new ClawPassive(claw)),
-      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
-      new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.2)),
-      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms,0)),
+      //new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
+      new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.3)),
+      //new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms,0)),
       //new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
-      //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, 0),new RunArmPositionAuto(arms, 0)),
-      new frc.robot.commands.DriveTrain.DriveDistance(driveTrain, 2050),
+      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, 0),new RunArmPositionAuto(arms, 0)),
+      new DriveForwardAndBalance(driveTrain),
 
 
       new SetIsAuto(claw, false)

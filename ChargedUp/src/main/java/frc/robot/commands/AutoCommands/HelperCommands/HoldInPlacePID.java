@@ -7,26 +7,25 @@ package frc.robot.commands.AutoCommands.HelperCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 
-public class DisplayStartingGyro extends CommandBase {
+public class HoldInPlacePID extends CommandBase {
   DriveTrain driveTrain;
-  boolean isFinished;
-  /** Creates a new DisplayStartingGyro. */
-  public DisplayStartingGyro(DriveTrain driveTrain) {
-    this.driveTrain = driveTrain;
-    this.isFinished = false;
+  /** Creates a new HoldInPlacePID. */
+  public HoldInPlacePID(DriveTrain dt) {
+    this.driveTrain = dt;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    driveTrain.resetDistance();
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveTrain.displayPitch(driveTrain.getPitch());
-    isFinished = true;
-
+    driveTrain.distancePIDDrive(0);
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +35,6 @@ public class DisplayStartingGyro extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

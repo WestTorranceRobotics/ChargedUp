@@ -118,9 +118,9 @@ public final class RobotMap {
     public static final double gyroPIDkI = 0;
     public static final double gyroPIDkD = 0;
 
-    public static final double distancePIDkP = 1;
-    public static final double distancePIDkI = 0;
-    public static final double distancePIDkD = 0;
+    public static final double distancePIDkP = 0.1;
+    public static final double distancePIDkI = 0.075;
+    public static final double distancePIDkD = 0.0003;
 
 
 

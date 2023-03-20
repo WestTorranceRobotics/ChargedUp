@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.DriveTrain;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +33,10 @@ public class Robot extends TimedRobot {
   AddressableLED m_led;
   AddressableLEDBuffer m_ledBuffer;
   int m_rainbowFirstPixelHue = 0;
+
+  
+  boolean hasResetGyro = false;
+  DriveTrain dt;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -120,10 +125,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    dt = m_robotContainer.getDriveTrain();
+  }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    if (!hasResetGyro && !dt.getIsCalibrating()){
+      dt.resetGyro();
+      hasResetGyro = true;
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -180,14 +192,14 @@ public class Robot extends TimedRobot {
     for (var i = 0; i < m_ledBuffer.getLength(); i++) {
       // Calculate the hue - hue is easier for rainbows because the color
       // shape is a circle so only one value needs to precess
-      // final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
+      final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
       // Set the value
-      // m_ledBuffer.setHSV(i, hue, 255, 128);
-      m_ledBuffer.setHSV(i, 80, 255, 128);
+      m_ledBuffer.setHSV(i, hue + 40, 255, 128);
+      // m_ledBuffer.setHSV(i, 80, 255, 128);
     }
     // Increase by to make the rainbow "move"
-    m_rainbowFirstPixelHue += 3;
+    m_rainbowFirstPixelHue += 1;
     // Check bounds
-    m_rainbowFirstPixelHue %= 180;
+    m_rainbowFirstPixelHue %= 60;
   }
 }

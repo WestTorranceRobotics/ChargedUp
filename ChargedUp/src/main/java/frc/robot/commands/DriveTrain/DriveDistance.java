@@ -40,7 +40,13 @@ public class DriveDistance extends CommandBase {
       }
     }
     // dt.distancePIDDrive(distance);
+    if (distance >=0){
     dt.TankDrive(0.6 * Math.signum(distance), 0.6 * Math.signum(distance));
+    }
+    else{
+    dt.TankDrive(0.5 * Math.signum(distance), 0.5 * Math.signum(distance));
+
+    }
   }
 
   // Called once the command ends or is interrupted.

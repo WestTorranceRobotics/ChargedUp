@@ -13,7 +13,10 @@ public class PointToLime extends CommandBase {
 
 DriveTrain driveTrain;
 LimeLight limeLight;
-private double tolerence = 0.05;
+
+double slowSpeed = 0.2;
+double fastSpeed = 1;
+private double tolerence = 0.5;
 
   /** Creates a new PointToLime. */
   public PointToLime(DriveTrain driveTrain,LimeLight limeLight) {
@@ -34,8 +37,8 @@ addRequirements(driveTrain,limeLight);
   @Override
   public void execute() {
     double calcuation = MathUtil.clamp(limeLight.pidCaluculation(), -1, 1);
-    System.out.println(calcuation);
-    driveTrain.TankDrive(-calcuation, calcuation);
+    double calcScaled = calcuation * (fastSpeed - slowSpeed) + (slowSpeed * Math.signum(calcuation));
+    driveTrain.TankDrive(-calcScaled, calcScaled);
   }
 
   // Called once the command ends or is interrupted.

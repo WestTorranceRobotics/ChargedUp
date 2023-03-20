@@ -5,6 +5,7 @@
 package frc.robot.commands.AutoCommands.CompleteAutos;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.AutoCommands.HelperCommands.HoldInPlacePID;
 import frc.robot.commands.DriveTrain.DriveDistance;
 //import frc.robot.commands.AutoCommands.DriveTrain.DriveDistance;
 import frc.robot.commands.DriveTrain.DriveDistancePID;
@@ -19,9 +20,10 @@ public class DriveForwardAndBalance extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new DriveDistancePID(driveTrain,975)
-    //new DriveDistance(driveTrain, 2070),
-    //new DriveDistance(driveTrain, -1270)
+      //new DriveDistancePID(driveTrain,1150)
+    new DriveDistance(driveTrain, 2070),
+    new DriveDistance(driveTrain, -1185),
+    new HoldInPlacePID(driveTrain)
     );
   }
 }

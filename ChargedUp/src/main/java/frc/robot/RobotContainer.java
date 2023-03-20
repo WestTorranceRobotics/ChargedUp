@@ -53,6 +53,7 @@ import frc.robot.commands.Limelight.PointToLime;
 import frc.robot.commands.Test.TurnToDirection;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -348,7 +349,7 @@ public class RobotContainer {
     operatorYbutton.onTrue(clawsolenoidExtend);
     operatorAbutton.onTrue(clawsolenoidRetract);
 
-    driverLeftTrigger.whileTrue(new DriveStraight(driverBaseSubsystem, 0.4));
+    driverLeftTrigger.whileTrue(new DriveStraight(driverBaseSubsystem, 0.6));
     driverRightTrigger.whileTrue(new CloseIntakeClaw(clawSubsystem));
 
     //Test commands
@@ -383,14 +384,16 @@ public class RobotContainer {
     }
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      // driverLeftTopRight.onTrue(pointToLimeCommand);
-      // driverLeftTopRight.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+      // driverLeftTopRight.toggleOnTrue(pointToLimeCommand);
+      // driverLeftTopRight.toggleOnTrue(new ClawInward(clawSubsystem));
+      driverLeftTopRight.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 
     if (RobotMap.enableAutonomous){
       // driverLeftTopLeft.toggleOnTrue(new NonPIDChargeStationBalance(driverBaseSubsystem));
-      // driverLeftTopLeft.toggleOnTrue(new PIDChargeStationBalance(driverBaseSubsystem, 0));
+      // driverLeftTopLeft.toggleOnTrue(new DriveForwardAndBalance(driverBaseSubsystem));
+      // driverLeftTopLeft.onTrue(new InstantCommand(driverBaseSubsystem::resetGyro));
       // driverLeftBottomRight.onTrue(coneScoringAutonomous);
       // driverLeftBottomLeft.onTrue(new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
       //driverLeftBottomLeft.onTrue(new ScoringSecondCube(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
@@ -425,9 +428,12 @@ public class RobotContainer {
   
  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
+    // return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
     // return new NonPIDChargeStationBalance(driverBaseSubsystem);
-    //return new DriveForwardAndBalance(driverBaseSubsystem);
+    return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
  }
  
+ public DriveTrain getDriveTrain(){
+  return driverBaseSubsystem;
+ }
 }

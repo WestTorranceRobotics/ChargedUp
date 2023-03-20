@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ExtensionArms;
@@ -29,7 +30,7 @@ public class RunExtensionArmPosition extends CommandBase {
   @Override
   public void execute() {
     
-    double y = controller.getRightY();
+    double y = MathUtil.applyDeadband(controller.getRightY(), 0.05);
 
     if (y >= -0.1){
       //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());

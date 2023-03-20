@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
 public class ExtensionArms extends SubsystemBase {
+  
   private CANSparkMax m_extensionarm;
   private double targettedPowerVelocity;
   private double targettedPosition;
