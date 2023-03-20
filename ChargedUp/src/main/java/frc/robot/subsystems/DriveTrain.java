@@ -334,7 +334,7 @@ public class DriveTrain extends SubsystemBase {
     driveGyro.reset();
   }
 
-  public boolean getIsCalibration(){
+  public boolean getIsCalibrating(){
     return driveGyro.isCalibrating();
   }
 

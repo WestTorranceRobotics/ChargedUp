@@ -27,8 +27,6 @@ public class TurnToDirection extends CommandBase {
   public TurnToDirection(DriveTrain dt, double target, double tolerence) {
     this.dt = dt;
     this.targetAngle = target;
-    this.startYawOffset = dt.getStartYawOffset();
-    // this.startYawOffset = -52.6;
     this.tolerence = tolerence;
 
     PID = dt.GetOrientationPID();
@@ -49,9 +47,8 @@ public class TurnToDirection extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = dt.getYaw() - startYawOffset;
-    if (currentAngle > 180){ currentAngle -= 360; }
-    if (currentAngle < -180){ currentAngle += 360; }
+    double currentAngle = dt.getYaw();
+    
     shortestAngle = shortestAngle(currentAngle, targetAngle);
     System.out.println(shortestAngle);
     
