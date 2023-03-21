@@ -20,7 +20,7 @@ public class ToggleClaw extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(claw.getPosition()>=1){
+    if(claw.getPosition()<=4){
       claw.clockFlip();
       dir = 1; 
     }
@@ -46,10 +46,10 @@ public class ToggleClaw extends CommandBase {
   public boolean isFinished() {
     double position = claw.getPosition();
     if(dir == 1){
-      return position >= 45;
+      return (position >= 44);
     }
     if(dir == -1){
-      return position <= 0;
+      return (position <= 1);
     }
     return false;
   }

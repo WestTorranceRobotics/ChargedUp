@@ -129,7 +129,7 @@ public class RobotContainer {
   RotateAndTwist rotateFrontRotateAndTwist;
   ClawScoreHigh clawScoreHigh;
 
-  private static final XboxController xboxController = new XboxController(0);
+  private static final XboxController operatorController = new XboxController(0);
   private static final XboxController driverxboxController = new XboxController(1);
 
   //private static final Joystick leftJoystick = new Joystick(RobotMap.JoyStickConstants.leftJoystickPort);
@@ -137,16 +137,16 @@ public class RobotContainer {
   //private  JoystickButton driverLeftTrigger = new JoystickButton(leftJoystick,RobotMap.JoyStickConstants.leftJoystickTrigger );
   //private JoystickButton driverRightTrigger = new JoystickButton(rightJoystick, RobotMap.JoyStickConstants.rightJoystickTrigger);
   
-  private JoystickButton operatorXbutton = new JoystickButton(xboxController, 1);
-  private JoystickButton operatorAbutton = new JoystickButton(xboxController, 2);
-  private JoystickButton operatorBbutton = new JoystickButton(xboxController, 3);
-  private JoystickButton operatorYbutton = new JoystickButton(xboxController, 4);
-  private JoystickButton operatorLeftBack = new JoystickButton(xboxController, 5);
-  private JoystickButton operatorRightBack = new JoystickButton(xboxController, 6);
-  //private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
-  //private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
-  private JoystickButton operatorBack = new JoystickButton(xboxController, 7);
-  private JoystickButton operatorStart = new JoystickButton(xboxController, 8);
+  private JoystickButton operatorXbutton = new JoystickButton(operatorController, 1);
+  private JoystickButton operatorAbutton = new JoystickButton(operatorController, 2);
+  private JoystickButton operatorBbutton = new JoystickButton(operatorController, 3);
+  private JoystickButton operatorYbutton = new JoystickButton(operatorController, 4);
+  private JoystickButton operatorLeftBack = new JoystickButton(operatorController, 5);
+  private JoystickButton operatorRightBack = new JoystickButton(operatorController, 6);
+  private JoystickButton operatorLeftTrigger = new JoystickButton(operatorController, 7);
+  private JoystickButton operatorRightTrigger = new JoystickButton(operatorController, 8);
+  //private JoystickButton operatorBack = new JoystickButton(xboxController, 7);
+  private JoystickButton operatorStart = new JoystickButton(operatorController, 10);
 
   private JoystickButton driverXbutton = new JoystickButton(driverxboxController, 3);
   private JoystickButton driverAbutton = new JoystickButton(driverxboxController, 1);
@@ -157,12 +157,12 @@ public class RobotContainer {
   //private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
   //private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
   private JoystickButton driverBack = new JoystickButton(driverxboxController, 7);
-  private JoystickButton driverStart = new JoystickButton(driverxboxController, 8);
+  private JoystickButton driverStart = new JoystickButton(driverxboxController, 10);
 
-  private POVButton operatorPOVRight = new POVButton(xboxController, 90);
-  private POVButton operatorPOVDown = new POVButton(xboxController, 180);
-  private POVButton operatorPOVLeft = new POVButton(xboxController, 270);
-  private POVButton operatorPOVUp = new POVButton(xboxController, 0);
+  private POVButton operatorPOVRight = new POVButton(operatorController, 90);
+  private POVButton operatorPOVDown = new POVButton(operatorController, 180);
+  private POVButton operatorPOVLeft = new POVButton(operatorController, 270);
+  private POVButton operatorPOVUp = new POVButton(operatorController, 0);
 
   //private JoystickButton driverLeftTopLeft = new JoystickButton(leftJoystick, 5);
   //private JoystickButton driverLeftTopRight = new JoystickButton(leftJoystick, 6);
@@ -249,8 +249,8 @@ public class RobotContainer {
     if (RobotMap.enableDrivetrain ){
       driveBaseArcadeDriveCommand = new ArcadeDrive(driverxboxController, driverBaseSubsystem);
       //driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
-      // driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
-      driverBaseSubsystem.setDefaultCommand(new BackwardsInvertedArcade(driverxboxController, driverBaseSubsystem));
+      driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+      // driverBaseSubsystem.setDefaultCommand(new BackwardsInvertedArcade(driverxboxController, driverBaseSubsystem));
     }
 
     if (RobotMap.enableClaw){
@@ -261,7 +261,7 @@ public class RobotContainer {
       clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
       clawInward = new ClawInward(clawSubsystem);
       clawOutward = new ClawOutward(clawSubsystem);
-      clawRotation = new ClawRotation(clawSubsystem, driverxboxController);
+      clawRotation = new ClawRotation(clawSubsystem, operatorController);
       clawSubsystem.setDefaultCommand(clawRotation);
 
     }
@@ -287,7 +287,7 @@ public class RobotContainer {
 // && RobotMap.enableIntake
     if (RobotMap.enableArm){
       
-      runArmPosition = new RunArmPosition(armSubsystem,xboxController);
+      runArmPosition = new RunArmPosition(armSubsystem,operatorController);
       armSubsystem.setDefaultCommand(runArmPosition);
       runArmPower = new RunArmPower(armSubsystem);
       startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0);
@@ -299,7 +299,7 @@ public class RobotContainer {
 
     if((RobotMap.enableExtensionArm) && (RobotMap.enableArm)){
       runExtensionArmPower = new RunExtensionArmPower(extensionArmSubsystem);
-      runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, xboxController);
+      runExtensionArmPosition = new RunExtensionArmPosition(extensionArmSubsystem, operatorController);
       extensionArmSubsystem.setDefaultCommand(runExtensionArmPosition);
       startingExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem, armSubsystem, 4);
       highExtensionArmSetpoint = new ToggleExtensionArmSetpoint(extensionArmSubsystem,armSubsystem, 1);
@@ -409,15 +409,17 @@ public class RobotContainer {
     if (RobotMap.enableClaw){
 
     //Main Command
+      
       operatorXbutton.whileTrue(clawOutward);
-      operatorBbutton.whileTrue(clawInward);
+      operatorBbutton.onTrue(clawsolenoidRetract);
       operatorYbutton.onTrue(clawsolenoidExtend);
-      operatorAbutton.onTrue(clawsolenoidRetract);
+      operatorAbutton.whileTrue(clawInward);
     }
 
+
     if (RobotMap.enableSpindexer){
-    operatorStart.whileTrue(spindexerClockwise);
-    operatorBack.whileTrue(spindexerCounterClockwise);
+    //operatorStart.whileTrue(spindexerClockwise);
+    //operatorBack.whileTrue(spindexerCounterClockwise);
     }
 
     if (RobotMap.enableExtensionArm && RobotMap.enableArm){
