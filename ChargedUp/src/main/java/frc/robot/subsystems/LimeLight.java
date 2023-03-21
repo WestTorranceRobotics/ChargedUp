@@ -20,9 +20,9 @@ public class LimeLight extends SubsystemBase {
   private GenericEntry bottomBound = limelightTab.add("Bottom Bound",0).withPosition(2, 2).getEntry();
   private GenericEntry SBIsFinished =  limelightTab.add("Is Finished?",false).withPosition(0, 3).getEntry();
   private GenericEntry SBReturnSpeed =  limelightTab.add("Speed?",0).withPosition(1, 3).getEntry();
-  private GenericEntry SBRotationKp = limelightTab.add("Rotation kP",0.015).withPosition(0, 4).getEntry();
+  private GenericEntry SBRotationKp = limelightTab.add("Rotation kP",0.002).withPosition(0, 4).getEntry();
   private GenericEntry SBRotationKi = limelightTab.add("Rotation kI",0).withPosition(1, 4).getEntry();
-  private GenericEntry SBRotationKd = limelightTab.add("Rotation kD",0.0008).withPosition(2, 4).getEntry();
+  private GenericEntry SBRotationKd = limelightTab.add("Rotation kD",0.0005).withPosition(2, 4).getEntry();
   
   private double middle = 22;
 

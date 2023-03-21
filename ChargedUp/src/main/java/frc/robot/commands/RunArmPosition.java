@@ -26,7 +26,7 @@ public class RunArmPosition extends CommandBase {
   @Override
   public void execute() {
   
-    double y = -controller.getLeftY();
+    double y = -controller.getRawAxis(1);
     if (y >= 0.1){
       //armsubsystem.setTargttedPosition(armsubsystem.getPosition());
       double currenttargetposition = armsubsystem.getTargettedPosition();

@@ -206,7 +206,7 @@ public class DriveTrain extends SubsystemBase {
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){
 
-      drive.arcadeDrive(InputSpeed*(speedPercentage/100), InputRotation*0.7);
+      drive.arcadeDrive(InputSpeed, InputRotation*0.7);
     
   }
 

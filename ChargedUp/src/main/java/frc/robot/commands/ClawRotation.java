@@ -39,8 +39,8 @@ public class ClawRotation extends CommandBase {
       }
     }
 
-    double leftTrigger =controller.getLeftTriggerAxis();
-    double rightTrigger = controller.getRightTriggerAxis();
+    double leftTrigger =controller.getRawAxis(3);
+    double rightTrigger = controller.getRawAxis(4);
 
     if(leftTrigger >= 0.5){
       clawsubsystem.clockFlip();

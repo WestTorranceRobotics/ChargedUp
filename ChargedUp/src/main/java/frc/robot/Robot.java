@@ -200,6 +200,6 @@ public class Robot extends TimedRobot {
     // Increase by to make the rainbow "move"
     m_rainbowFirstPixelHue += 1;
     // Check bounds
-    m_rainbowFirstPixelHue %= 60;
+    m_rainbowFirstPixelHue %= 180;
   }
 }

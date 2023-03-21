@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
-public class ArcadeDrive extends CommandBase {
+public class BackwardsInvertedArcade extends CommandBase {
   DriveTrain drivetrain;
   
 
   private XboxController driverXboxController;
   /** Creates a new ArcadeDrive. */
-  public ArcadeDrive(XboxController xboxController ,  DriveTrain dt) {
+  public BackwardsInvertedArcade(XboxController xboxController ,  DriveTrain dt) {
     this.drivetrain = dt;
     this.driverXboxController = xboxController;
     addRequirements(drivetrain);
@@ -38,6 +38,8 @@ public class ArcadeDrive extends CommandBase {
     // System.out.println("right x :" + driverXboxController.getRawAxis(2));
     double speed = MathUtil.applyDeadband(-driverXboxController.getLeftY(), 0.05);
     double turn = MathUtil.applyDeadband(-driverXboxController.getRightX(), 0.05);
+    
+    if(speed < 0){ turn *= -1;}
 
     drivetrain.arcadeDrive(speed,turn);
   }

@@ -30,7 +30,7 @@ public class RunExtensionArmPosition extends CommandBase {
   @Override
   public void execute() {
     
-    double y = MathUtil.applyDeadband(controller.getRightY(), 0.05);
+    double y = MathUtil.applyDeadband(controller.getRawAxis(5), 0.05);
 
     if (y >= -0.1){
       //extensionArmSubsystem.setTargettedPosition(extensionArmSubsystem.getPosition());
