@@ -36,9 +36,14 @@ public class EndWhenRotatedToPoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Math.abs(target - arms.getPosition()) <= tolerence){
-      return true;
-    }
+    if (target >= arms.getPosition())
+      if (arms.getPosition() >= target){
+        return true;
+      }
+    else if (target <= arms.getPosition())
+      if (arms.getPosition() <= target){
+        return true;
+      }
     return false;
   }
 }

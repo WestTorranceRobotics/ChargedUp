@@ -49,6 +49,7 @@ private GenericEntry SBClawSpeed = clawTab.add("Claw Speed", 0).withPosition(3, 
 private GenericEntry SBClawTargetSpeed = clawTab.add("Claw Target Speed", 0).withPosition(0, 1).getEntry();
 private GenericEntry SBClawSolenoid = clawTab.add("Claw Solenoid", false).withPosition(1, 1).getEntry();
 
+
 boolean isAuto = false;
 
 
@@ -98,7 +99,7 @@ leftSolenoid.set(bol);
 
 
 public void rotateArm(){
-  motionMotor.set(SBClawTargetSpeed.getDouble(0));
+//  motionMotor.set(SBClawTargetSpeed.getDouble(0));
 
 }
 

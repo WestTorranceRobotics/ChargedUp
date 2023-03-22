@@ -10,6 +10,7 @@ import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.ExtensionArms;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.LEDs.LEDs;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 
@@ -36,6 +37,7 @@ import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
 import frc.robot.commands.DriveTrain.DriveDistance;
 import frc.robot.commands.DriveTrain.DriveStraight;
+import frc.robot.commands.DriveTrain.DriveTrainDefualt;
 import frc.robot.commands.DriveTrain.NonPIDChargeStationBalance;
 import frc.robot.commands.AutoCommands.ClawScoreHigh;
 // import frc.robot.commands.DriveTrain.NonPIDChargeStationBalance;
@@ -85,6 +87,7 @@ public class RobotContainer {
   Intake intakesubsystem;
   Spindexer spindexerSubsystem;
   Claw clawSubsystem;
+  LEDs leds;
 
 
   TankDrive driveBaseTankDriveCommand;
@@ -210,6 +213,8 @@ public class RobotContainer {
   }
 
   private void initSubsytems() {
+    leds = new LEDs();
+
     if (RobotMap.enableDrivetrain ){
       driverBaseSubsystem = new frc.robot.subsystems.DriveTrain();
     }
@@ -248,8 +253,10 @@ public class RobotContainer {
 
     if (RobotMap.enableDrivetrain ){
       driveBaseArcadeDriveCommand = new ArcadeDrive(driverxboxController, driverBaseSubsystem);
-      //driveBaseTankDriveCommand = new TankDrive(leftJoystick, rightJoystick, driverBaseSubsystem);
-      driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);
+      driveBaseTankDriveCommand = new TankDrive(driverxboxController, driverBaseSubsystem);
+      // driverBaseSubsystem.setDefaultCommand(new DriveTrainDefualt(driverxboxController, driverBaseSubsystem, limelightSubsystem));
+      driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);  
+      // driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);      
       // driverBaseSubsystem.setDefaultCommand(new BackwardsInvertedArcade(driverxboxController, driverBaseSubsystem));
     }
 
@@ -376,7 +383,7 @@ public class RobotContainer {
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
       // driverLeftTopRight.toggleOnTrue(pointToLimeCommand);
       // driverLeftTopRight.toggleOnTrue(new ClawInward(clawSubsystem));
-      driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+      // driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 
@@ -407,13 +414,13 @@ public class RobotContainer {
     }
    
     if (RobotMap.enableClaw){
-
+      driverRightBumper.whileTrue(new CloseIntakeClaw(clawSubsystem));
     //Main Command
       
-      operatorXbutton.whileTrue(clawOutward);
+      operatorXbutton.whileTrue(clawInward);
       operatorBbutton.onTrue(clawsolenoidRetract);
       operatorYbutton.onTrue(clawsolenoidExtend);
-      operatorAbutton.whileTrue(clawInward);
+      operatorAbutton.whileTrue(clawOutward);
     }
 
 
@@ -442,9 +449,10 @@ public class RobotContainer {
     }
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      // driverXbutton.onTrue(pointToLimeCommand);
+      //driverXbutton.whileTrue(pointToLimeCommand);
+      // driverXbutton.onFalse(new CloseIntakeClaw(clawSubsystem));
       // driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
-      driverXbutton.whileTrue(new DriveStraight(driverBaseSubsystem, 0.5));
+         driverXbutton.whileTrue(new DriveStraight(driverBaseSubsystem, 0.5));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 

@@ -13,6 +13,7 @@ public class PointToLime extends CommandBase {
 
 DriveTrain driveTrain;
 LimeLight limeLight;
+boolean isFinished;
 
 double slowSpeed = 0.2;
 double fastSpeed = 1;
@@ -23,6 +24,7 @@ private double tolerence = 0.5;
 
 this.driveTrain = driveTrain;
 this.limeLight = limeLight;
+this.isFinished = false;
 addRequirements(driveTrain,limeLight);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,28 +32,39 @@ addRequirements(driveTrain,limeLight);
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+  isFinished = false;    
+  limeLight.setIsFinished(false);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double calcuation = MathUtil.clamp(limeLight.pidCaluculation(), -1, 1);
-    double calcScaled = calcuation * (fastSpeed - slowSpeed) + (slowSpeed * Math.signum(calcuation));
-    driveTrain.TankDrive(-calcScaled, calcScaled);
+    limeLight.setIsFinished(false);
+    double calculation = MathUtil.clamp(limeLight.pidCaluculation(), -1, 1);
+    double calcScaled = calculation * (fastSpeed - slowSpeed) + (slowSpeed * Math.signum(calculation));
+    //driveTrain.TankDrive(-calcScaled, calcScaled);
+    if (Math.abs(limeLight.getTX()) < tolerence || limeLight.getTV() == 0){
+      isFinished = true;
+    }
+    limeLight.setMonkey(limeLight.getMonkey() +1);
+
+
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    driveTrain.TankDrive(0, 0);
-    limeLight.reset();
+    //driveTrain.TankDrive(0, 0);
+    limeLight.setIsFinished(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     // return limeLight.getIsFinished();
-    return Math.abs(limeLight.getTX()) < tolerence || limeLight.getTV() == 0;
+    return isFinished;
+
   }
 }

@@ -23,9 +23,8 @@ public class LimeLight extends SubsystemBase {
   private GenericEntry SBRotationKp = limelightTab.add("Rotation kP",0.002).withPosition(0, 4).getEntry();
   private GenericEntry SBRotationKi = limelightTab.add("Rotation kI",0).withPosition(1, 4).getEntry();
   private GenericEntry SBRotationKd = limelightTab.add("Rotation kD",0.0005).withPosition(2, 4).getEntry();
-  
+  private GenericEntry SBMonkeysRunning = limelightTab.add("Monkey is running",0).withPosition(3, 4).getEntry();
   private double middle = 22;
-
   private PIDController limePIDController;
   private boolean isFinished;
   double a_kp;
@@ -78,18 +77,27 @@ public class LimeLight extends SubsystemBase {
 
   }
 
-  public void reset(){
-    isFinished = false;
+  public double getMonkey(){
+    return SBMonkeysRunning.getDouble(0);
   }
+
+  public void setMonkey(double val){
+    SBMonkeysRunning.setDouble(val);
+  }
+
+
 
   public boolean getIsFinished(){
     return isFinished;
+  }
+  public void setIsFinished(boolean bol){
+    SBIsFinished.setBoolean(bol);
   }
   
 
   @Override
   public void periodic() {
-    SBIsFinished.setBoolean(isFinished);
+    //SBIsFinished.setBoolean(isFinished);
     double calculation = MathUtil.clamp(limePIDController.calculate(getTX(), 0), -0.7, 0.7);
     SBReturnSpeed.setDouble( Math.signum(calculation)*Math.max(calculation, 0.1));
    

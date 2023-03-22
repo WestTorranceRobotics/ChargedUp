@@ -106,6 +106,7 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBResetPosition =  drivesTab.add("Reset Position",0).withPosition(7, 0).getEntry();
   private GenericEntry SBstartingGyro =  drivesTab.add("Starting Pitch",0).withPosition(4, 0).getEntry();
   private GenericEntry SBstartingYaw =  drivesTab.add("Starting Yaw",0).withPosition(5, 0).getEntry();
+  private GenericEntry SBtargetSpeed =  drivesTab.add("Target speed",0).withPosition(6, 0).getEntry();
 
   private GenericEntry SB005 = drivesTab.add("0.05 Delay",0).withPosition(1, 4).getEntry();
   private GenericEntry SB01 = drivesTab.add("0.1 Delay",0).withPosition(2, 4).getEntry();
@@ -167,6 +168,7 @@ public class DriveTrain extends SubsystemBase {
 // rightFollower.setSafetyEnabled(true);
 
     drive = new DifferentialDrive(leftLeader,rightLeader);
+    drive.setSafetyEnabled(true);
 
     leftFollower.follow(leftLeader);
     rightFollower.follow(rightLeader);
@@ -205,8 +207,8 @@ public class DriveTrain extends SubsystemBase {
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){
-
-      drive.arcadeDrive(InputSpeed, InputRotation*0.7);
+      SBtargetSpeed.setDouble(InputSpeed*(speedPercentage/100));
+      drive.arcadeDrive(InputSpeed*(speedPercentage/100), InputRotation*0.7);
     
   }
 

@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class TankDrive extends CommandBase {
   /** Creates a new TankDrive. */
@@ -17,12 +18,10 @@ public class TankDrive extends CommandBase {
   double maxTolerence = 0.9;
   double notMaxTopSpeed = 0.8;
 
-  private Joystick leftjoystick;
-  private Joystick rightjoystick;
-  public TankDrive(Joystick leftJoystick, Joystick rightJoystick, DriveTrain dt) {
+  private XboxController controller;
+  public TankDrive(XboxController controller, DriveTrain dt) {
     this.drivetrain = dt;
-    this.leftjoystick = leftJoystick;
-    this.rightjoystick = rightJoystick;
+    this.controller = controller;
     addRequirements(drivetrain);
   }
 
@@ -33,8 +32,8 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double leftSpeed = calculate(-leftjoystick.getY());
-    double rightSpeed = calculate(-rightjoystick.getY());
+    double leftSpeed = calculate(-controller.getLeftY());
+    double rightSpeed = calculate(-controller.getRightY());
     drivetrain.TankDrive(leftSpeed,rightSpeed);
 
 
