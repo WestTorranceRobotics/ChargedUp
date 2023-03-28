@@ -4,7 +4,9 @@
 
 package frc.robot.commands.Limelight;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.DriveTrain.SeeLimeLight;
 import frc.robot.commands.Test.TurnToDirection;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.LimeLight;
@@ -18,7 +20,10 @@ public class LimelightAlignWithGyro extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TurnToDirection(dt, 0, 3),
+      new ParallelDeadlineGroup(
+        new SeeLimeLight(limeLight),
+        new TurnToDirection(dt, 0, 3)
+      ),
       new PointToLime(dt, limeLight),
       new PointToLime(dt, limeLight)
     );

@@ -8,13 +8,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
 import frc.robot.commands.ClawSolenoid;
+import frc.robot.commands.RunExtensionArmPosition;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
 import frc.robot.commands.AutoCommands.HelperCommands.ClawPassive;
+import frc.robot.commands.AutoCommands.HelperCommands.Delay;
 import frc.robot.commands.AutoCommands.HelperCommands.EndWhenExtendedToPoint;
 import frc.robot.commands.AutoCommands.HelperCommands.EndWhenRotatedToPoint;
 import frc.robot.commands.AutoCommands.HelperCommands.RunArmPositionAuto;
+import frc.robot.commands.AutoCommands.HelperCommands.RunExtensionArmPositionAuto;
 import frc.robot.commands.Claw.ToggleClaw;
 import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.Claw;
@@ -34,7 +37,7 @@ public class ClawScoreHigh extends SequentialCommandGroup {
     addCommands(
       new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-25),new ClawPassive(claw),new RunArmPositionAuto(arms, -50)),
       new EndWhenRotatedToPoint(arms, -45),
-      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-90),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1))
+      new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-90),new ClawPassive(claw),new RunExtensionArmPositionAuto(extensionArms, -95))
      );
   }
 }

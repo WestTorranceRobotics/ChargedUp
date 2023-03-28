@@ -30,8 +30,8 @@ public class LEDs extends SubsystemBase {
   double offset = 0.01;
   double offsetInc = 0.01;
   // double[] hueRange = {85, 150};
-  // double[] hueRange = {60, 150};
-  double[] hueRange = {150, 180+20};
+  double[] hueRange = {60, 150};
+  // double[] hueRange = {150, 180+20};
   double[] noiseRange = {-1,1};
 
   Timer timer = new Timer();
@@ -93,6 +93,10 @@ public class LEDs extends SubsystemBase {
       m_ledBuffer.setHSV(x, hue, 255, 128);
     }
     offset += offsetInc;
+
+    if(Math.abs(offset) > 10000){
+      offset *= -1;
+    }
   }
 
   private double Remap(double startVal, double[] startRange, double[] endRange){

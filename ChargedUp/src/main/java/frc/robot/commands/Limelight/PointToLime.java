@@ -15,7 +15,7 @@ DriveTrain driveTrain;
 LimeLight limeLight;
 boolean isFinished;
 
-double slowSpeed = 0.2;
+double slowSpeed = 0.3;
 double fastSpeed = 1;
 private double tolerence = 0.5;
 
@@ -43,20 +43,17 @@ addRequirements(driveTrain,limeLight);
     limeLight.setIsFinished(false);
     double calculation = MathUtil.clamp(limeLight.pidCaluculation(), -1, 1);
     double calcScaled = calculation * (fastSpeed - slowSpeed) + (slowSpeed * Math.signum(calculation));
-    //driveTrain.TankDrive(-calcScaled, calcScaled);
+    System.out.println("Scaled: " + calcScaled);
+    driveTrain.TankDrive(-calcScaled, calcScaled);
     if (Math.abs(limeLight.getTX()) < tolerence || limeLight.getTV() == 0){
       isFinished = true;
     }
-    limeLight.setMonkey(limeLight.getMonkey() +1);
-
-
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //driveTrain.TankDrive(0, 0);
+    driveTrain.TankDrive(0, 0);
     limeLight.setIsFinished(true);
   }
 

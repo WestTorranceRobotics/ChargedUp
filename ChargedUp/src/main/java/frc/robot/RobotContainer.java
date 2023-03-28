@@ -15,7 +15,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LimeLight;
 
 import frc.robot.commands.TankDrive;
-import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
 import frc.robot.commands.ClawRotation;
@@ -35,6 +34,7 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
+import frc.robot.commands.DriveTrain.ArcadeDrive;
 import frc.robot.commands.DriveTrain.DriveDistance;
 import frc.robot.commands.DriveTrain.DriveStraight;
 import frc.robot.commands.DriveTrain.DriveTrainDefualt;
@@ -99,7 +99,7 @@ public class RobotContainer {
   ClawSolenoid clawsolenoidExtend;
   ClawSolenoid clawsolenoidRetract;
  // ClawTurning clawTurningClockwise;
-  //ClawTurning clawTurningCounterClockwise; 
+  //ClawTurning clawTurfningCounterClockwise; 
   ClawInward clawInward;
   ClawOutward clawOutward; 
   RunArmPosition runArmPosition;
@@ -297,10 +297,10 @@ public class RobotContainer {
       runArmPosition = new RunArmPosition(armSubsystem,operatorController);
       armSubsystem.setDefaultCommand(runArmPosition);
       runArmPower = new RunArmPower(armSubsystem);
-      startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0);
-      rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem, 1);
-      leftPerpendicularArmSetpoint = new ToggleArmSetpoint(armSubsystem, 2);
-      leftFourtyFiveArmSetpoint = new ToggleArmSetpoint(armSubsystem, 3);
+      startingArmSetpoint = new ToggleArmSetpoint(armSubsystem, 0,extensionArmSubsystem);
+      rightPerpendicularArmSetpoint  = new ToggleArmSetpoint(armSubsystem, 1,extensionArmSubsystem);
+      leftPerpendicularArmSetpoint = new ToggleArmSetpoint(armSubsystem, 2,extensionArmSubsystem);
+      leftFourtyFiveArmSetpoint = new ToggleArmSetpoint(armSubsystem, 3,extensionArmSubsystem);
       
     }
 
@@ -383,7 +383,7 @@ public class RobotContainer {
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
       // driverLeftTopRight.toggleOnTrue(pointToLimeCommand);
       // driverLeftTopRight.toggleOnTrue(new ClawInward(clawSubsystem));
-      // driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+      driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 
@@ -449,10 +449,10 @@ public class RobotContainer {
     }
 
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      //driverXbutton.whileTrue(pointToLimeCommand);
+      // driverXbutton.toggleOnTrue(pointToLimeCommand);
       // driverXbutton.onFalse(new CloseIntakeClaw(clawSubsystem));
-      // driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
-         driverXbutton.whileTrue(new DriveStraight(driverBaseSubsystem, 0.5));
+         driverXbutton.onTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+       // driverXbutton.toggleOnTrue(new TurnToDirection(driverBaseSubsystem, 0, 3));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
 

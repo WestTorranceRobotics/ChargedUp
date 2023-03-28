@@ -20,7 +20,7 @@ public class TurnToDirection extends CommandBase {
 
   double tolerence = 1;
 
-  double slowSpeed = 0.2;
+  double slowSpeed = 0.35;
   double fastSpeed = 1;
 
   /** Creates a new TurnToDirection. */
@@ -55,6 +55,8 @@ public class TurnToDirection extends CommandBase {
     double calcuation = MathUtil.clamp(PID.calculate(shortestAngle), -1, 1);
     double calcScaled = calcuation * (fastSpeed - slowSpeed) + (slowSpeed * Math.signum(calcuation));
     
+    System.out.println(calcScaled);
+
     dt.TankDrive(calcScaled, -calcScaled);
 
     // dt.TankDrive(calcuation, -calcuation);

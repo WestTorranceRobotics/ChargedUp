@@ -137,6 +137,10 @@ public class ExtensionArms extends SubsystemBase {
     m_extensionarm.getPIDController().setReference(Position, ControlType.kPosition);
   }
 
+  public void resetExtensionArmTarget(){
+    SBArmTargettedPosition.setDouble(m_extensionarm.getEncoder().getPosition());
+  }
+
  public double getPosition(){
   return m_extensionarm.getEncoder().getPosition();
  } 
@@ -159,6 +163,7 @@ public class ExtensionArms extends SubsystemBase {
  }
 
  public void resetTargettedPosition(){
+  targettedPosition = m_extensionarm.getEncoder().getPosition();
   SBArmTargettedPosition.setDouble(m_extensionarm.getEncoder().getPosition());
  }
 
@@ -205,6 +210,11 @@ public class ExtensionArms extends SubsystemBase {
 
     if(SBArmSetPointEnable.getInteger(0) == 1){
       runSetPoint();
+    }
+
+    if (m_extensionarm.getEncoder().getPosition() >= -0.5){
+      resetExtensionArmTarget();
+
     }
      // This method will be called once per scheduler run
   }

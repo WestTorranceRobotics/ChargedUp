@@ -81,7 +81,14 @@ public class DriveTrain extends SubsystemBase {
   Encoder leftEncoder =  new Encoder(2,3,false,EncodingType.k2X);
   
 
-  
+  ShuffleboardTab diagnosticTab = Shuffleboard.getTab("Drive diagnostic Tab");  
+  private GenericEntry SBLeftMotorFollowerVoltage = diagnosticTab.add("Left Follower Voltage", 0).withPosition(0, 0).getEntry();
+  private GenericEntry SBRightMotorFollowerVoltage = diagnosticTab.add("Right Follower Voltage", 0).withPosition(1, 0).getEntry();
+  private GenericEntry SBLeftMotorLeaderVoltage = diagnosticTab.add("Left Leader Voltage", 0).withPosition(2, 0).getEntry();
+  private GenericEntry SBRightMotorLeaderVoltage = diagnosticTab.add("Right Leader Voltage", 0).withPosition(3, 0).getEntry();
+
+
+
   ShuffleboardTab drivesTab = Shuffleboard.getTab("DriveTab");  
   private GenericEntry SBLeftSpeed = drivesTab.add("Left Speed", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
@@ -99,9 +106,9 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBDistanceKd = drivesTab.add("Distance kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 4).getEntry();
   private GenericEntry SBtargetPosition = drivesTab.add("Target position",0).withPosition(4, 0).getEntry();
   private GenericEntry SBEnablePIDPosition = drivesTab.add("Enable position",0).withPosition(5, 0).getEntry();
-  private GenericEntry SBRotationKp = drivesTab.add("Rotation kP",RobotMap.DriveTrainConstants.distancePIDkP).withPosition(0, 6).getEntry();
-  private GenericEntry SBRotationKi = drivesTab.add("Rotation kI",RobotMap.DriveTrainConstants.distancePIDkI).withPosition(1, 6).getEntry();
-  private GenericEntry SBRotationKd = drivesTab.add("Rotation kD",RobotMap.DriveTrainConstants.distancePIDkD).withPosition(2, 6).getEntry();
+  private GenericEntry SBRotationKp = drivesTab.add("Rotation kP",0.02).withPosition(0, 6).getEntry();
+  private GenericEntry SBRotationKi = drivesTab.add("Rotation kI",0).withPosition(1, 6).getEntry();
+  private GenericEntry SBRotationKd = drivesTab.add("Rotation kD",0.003).withPosition(2, 6).getEntry();
   private GenericEntry SBtargetAngle = drivesTab.add("Target angle",0).withPosition(3, 6).getEntry();
   private GenericEntry SBResetPosition =  drivesTab.add("Reset Position",0).withPosition(7, 0).getEntry();
   private GenericEntry SBstartingGyro =  drivesTab.add("Starting Pitch",0).withPosition(4, 0).getEntry();
@@ -199,6 +206,7 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public double getStartYawOffset(){
+
     return SBstartingYaw.getDouble(0);
   }
   public void displayPitch(double pitch){
@@ -213,13 +221,13 @@ public class DriveTrain extends SubsystemBase {
   }
 
   public void TankDrive(double InputLeftSpeed, double InputRightSpeed){
-    leftLeader.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
-    leftFollower.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
+    // leftLeader.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
+    // leftFollower.set(ControlMode.PercentOutput, InputLeftSpeed*(speedPercentage/100));
 
-    rightLeader.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
-    rightFollower.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
+    // rightLeader.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
+    // rightFollower.set(ControlMode.PercentOutput, InputRightSpeed*(speedPercentage/100));
 
-    // drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
+    drive.tankDrive(InputLeftSpeed*(speedPercentage/100), InputRightSpeed*(speedPercentage/100));
   }
 
   public void TankDriveStraight(double speed, double totalDist){
@@ -340,6 +348,22 @@ public class DriveTrain extends SubsystemBase {
     return driveGyro.isCalibrating();
   }
 
+  public void resetFollowers(){
+    leftFollower.follow(leftLeader);
+    rightFollower.follow(rightLeader);
+
+    leftLeader.setInverted(false);
+    leftFollower.setInverted(false);
+    
+    rightLeader.setInverted(true);
+    rightFollower.setInverted(true);
+
+    leftFollower.setNeutralMode(NeutralMode.Brake);
+    leftLeader.setNeutralMode(NeutralMode.Brake);
+    rightLeader.setNeutralMode(NeutralMode.Brake);
+    rightFollower.setNeutralMode(NeutralMode.Brake);
+  }
+
   double counter = 0;
   @Override
   public void periodic() {
@@ -353,7 +377,10 @@ public class DriveTrain extends SubsystemBase {
 
     //System.out.println("Right Encoder: " + rightEncoder.get());
     //SBDumbLimitSwitch2.setBoolean(dumblimitswtich2.get());
-
+    
+    // orientationPID.setP(SBGyroKp.getDouble(0));
+    // orientationPID.setI(SBGyroKi.getDouble(0));
+    // orientationPID.setD(SBGyroKd.getDouble(0));
     // if((kP != SBGyroKp.getDouble(0)) || (kI != SBGyroKi.getDouble(0)) || (kD != SBGyroKd.getDouble(0)) ){
     //   kP = SBGyroKp.getDouble(0);
     //   kI = SBGyroKi.getDouble(0);
@@ -385,6 +412,11 @@ public class DriveTrain extends SubsystemBase {
     SBGyroYaw.setDouble(driveGyro.getYaw());
     SBGyroPitch.setDouble(driveGyro.getPitch());
     SBGyroRoll.setDouble(driveGyro.getRoll());
+
+    SBLeftMotorFollowerVoltage.setDouble(leftFollower.getMotorOutputVoltage());
+    SBLeftMotorLeaderVoltage.setDouble(leftLeader.getMotorOutputVoltage());
+    SBRightMotorFollowerVoltage.setDouble(rightFollower.getMotorOutputVoltage());
+    SBRightMotorLeaderVoltage.setDouble(rightLeader.getMotorOutputVoltage());
 
     //drivesTab.addDouble("HI", this::getRightVelocity);
 

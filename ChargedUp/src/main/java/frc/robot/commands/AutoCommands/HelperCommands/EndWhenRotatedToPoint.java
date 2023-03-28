@@ -13,37 +13,54 @@ public class EndWhenRotatedToPoint extends CommandBase {
   double target;
   double tolerence;
   Arms arms;
+  boolean isFinished;
+  double dir;
   /** Creates a new EndWhenRotatedToPoint. */
   public EndWhenRotatedToPoint(Arms arms,double target ) {
     this.arms = arms;
     this.target = target;
+    this.isFinished = false;
     tolerence = 2;
+    this.dir = 0;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    if (target >= arms.getPosition()){
+      dir = 1;
+    }
+    else if (target <= arms.getPosition()){
+      dir = -1;
+    }
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  if (dir == 1){
+    if (arms.getPosition() >= target){
+      isFinished =true;
+    }
+  }
+  else if (dir == -1){
+    if (arms.getPosition() <= target){
+      isFinished = true;
+    }
+  }
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    isFinished = false;
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (target >= arms.getPosition())
-      if (arms.getPosition() >= target){
-        return true;
-      }
-    else if (target <= arms.getPosition())
-      if (arms.getPosition() <= target){
-        return true;
-      }
-    return false;
+    return isFinished;
+   
   }
 }

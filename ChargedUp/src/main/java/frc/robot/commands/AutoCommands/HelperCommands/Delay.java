@@ -10,10 +10,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class Delay extends CommandBase {
   Timer timer = new Timer();
   double delay;
+  
   boolean isFinished = false;
+  boolean start = true;
   /** Creates a new Delay. */
   public Delay(double delay) {
     this.delay = delay;
+    start = true;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,6 +32,11 @@ public class Delay extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(start){
+      timer.reset();
+      timer.start();
+      start = false;
+    }
     System.out.println(timer.hasElapsed(delay));
     if(timer.hasElapsed(delay))
     {
@@ -38,7 +46,11 @@ public class Delay extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    timer.reset();
+    start = true;
+    isFinished = false;
+  }
 
   // Returns true when the command should end.
   @Override

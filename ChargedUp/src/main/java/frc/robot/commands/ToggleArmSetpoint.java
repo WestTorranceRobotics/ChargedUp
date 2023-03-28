@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arms;
+import frc.robot.subsystems.ExtensionArms;
 import frc.robot.subsystems.Intake;
 
 public class ToggleArmSetpoint extends CommandBase {
@@ -18,10 +19,12 @@ public class ToggleArmSetpoint extends CommandBase {
   Arms armsubsystem;
   Intake intakeSubsystem;
   int setpoint;
+  ExtensionArms extensionArms;
   /** Creates a new ToggleArmSetpoint. */
-  public ToggleArmSetpoint(Arms arms, int point) {
+  public ToggleArmSetpoint(Arms arms, int point, ExtensionArms extensionArms) {
     this.armsubsystem = arms;
     this.setpoint = point;
+    this.extensionArms = extensionArms;
    // this.intakeSubsystem = intake;
     isFinished = false;
     addRequirements(arms);
@@ -38,11 +41,21 @@ public class ToggleArmSetpoint extends CommandBase {
 
    // if (intakeSubsystem.getSolenoid()){
    
+    if (setpoint == 0){
+      if (extensionArms.getPosition()>=-5){
+        armsubsystem.setSetPoint(setpoint);
+        armsubsystem.toggleSetpoint(1);
+        armsubsystem.togglePosition(0);
+        isFinished = true;
+      }
+    }
+    else if (setpoint != 0)
+    {
     armsubsystem.setSetPoint(setpoint);
     armsubsystem.toggleSetpoint(1);
     armsubsystem.togglePosition(0);
     isFinished = true;
-    
+    }
 
     
 

@@ -44,6 +44,8 @@ public class Arms extends SubsystemBase {
   private GenericEntry SBCurrentArmSetPoint = armTab.add("Current Arm Setpoint",0).withPosition(0, 4).getEntry();
   private GenericEntry SBArmSetPointEnable = armTab.add("Enable Arm Set Point",0).withPosition(2, 3).getEntry();
   
+  private GenericEntry PIDOffset = armTab.add("Arm Target Offset",0).withPosition(2, 3).getEntry();
+  
   
   /** Creates a new Arms. */
   public Arms() {
@@ -89,8 +91,8 @@ public class Arms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(0);
-      targettedPosition = 0;
+      SBArmTargettedPosition.setDouble(1);
+      targettedPosition = 1;
     }
 
     else if (targettedSetPoint==1){
@@ -167,6 +169,8 @@ public class Arms extends SubsystemBase {
 
   @Override
   public void periodic() {
+    PIDOffset.setDouble(targettedPosition - armMotorController.getEncoder().getPosition());
+
     if (SBResetArmPosition.getDouble(0) ==1){
       armMotorController.getEncoder().setPosition(0);
       SBResetArmPosition.setDouble(1);
