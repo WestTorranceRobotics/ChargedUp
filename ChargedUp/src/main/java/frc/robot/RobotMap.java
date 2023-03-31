@@ -55,9 +55,9 @@ public final class RobotMap {
 
 
     public static final int armMotorID =6;
-    public static final double kP =  0.02;
-    public static final double kI = 0.000000125;
-    public static final double kD = 0.065;
+    public static final double kP =  0.035;
+    public static final double kI = 0.0000125;
+    public static final double kD = 0.005;
     
   
     //Default PID

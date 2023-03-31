@@ -37,17 +37,17 @@ public class TwoCubeAutonomous extends ParallelCommandGroup {
       new InstantCommand(driveTrain::restartYaw),
       //new ToggleIntakeSolenoid(intake),
       //new ExtendAndSuckCube(claw, extensionArms, arms),
-      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53),new ClawPassive(claw),new RunArmPositionAuto(arms, -53), new ClawPassive(claw)),
+      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-53.2),new ClawPassive(claw),new ToggleArmSetpoint(arms, 2, extensionArms), new ClawPassive(claw)),
       //new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-95),new ClawPassive(claw),new ToggleExtensionArmSetpoint(extensionArms, arms, 1)),    
-      new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.3)),
+      new ParallelDeadlineGroup(new Delay(0.2), new ClawActive(claw, 0.5)),
       //new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms,0)),
       //new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
-      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, 0),new RunArmPositionAuto(arms, 0)),
+      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, -1),new ToggleArmSetpoint(arms, 0, extensionArms)),
       new DriveForwardAndBalance(driveTrain),
 
 
       new SetIsAuto(claw, false)
-    //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, -25), new RunArmPositionAuto(arms, -25))
+      //new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, -25), new RunArmPositionAuto(arms, -25))
     ));
   }
 }

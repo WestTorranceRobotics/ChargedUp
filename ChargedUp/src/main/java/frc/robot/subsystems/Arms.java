@@ -46,7 +46,6 @@ public class Arms extends SubsystemBase {
   
   private GenericEntry PIDOffset = armTab.add("Arm Target Offset",0).withPosition(2, 3).getEntry();
   
-  
   /** Creates a new Arms. */
   public Arms() {
     armMotorController = new CANSparkMax(RobotMap.ArmConstants.armMotorID, MotorType.kBrushless);
@@ -89,23 +88,49 @@ public class Arms extends SubsystemBase {
     return targettedSetPoint; 
   }
 
+  public void setSmallAnglePID(boolean toggle){
+    if (toggle)
+    {
+      setPID(0.035, 0.0000125, 0.005);
+    }
+    else{
+      setPID(0.02, 0.0000000125, 0.065);
+    }
+
+  }
+
+  public void setPIDHiLo(){
+    if(Math.abs(targettedPosition-armMotorController.getEncoder().getPosition()) < 20){
+      setSmallAnglePID(true);
+    }
+    else{
+      setSmallAnglePID(false);
+    }
+  }
+
   public void runSetPoint(){
+    armMotorController.getPIDController().setOutputRange(-1, 1);
+
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(1);
-      targettedPosition = 1;
+      setPIDHiLo();
+      SBArmTargettedPosition.setDouble(0);
+      targettedPosition = 0;
+      armMotorController.getPIDController().setOutputRange(-0.5, 0.5);
     }
 
     else if (targettedSetPoint==1){
-      SBArmTargettedPosition.setDouble(-20);
-      targettedPosition = -20;
+      setPIDHiLo();
+      SBArmTargettedPosition.setDouble(-17.75);
+      targettedPosition = -17.75;
     }
 
     else if (targettedSetPoint == 2){
-      SBArmTargettedPosition.setDouble(-49);
-      targettedPosition = -53;
+      setPIDHiLo();
+      SBArmTargettedPosition.setDouble(-53.2);
+      targettedPosition = -53.2;
     }
     else if (targettedSetPoint ==3){
-      
+      setPIDHiLo();
       SBArmTargettedPosition.setDouble(-70);
       targettedPosition = -70;
     }
@@ -114,11 +139,14 @@ public class Arms extends SubsystemBase {
       armMotorController.getEncoder().setPosition(0);
 
     }
+  
+    
 
     armMotorController.getPIDController().setReference(targettedPosition, ControlType.kPosition);
-
     
- 
+    if(Math.abs(targettedPosition-armMotorController.getEncoder().getPosition()) < 0.5){
+      armMotorController.getPIDController().setIAccum(0);
+    }
 
   }
 
@@ -142,6 +170,10 @@ public class Arms extends SubsystemBase {
  }
 
  public void setPID(double p, double i, double d){
+  SBArmPIDP.setDouble(p);
+  SBArmPIDI.setDouble(i);
+  SBArmPIDD.setDouble(d);
+
   armMotorController.getPIDController().setP(p);
   armMotorController.getPIDController().setI(i);
   armMotorController.getPIDController().setD(d);

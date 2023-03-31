@@ -44,7 +44,7 @@ public class DriveDistance extends CommandBase {
     dt.TankDrive(0.6 * Math.signum(distance), 0.6 * Math.signum(distance));
     }
     else{
-    dt.TankDrive(0.5 * Math.signum(distance), 0.5 * Math.signum(distance));
+    dt.TankDrive(0.75 * Math.signum(distance), 0.75 * Math.signum(distance));
 
     }
   }

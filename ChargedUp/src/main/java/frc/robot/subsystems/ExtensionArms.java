@@ -41,9 +41,9 @@ public class ExtensionArms extends SubsystemBase {
   private GenericEntry SBArmCurrentSpeed = extensionarmTab.add("Arm Current Velocity", 0).withPosition(0, 0).getEntry();
   private GenericEntry SBArmCurrentPosition = extensionarmTab.add("Arm Current Position", 0).withPosition(1, 0).getEntry();
   
-  private GenericEntry SBArmPIDP = extensionarmTab.add("PID P", RobotMap.ExtensionArmConstants.kP).withPosition(0, 1).getEntry();
-  private GenericEntry SBArmPIDI = extensionarmTab.add("PID I", RobotMap.ExtensionArmConstants.kI).withPosition(1, 1).getEntry();
-  private GenericEntry SBArmPIDD = extensionarmTab.add("PID D", RobotMap.ExtensionArmConstants.kD).withPosition(2, 1).getEntry();
+  private GenericEntry SBArmPIDP = extensionarmTab.add("PID P", 0.04).withPosition(0, 1).getEntry();
+  private GenericEntry SBArmPIDI = extensionarmTab.add("PID I", 0.000000125).withPosition(1, 1).getEntry();
+  private GenericEntry SBArmPIDD = extensionarmTab.add("PID D", 0.005).withPosition(2, 1).getEntry();
 
   private GenericEntry SBArmTargettedPosition = extensionarmTab.add("Arm Targetted Position", 0).withPosition(0, 2).getEntry();
   private GenericEntry SBArmTargettedPowerSpeed = extensionarmTab.add("Arm Targetted Power Speed", 0.15).withPosition(1, 2).getEntry();
@@ -93,23 +93,15 @@ public class ExtensionArms extends SubsystemBase {
 
   public void runSetPoint(){
     if (targettedSetPoint ==0){
-      SBArmTargettedPosition.setDouble(-1);
-      targettedPosition = -1;
+      SBArmTargettedPosition.setDouble(1);
+      targettedPosition = 1;
     }
 
     else if (targettedSetPoint ==1){
       SBArmTargettedPosition.setDouble(-95);
       targettedPosition = -95;
-    }
 
-    else if (targettedSetPoint ==2){
-      SBArmTargettedPosition.setDouble(-34);
-      targettedPosition = -34;
-    }
-
-    else if (targettedSetPoint == 3){
-      SBArmTargettedPosition.setDouble(-18);
-      targettedPosition = -18;
+      //ORIGINAL -95
     }
 
     else if (targettedSetPoint == 4){

@@ -38,7 +38,8 @@ public class ArcadeDrive extends CommandBase {
     // System.out.println("right x :" + driverXboxController.getRawAxis(2));
     double speed = MathUtil.applyDeadband(-driverXboxController.getLeftY(), 0.05);
     double turn = MathUtil.applyDeadband(-driverXboxController.getRightX(), 0.05);
-
+    
+    // System.out.println("Speed: " + speed);
     drivetrain.arcadeDrive(speed,turn);
   }
 

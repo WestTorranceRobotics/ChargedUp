@@ -2,18 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.AutoCommands.HelperCommands;
+package frc.robot.commands.AutoCommands.CompleteAutos;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Claw;
 
-public class ClawActive extends CommandBase {
-  Claw claw;
-  double speed;
-  /** Creates a new ClawActive. */
-  public ClawActive(Claw claw, double Speed) {
-    this.claw = claw;
-    this.speed = Speed;
+public class EndWhenPitchBack extends CommandBase {
+  /** Creates a new EndWhenPitchBack. */
+  public EndWhenPitchBack() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,15 +18,11 @@ public class ClawActive extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    claw.runClaw(speed);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    claw.runClaw(-0.3);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

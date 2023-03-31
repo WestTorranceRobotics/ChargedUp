@@ -35,8 +35,7 @@ public class ClawScoreHigh extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-25),new ClawPassive(claw),new RunArmPositionAuto(arms, -50)),
-      new EndWhenRotatedToPoint(arms, -45),
+      new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms,-51.2),new ClawPassive(claw),new ToggleArmSetpoint(arms, 2, extensionArms)),
       new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms,-90),new ClawPassive(claw),new RunExtensionArmPositionAuto(extensionArms, -95))
      );
   }

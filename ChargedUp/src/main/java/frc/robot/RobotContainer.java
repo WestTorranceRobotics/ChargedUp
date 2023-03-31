@@ -451,7 +451,7 @@ public class RobotContainer {
     if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
       // driverXbutton.toggleOnTrue(pointToLimeCommand);
       // driverXbutton.onFalse(new CloseIntakeClaw(clawSubsystem));
-         driverXbutton.onTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+         driverXbutton.whileTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
        // driverXbutton.toggleOnTrue(new TurnToDirection(driverBaseSubsystem, 0, 3));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }

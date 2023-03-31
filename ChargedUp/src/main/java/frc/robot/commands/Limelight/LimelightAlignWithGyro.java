@@ -20,10 +20,7 @@ public class LimelightAlignWithGyro extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
-        new SeeLimeLight(limeLight),
-        new TurnToDirection(dt, 0, 3)
-      ),
+      new TurnToDirection(dt, 0, 5),
       new PointToLime(dt, limeLight),
       new PointToLime(dt, limeLight)
     );
