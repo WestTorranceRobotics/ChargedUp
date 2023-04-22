@@ -18,7 +18,7 @@ import frc.robot.commands.AutoCommands.HelperCommands.EndWhenExtendedToPoint;
 import frc.robot.commands.AutoCommands.HelperCommands.EndWhenRotatedToPoint;
 import frc.robot.commands.AutoCommands.HelperCommands.RunArmPositionAuto;
 import frc.robot.commands.AutoCommands.HelperCommands.RunExtensionArmPositionAuto;
-import frc.robot.commands.Claw.ToggleClaw;
+import frc.robot.commands.Claw.ToggleWrist;
 import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.ExtensionArms;

@@ -9,6 +9,7 @@ import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
 import frc.robot.commands.ClawSolenoid;
 import frc.robot.commands.RunArmPosition;
+import frc.robot.commands.TankDrive;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
@@ -22,13 +23,14 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.AutoCommands.HelperCommands.*;
 //import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.DriveTrain.DriveDistance;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoCubeAutonomous extends ParallelCommandGroup {
+public class TwoCubeTaxi extends ParallelCommandGroup {
   /** Creates a new TwoCubeAutonomous. */
-  public TwoCubeAutonomous(Claw claw, ExtensionArms extensionArms, Arms arms, DriveTrain driveTrain) {
+  public TwoCubeTaxi(Claw claw, ExtensionArms extensionArms, Arms arms, DriveTrain driveTrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(new SequentialCommandGroup(
@@ -43,7 +45,7 @@ public class TwoCubeAutonomous extends ParallelCommandGroup {
       //new ParallelDeadlineGroup(new EndWhenExtendedToPoint(extensionArms, 0),new ToggleExtensionArmSetpoint(extensionArms, arms,0)),
       //new ScoringSecondCube(claw, extensionArms, arms, intake, driveTrain),
       new ParallelDeadlineGroup(new EndWhenRotatedToPoint(arms, 0),new RunArmPositionAuto(arms, 0)),
-      new DriveForwardAndBalance(driveTrain),
+      new DriveDistance(driveTrain, 1150),
 
 
       new SetIsAuto(claw, false)
