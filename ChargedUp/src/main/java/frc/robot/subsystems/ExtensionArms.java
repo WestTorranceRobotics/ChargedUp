@@ -117,19 +117,7 @@ public class ExtensionArms extends SubsystemBase {
       targettedPosition = 6;
       
     }
-    
-
-/* 
-    if((targettedSetPoint ==0) && (m_extensionarm.getEncoder().getPosition()>=-0.25)){
-      m_extensionarm.getEncoder().setPosition(0);
-
-    }
-*/
     m_extensionarm.getPIDController().setReference(targettedPosition, ControlType.kPosition);
-
-    
- 
-
   }
 
 

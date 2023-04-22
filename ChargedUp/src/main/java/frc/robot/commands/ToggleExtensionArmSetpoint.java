@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arms;
 import frc.robot.subsystems.ExtensionArms;
-import frc.robot.subsystems.Intake;
 
 public class ToggleExtensionArmSetpoint extends CommandBase {
   /** Creates a new ToggleExtensionArmSetpoint. */
