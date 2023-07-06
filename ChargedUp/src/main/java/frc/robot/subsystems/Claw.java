@@ -33,7 +33,7 @@ public class Claw extends SubsystemBase {
 PneumaticsControlModule controlModule;
 
 CANSparkMax motionMotor;
-CANSparkMax powerMotor;
+CANSparkMax intakeMotor;
 boolean clawstate;
 Solenoid leftSolenoid;
 Solenoid rightSolenoid;
@@ -62,8 +62,8 @@ direction = true;
 clawstate = true;
 motionMotor = new CANSparkMax(RobotMap.ClawMap.motionMotorCANID, MotorType.kBrushless);
 motionMotor.getEncoder().setPosition(0);
-powerMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
-powerMotor.setIdleMode(IdleMode.kBrake);
+intakeMotor = new CANSparkMax(RobotMap.ClawMap.powerMotorCANID, MotorType.kBrushless);
+intakeMotor.setIdleMode(IdleMode.kBrake);
 motionMotor.setIdleMode(IdleMode.kBrake);
 leftSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 //Solenoid rightSolenoid = new Solenoid(PneumaticsModuleType.CTREPCM, RobotMap.ClawMap.rightSolenoidPort);
@@ -74,9 +74,14 @@ leftSolenoid.set(false);
 
   }
 
+
+  public double getIntakeVelocity(){
+    return intakeMotor.getEncoder().getVelocity();
+  }
+
 public void runClaw(double power){
 
-powerMotor.set(power);
+intakeMotor.set(power);
 
 }
 
@@ -89,7 +94,7 @@ public void SetIsAuto(boolean newVal)
   isAuto = newVal;
 }
 
-public void extendClaw(boolean bol){
+public void closeClaw(boolean bol){
 
 leftSolenoid.set(bol);
 //rightSolenoid.set(bol);
@@ -120,29 +125,31 @@ return !downLimitSwitch.get();
 }
 
 public void counterClockFlip(){
-
-  if ((motionMotor.getEncoder().getPosition()>= 0)){
-    motionMotor.set(-0.2);
+  SBLeftLimit.setBoolean(false);
+  if ((motionMotor.getEncoder().getPosition()>= 0.1)){
+    motionMotor.set(-0.15);
     clawstate = true;
-
+    SBRightLimit.setBoolean(false);
   }
   else
   {
-    motionMotor.set(0.0);
+    SBRightLimit.setBoolean(true);
+    motionMotor.set(-0.05);
   }
 
 }
 
 public void clockFlip(){
-
-  if ((motionMotor.getEncoder().getPosition()<=45)){
-    motionMotor.set(0.2);
+  SBRightLimit.setBoolean(false);
+  if ((motionMotor.getEncoder().getPosition()<=2.21)){
+    motionMotor.set(0.15);
     clawstate = false;
-
+    SBLeftLimit.setBoolean(false);
   }
 
   else{
-    motionMotor.set(0.0);
+    motionMotor.set(0.05);
+    SBLeftLimit.setBoolean(true);
   }
 }
 public double getPosition(){
@@ -160,11 +167,11 @@ public boolean getClawState(){
 public void periodic() {
   //powerMotor.set(-0.08);
 
-  SBClawSolenoid.setBoolean(leftSolenoid.get());
-  SBLeftLimit.setBoolean(getDownSwitch());
-  SBRightLimit.setBoolean(getUpSwitch());
+  // SBClawSolenoid.setBoolean(leftSolenoid.get());
+  SBClawSolenoid.setBoolean(motionMotor.getIdleMode() == IdleMode.kBrake);
+  // SBLeftLimit.setBoolean(getDownSwitch());
+  // SBRightLimit.setBoolean(getUpSwitch());
   SBClawPosition.setDouble(motionMotor.getEncoder().getPosition());
   SBClawSpeed.setDouble(motionMotor.getEncoder().getVelocity());
-
 }
 }

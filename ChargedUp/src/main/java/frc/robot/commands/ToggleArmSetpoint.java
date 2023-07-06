@@ -42,7 +42,7 @@ public class ToggleArmSetpoint extends CommandBase {
    // if (intakeSubsystem.getSolenoid()){
    
     if (setpoint == 0){
-      if (extensionArms.getPosition()>=-5){
+      if (extensionArms.getPosition()>=-30){
         armsubsystem.setSetPoint(setpoint);
         armsubsystem.toggleSetpoint(1);
         armsubsystem.togglePosition(0);

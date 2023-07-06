@@ -18,9 +18,6 @@ import org.ejml.dense.row.decompose.TriangularSolver_CDRM;
  * constants are needed, to reduce verbosity.
  */
 
-import edu.wpi.first.wpilibj2.command.Subsystem;
-import frc.robot.subsystems.LimeLight;
-
 public final class RobotMap {
   
   public static boolean enableDrivetrain = true;
@@ -103,6 +100,12 @@ public final class RobotMap {
   }
 
   public final class DriveTrainConstants{
+    public static final double ksVolts = 1.3943;
+    public static final double kvVoltSecondsPerMeter = 2.6786;
+    public static final double kaVoltSecondsSquaredPerMeter = 2.4902;
+    public static final double kDriveKinematics = 1;
+
+
     public static final int leftLeader_ID = 1;
     public static final int leftFollower_ID = 2;
     public static final int rightLeader_ID =3;
@@ -114,6 +117,8 @@ public final class RobotMap {
     public static final int leftleaderEncoder1 = 2;
     public static final int leftleaderEncoder2 = 3;
     
+    public static final double encoderDistancePerPulse = 1/20;
+
     public static final double gyroPIDkP = 1;
     public static final double gyroPIDkI = 0;
     public static final double gyroPIDkD = 0;
@@ -127,6 +132,7 @@ public final class RobotMap {
 
 }
 
+
 public final class JoyStickConstants{
   public static final int leftJoystickPort = 0;
   public static final int rightJoystickPort = 1;
@@ -137,6 +143,11 @@ public final class JoyStickConstants{
   public static final int rightJoystickFiveButton = 5;
   public static final int xboxControllerRightBack = 6;
   public static final int xboxControllerRightTrigger = 8;
+}
+public final class  AutoConstants{
+  public static final double kMaxSpeedMetersPerSecond = 1;
+  public static final double kMaxAccelerationMetersPerSecondSquared = 0.25;
+
 }
 
 }

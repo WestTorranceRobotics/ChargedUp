@@ -7,10 +7,10 @@ package frc.robot.commands.Claw;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Claw;
 
-public class CloseIntakeClaw extends CommandBase {
+public class ClampWhenIdleStop extends CommandBase {
   Claw claw;
-  /** Creates a new CloseIntakeClaw. */
-  public CloseIntakeClaw(Claw claw) {
+  /** Creates a new ClampWhenIdleStop. */
+  public ClampWhenIdleStop(Claw claw) {
     this.claw = claw;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(claw);
@@ -19,13 +19,15 @@ public class CloseIntakeClaw extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    claw.closeClaw(true);
-    claw.runClaw(-0.5);
+    claw.closeClaw(false);
+    claw.runClaw(-0.08);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    System.out.println(claw.getIntakeVelocity());
+  }
 
   // Called once the command ends or is interrupted.
   @Override

@@ -17,6 +17,7 @@ import frc.robot.subsystems.LimeLight;
 import frc.robot.commands.TankDrive;
 import frc.robot.commands.ClawInward;
 import frc.robot.commands.ClawOutward;
+import frc.robot.commands.ClawOutwardSlow;
 import frc.robot.commands.ClawRotation;
 import frc.robot.commands.RunIntake;
 import frc.robot.commands.RunOuttake;
@@ -34,22 +35,33 @@ import frc.robot.commands.RunExtensionArmPower;
 import frc.robot.commands.ToggleArmSetpoint;
 import frc.robot.commands.ToggleExtensionArmSetpoint;
 import frc.robot.commands.ToggleIntakeSolenoid;
+import frc.robot.commands.Arm.PlaceHighCube;
+import frc.robot.commands.Arm.PlaceLowCube;
+import frc.robot.commands.Arm.PlaceMidCube;
 import frc.robot.commands.DriveTrain.ArcadeDrive;
 import frc.robot.commands.DriveTrain.DriveDistance;
 import frc.robot.commands.DriveTrain.DriveStraight;
 import frc.robot.commands.DriveTrain.DriveTrainDefualt;
 import frc.robot.commands.DriveTrain.NonPIDChargeStationBalance;
+import frc.robot.commands.ExtArm.HumanPlayer;
+import frc.robot.commands.ExtArm.StartingPositionRetract;
 import frc.robot.commands.AutoCommands.ClawScoreHigh;
 // import frc.robot.commands.DriveTrain.NonPIDChargeStationBalance;
 // import frc.robot.commands.DriveTrain.PIDChargeStationBalance;
 import frc.robot.commands.AutoCommands.CompleteAutos.BasicGrabSecondCube;
 import frc.robot.commands.AutoCommands.CompleteAutos.DriveForwardAndBalance;
+import frc.robot.commands.AutoCommands.CompleteAutos.OneCube;
 import frc.robot.commands.AutoCommands.CompleteAutos.ScoringSecondCube;
-import frc.robot.commands.AutoCommands.CompleteAutos.TwoCubeAutonomous;
+import frc.robot.commands.AutoCommands.CompleteAutos.TaxiAndBalance;
+import frc.robot.commands.AutoCommands.CompleteAutos.OneCubeCharge;
+import frc.robot.commands.AutoCommands.CompleteAutos.OneCubeTaxi;
 import frc.robot.commands.AutoCommands.HelperCommands.ConeScoringAutonomous;
 import frc.robot.commands.AutoCommands.HelperCommands.CubeScoringAutonomous;
+import frc.robot.commands.AutoCommands.HelperCommands.Delay;
 import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuck;
 import frc.robot.commands.AutoCommands.HelperCommands.ExtendAndSuckCube;
+import frc.robot.commands.AutoCommands.HelperCommands.HoldInPlacePID;
+import frc.robot.commands.AutoCommands.HelperCommands.HoldPIDWithReset;
 import frc.robot.commands.AutoCommands.HelperCommands.PlaceConeTop;
 import frc.robot.commands.Claw.CloseIntakeClaw;
 import frc.robot.commands.Limelight.LimelightAlignWithGyro;
@@ -58,10 +70,14 @@ import frc.robot.commands.Test.TurnToDirection;
 import frc.robot.RobotMap.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+
+import java.util.HashMap;
+import java.util.function.Supplier;
 
 import com.fasterxml.jackson.databind.util.PrimitiveArrayBuilder;
 
@@ -78,6 +94,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.ADXL345_I2C.Axes;
 import edu.wpi.first.wpilibj.XboxController.Axis;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+
+
+
 public class RobotContainer {
   
   Arms armSubsystem;
@@ -89,6 +111,8 @@ public class RobotContainer {
   Claw clawSubsystem;
   LEDs leds;
 
+  private ShuffleboardTab display;
+  private SendableChooser<Command> commandChooser = new SendableChooser<>();
 
   TankDrive driveBaseTankDriveCommand;
   ArcadeDrive driveBaseArcadeDriveCommand;
@@ -108,6 +132,7 @@ public class RobotContainer {
   ToggleArmSetpoint rightPerpendicularArmSetpoint;
   ToggleArmSetpoint leftPerpendicularArmSetpoint;
   ToggleArmSetpoint leftFourtyFiveArmSetpoint;
+  HoldInPlacePID holdInPlacePID;
 
   ToggleExtensionArmSetpoint startingExtensionArmSetpoint;
   ToggleExtensionArmSetpoint midExtensionArmSetpoint;
@@ -131,6 +156,7 @@ public class RobotContainer {
   RotateAndTwist rotateBackandTwist;
   RotateAndTwist rotateFrontRotateAndTwist;
   ClawScoreHigh clawScoreHigh;
+  ClawOutwardSlow clawOutwardSlow;
 
   private static final XboxController operatorController = new XboxController(0);
   private static final XboxController driverxboxController = new XboxController(1);
@@ -148,7 +174,8 @@ public class RobotContainer {
   private JoystickButton operatorRightBack = new JoystickButton(operatorController, 6);
   private JoystickButton operatorLeftTrigger = new JoystickButton(operatorController, 7);
   private JoystickButton operatorRightTrigger = new JoystickButton(operatorController, 8);
-  //private JoystickButton operatorBack = new JoystickButton(xboxController, 7);
+  private JoystickButton operatorBack = new JoystickButton(operatorController, 9);
+  
   private JoystickButton operatorStart = new JoystickButton(operatorController, 10);
 
   private JoystickButton driverXbutton = new JoystickButton(driverxboxController, 3);
@@ -159,8 +186,8 @@ public class RobotContainer {
   private JoystickButton driverRightBumper = new JoystickButton(driverxboxController, 6);
   //private JoystickButton operatorLeftTrigger = new JoystickButton(xboxController, 7);
   //private JoystickButton operatorRightTrigger = new JoystickButton(xboxController, 8);
-  private JoystickButton driverBack = new JoystickButton(driverxboxController, 7);
-  private JoystickButton driverStart = new JoystickButton(driverxboxController, 10);
+  //private JoystickButton driverBack = new JoystickButton(driverxboxController, 7);
+  private JoystickButton driverStart = new JoystickButton(driverxboxController, 8);
 
   private POVButton operatorPOVRight = new POVButton(operatorController, 90);
   private POVButton operatorPOVDown = new POVButton(operatorController, 180);
@@ -205,11 +232,20 @@ public class RobotContainer {
  
  
   public RobotContainer() {
-    
+
     initSubsytems();
     initCommands();
     // Configure the trigger bindings
     configure2PersonControl();
+
+    display = Shuffleboard.getTab("Auto Tab");
+    // Shuffleboard.selectTab(display.getTitle());
+    
+    commandChooser.setDefaultOption("One Cube + Charge", new OneCubeCharge(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem));
+    commandChooser.addOption("One Cube + Taxi", new OneCubeTaxi(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem));
+    commandChooser.addOption("One Cube", new OneCube(clawSubsystem, extensionArmSubsystem, armSubsystem));
+    // commandChooser.addOption("One Cube + Taxi and Charge Position", new TaxiAndBalance(driverBaseSubsystem));
+    display.add(commandChooser);
   }
 
   private void initSubsytems() {
@@ -256,19 +292,21 @@ public class RobotContainer {
       driveBaseTankDriveCommand = new TankDrive(driverxboxController, driverBaseSubsystem);
       // driverBaseSubsystem.setDefaultCommand(new DriveTrainDefualt(driverxboxController, driverBaseSubsystem, limelightSubsystem));
       driverBaseSubsystem.setDefaultCommand(driveBaseArcadeDriveCommand);  
+      holdInPlacePID = new HoldInPlacePID(driverBaseSubsystem);
       // driverBaseSubsystem.setDefaultCommand(driveBaseTankDriveCommand);      
       // driverBaseSubsystem.setDefaultCommand(new BackwardsInvertedArcade(driverxboxController, driverBaseSubsystem));
     }
 
     if (RobotMap.enableClaw){
       clawSpeed = new ClawSpeed(clawSubsystem);
+      clawOutwardSlow = new ClawOutwardSlow(clawSubsystem);
       //clawTurningClockwise = new ClawTurning(clawSubsystem, true);
       //clawTurningCounterClockwise = new ClawTurning(clawSubsystem, false);
       clawsolenoidExtend = new ClawSolenoid(clawSubsystem, true);
       clawsolenoidRetract = new ClawSolenoid(clawSubsystem, false);
       clawInward = new ClawInward(clawSubsystem);
       clawOutward = new ClawOutward(clawSubsystem);
-      clawRotation = new ClawRotation(clawSubsystem, operatorController);
+      clawRotation = new ClawRotation(clawSubsystem, operatorController, armSubsystem, leds);
       clawSubsystem.setDefaultCommand(clawRotation);
 
     }
@@ -340,80 +378,24 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  private void configure1PersonControl(){
-    if (RobotMap.enableArm && RobotMap.enableClaw){
-
-      operatorPOVDown.whileTrue(startingArmSetpoint);
-      operatorPOVUp.whileTrue(rightPerpendicularArmSetpoint);
-      operatorPOVRight.whileTrue(leftPerpendicularArmSetpoint);
-      operatorPOVLeft.whileTrue(leftFourtyFiveArmSetpoint);
-    }
-   
-    if (RobotMap.enableClaw){
-
-    //Main Command
-      operatorXbutton.whileTrue(clawOutward);
-      operatorBbutton.whileTrue(clawInward);
-      operatorYbutton.onTrue(clawsolenoidExtend);
-      operatorAbutton.onTrue(clawsolenoidRetract);
-
-      driverAbutton.whileTrue(new DriveStraight(driverBaseSubsystem, 0.6));
-      driverBbutton.whileTrue(new CloseIntakeClaw(clawSubsystem));
-    }
-
-    if (RobotMap.enableExtensionArm && RobotMap.enableArm){
-      //Main c0mmands
-      operatorRightBack.whileTrue(highExtensionArmSetpoint);
-      operatorLeftBack.whileTrue(startingExtensionArmSetpoint);
-
-
-      //Test c0mmands
-     // operatorPOV90.whileTrue(startingArmSetpoint);
-      //operatorPOV270.whileTrue(highExtensionArmSetpoint);
-      //operatorRightBack.whileTrue(runExtensionArmPower);
-    }
-
-    if (RobotMap.enableIntake){
-      //driverLeftTrigger.whileTrue(outtakeCommand);
-      //driverRightTrigger.whileTrue(intakeCommand);
-      //driverRightTopLeft.whileTrue(toggleIntakeSolenoid);
-      
-    }
-
-    if ((RobotMap.enableDrivetrain) && (RobotMap.enableLimelight)){
-      // driverLeftTopRight.toggleOnTrue(pointToLimeCommand);
-      // driverLeftTopRight.toggleOnTrue(new ClawInward(clawSubsystem));
-      driverXbutton.toggleOnTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
-      // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
-    }
-
-    if (RobotMap.enableAutonomous){
-      // driverLeftTopLeft.toggleOnTrue(new NonPIDChargeStationBalance(driverBaseSubsystem));
-      // driverLeftTopLeft.toggleOnTrue(new DriveForwardAndBalance(driverBaseSubsystem));
-      // driverLeftTopLeft.onTrue(new InstantCommand(driverBaseSubsystem::resetGyro));
-      // driverLeftBottomRight.onTrue(coneScoringAutonomous);
-      // driverLeftBottomLeft.onTrue(new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
-      //driverLeftBottomLeft.onTrue(new ScoringSecondCube(clawSubsystem, extensionArmSubsystem, armSubsystem, intakesubsystem, driverBaseSubsystem));
-      //driverLeftBottomLeft.onTrue(new DriveDistance(driverBaseSubsystem, 2050));
-    }
-    if (RobotMap.enableSetpoint){
-      driverYbutton.onTrue(extendAndSuckCube);
-      // driverLeftBottomRight.onTrue(new TurnToDirection(driverBaseSubsystem, 0,3));
-    }
-
-  }
   private void configure2PersonControl() {
 
     //Operator -Ask Ishan
     if (RobotMap.enableArm && RobotMap.enableClaw){
 
-      operatorPOVDown.whileTrue(startingArmSetpoint);
-      operatorPOVUp.whileTrue(rightPerpendicularArmSetpoint);
+      operatorPOVDown.whileTrue(new StartingPositionRetract(extensionArmSubsystem, armSubsystem));
+      operatorPOVUp.whileTrue(new HumanPlayer(extensionArmSubsystem, armSubsystem));
       operatorPOVRight.whileTrue(leftPerpendicularArmSetpoint);
       operatorPOVLeft.whileTrue(leftFourtyFiveArmSetpoint);
     }
    
     if (RobotMap.enableClaw){
+      // driverLeftBumper.onTrue(new PlaceLowCube(armSubsystem, clawSubsystem,extensionArmSubsystem));
+      // driverLeftBumper.onTrue(new PlaceMidCube(armSubsystem, clawSubsystem,extensionArmSubsystem));
+      //driverYbutton.onTrue(new PlaceHighCube(armSubsystem, clawSubsystem, extensionArmSubsystem));
+      operatorStart.onTrue(new PlaceHighCube(armSubsystem, clawSubsystem, extensionArmSubsystem));
+      driverAbutton.onTrue(new PlaceLowCube(armSubsystem, clawSubsystem, extensionArmSubsystem));
+      driverBbutton.onTrue(new PlaceMidCube(armSubsystem, clawSubsystem, extensionArmSubsystem));
       driverRightBumper.whileTrue(new CloseIntakeClaw(clawSubsystem));
     //Main Command
       
@@ -421,6 +403,7 @@ public class RobotContainer {
       operatorBbutton.onTrue(clawsolenoidRetract);
       operatorYbutton.onTrue(clawsolenoidExtend);
       operatorAbutton.whileTrue(clawOutward);
+    
     }
 
 
@@ -433,7 +416,6 @@ public class RobotContainer {
       //Main c0mmands
       operatorRightBack.whileTrue(highExtensionArmSetpoint);
       operatorLeftBack.whileTrue(startingExtensionArmSetpoint);
-
 
       //Test c0mmands
      // operatorPOV90.whileTrue(startingArmSetpoint);
@@ -452,6 +434,7 @@ public class RobotContainer {
       // driverXbutton.toggleOnTrue(pointToLimeCommand);
       // driverXbutton.onFalse(new CloseIntakeClaw(clawSubsystem));
          driverXbutton.whileTrue(new LimelightAlignWithGyro(driverBaseSubsystem, limelightSubsystem));
+         driverStart.toggleOnTrue(new HoldPIDWithReset(driverBaseSubsystem));
        // driverXbutton.toggleOnTrue(new TurnToDirection(driverBaseSubsystem, 0, 3));
       // driverLeftTopLeft.onTrue(new PlaceConeTop(driverBaseSubsystem, limelightSubsystem, armSubsystem, extensionArmSubsystem, clawSubsystem, intakesubsystem));
     }
@@ -466,8 +449,8 @@ public class RobotContainer {
       //driverLeftBottomLeft.onTrue(new DriveDistance(driverBaseSubsystem, 2050));
     }
     if (RobotMap.enableSetpoint){
-      driverYbutton.onTrue(extendAndSuckCube);
-      operatorStart.onTrue(clawScoreHigh);
+      // driverYbutton.onTrue(extendAndSuckCube);
+     // operatorStart.onTrue(clawScoreHigh);
       // driverLeftBottomRight.onTrue(new TurnToDirection(driverBaseSubsystem, 0,3));
     }
   }
@@ -480,7 +463,10 @@ public class RobotContainer {
     // An example command will be run in autonomous
     // return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
     // return new NonPIDChargeStationBalance(driverBaseSubsystem);
-    return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
+    // return new TwoCubeAutonomous(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
+    return commandChooser.getSelected();
+      //return new OneCubeTaxi(clawSubsystem, extensionArmSubsystem, armSubsystem, driverBaseSubsystem);
+  //  return new OneCube(clawSubsystem, extensionArmSubsystem, armSubsystem);
  }
  
  public DriveTrain getDriveTrain(){

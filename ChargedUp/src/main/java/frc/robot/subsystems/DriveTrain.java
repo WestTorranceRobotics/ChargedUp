@@ -94,7 +94,7 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBRightSpeed = drivesTab.add("Right Speed", 0).withPosition(1, 0).getEntry();
   private GenericEntry SBRightPosition =  drivesTab.add("Right Distance", 0).withPosition(2, 0).getEntry();
   private GenericEntry SBLeftPosition =  drivesTab.add("Left Distance", 0).withPosition(3, 0).getEntry();
-  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 50).withPosition(0,1).withSize(2, 1).getEntry();
+  private GenericEntry SBSpeedPercentage = drivesTab.add("Speed Percentage", 30).withPosition(0,1).withSize(2, 1).getEntry();
   private GenericEntry SBGyroYaw = drivesTab.add("Gyro Yaw X",0).withPosition(0, 2).getEntry();
   private GenericEntry SBGyroPitch = drivesTab.add("Gyro Pitch",0).withPosition(1, 2).getEntry();
   private GenericEntry SBGyroRoll = drivesTab.add("Gyro Roll",0).withPosition(2, 2).getEntry();
@@ -115,8 +115,7 @@ public class DriveTrain extends SubsystemBase {
   private GenericEntry SBstartingYaw =  drivesTab.add("Starting Yaw",0).withPosition(5, 0).getEntry();
   private GenericEntry SBtargetSpeed =  drivesTab.add("Target speed",0).withPosition(6, 0).getEntry();
 
-  private GenericEntry SB005 = drivesTab.add("0.05 Delay",0).withPosition(1, 4).getEntry();
-  private GenericEntry SB01 = drivesTab.add("0.1 Delay",0).withPosition(2, 4).getEntry();
+  private GenericEntry SBPitchVelo = drivesTab.add("Pitch Velocity",0).withPosition(1, 4).getEntry();
   Timer timer = new Timer();
   
 
@@ -141,10 +140,10 @@ public class DriveTrain extends SubsystemBase {
     driveGyro.calibrate();
     driveGyro.zeroYaw();
     driveGyro.reset();
-    speedPercentage = 100;
+    speedPercentage = 70;
     gyroPID = new PIDController(0.02, 0, 0.003);
     distancePID = new PIDController(d_kP, d_kI, d_kD);
-    orientationPID = new PIDController(0.02, 0, 0.003);
+    orientationPID = new PIDController(0.03, 0, 0.002);
     orientationPID.setTolerance(1);
     gyroPID.setTolerance(1.0);
 
@@ -159,7 +158,7 @@ public class DriveTrain extends SubsystemBase {
     // gyroPID.setTolerance(5.0);
     //Variables
 
-    SBSpeedPercentage.setDouble(100);
+    SBSpeedPercentage.setDouble(70);
     leftLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftLeader_ID);
     leftFollower = new WPI_TalonSRX(RobotMap.DriveTrainConstants.leftFollower_ID);
     rightLeader = new WPI_TalonSRX(RobotMap.DriveTrainConstants.rightLeader_ID);
@@ -205,6 +204,10 @@ public class DriveTrain extends SubsystemBase {
 
   }
 
+  public void setSBPitchVelocity(double velo){
+    SBPitchVelo.setDouble(velo);
+  }
+
   public double getStartYawOffset(){
 
     return SBstartingYaw.getDouble(0);
@@ -215,7 +218,8 @@ public class DriveTrain extends SubsystemBase {
 
   public void arcadeDrive(double InputSpeed, double InputRotation){
     //if (0.2<InputSpeed){
-      SBtargetSpeed.setDouble(InputSpeed*(speedPercentage/100));
+      SBtargetSpeed.setDouble(InputSpeed*(30/100));
+      // drive.arcadeDrive(InputSpeed*(0.6), InputRotation*0.7);
       drive.arcadeDrive(InputSpeed, InputRotation*0.7);
     
   }

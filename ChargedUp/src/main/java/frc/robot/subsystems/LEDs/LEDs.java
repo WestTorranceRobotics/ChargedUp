@@ -29,12 +29,15 @@ public class LEDs extends SubsystemBase {
   double yscale = 0.05;
   double offset = 0.01;
   double offsetInc = 0.01;
-  // double[] hueRange = {85, 150};
-  double[] hueRange = {60, 150};
-  // double[] hueRange = {150, 180+20};
+  double[] hueRange = {85, 150};
+  // double[] hueRange = {60, 150};
+  //double[] hueRange = {150, 180+20};
   double[] noiseRange = {-1,1};
 
   Timer timer = new Timer();
+
+  int hue = 80;
+  int value = 128;
 
   /** Creates a new LEDs. */
   public LEDs() {
@@ -52,18 +55,23 @@ public class LEDs extends SubsystemBase {
 
     noise = new OpenSimplex();
 
-    mode = 2;
+    this.mode = 2;
+    this.hue = 80;
   }
 
   public void SetModeSolid(int hue){
-    mode = 0;
-    for (var i = 0; i < m_ledBuffer.getLength(); i++) {
-      m_ledBuffer.setHSV(i, hue, 255, 128);
-    }
+    this.mode = 0;
+    this.hue = hue;
+    this.value = 128;
+  }
+
+  public void SetLEDsValue(int value){
+    this.value = value;
   }
 
   public void SetModeRainbow(){
-    mode = 1;
+    this.mode = 1;
+    this.value = 128;
   }
 
   private void rainbow() {
@@ -73,7 +81,7 @@ public class LEDs extends SubsystemBase {
       // shape is a circle so only one value needs to precess
       final var hue = (m_rainbowFirstPixelHue + (i * 180 / m_ledBuffer.getLength())) % 180;
       // Set the value
-      m_ledBuffer.setHSV(i, hue, 255, 128);
+      m_ledBuffer.setHSV(i, hue, 120, value);
     }
     // Increase by to make the rainbow "move"
     m_rainbowFirstPixelHue += 3;
@@ -81,16 +89,17 @@ public class LEDs extends SubsystemBase {
     m_rainbowFirstPixelHue %= 180;
   }
 
-  private void SetModeNoise(double[] hueRange){
+  public void SetModeNoise(double[] hueRange){
     this.hueRange = hueRange;
     this.mode = 2;
+    this.value = 128;
   }
 
   private void noise(){
     for (var x = 0; x < m_ledBuffer.getLength(); x++) {
       double noiseVal = noise.noise2_ImproveX(1934173838, x*yscale, offset);
       int hue = (int)Remap(noiseVal, noiseRange, hueRange) % 180;
-      m_ledBuffer.setHSV(x, hue, 255, 128);
+      m_ledBuffer.setHSV(x, hue, 450, value);
     }
     offset += offsetInc;
 
@@ -109,7 +118,13 @@ public class LEDs extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if(mode == 0){return;}
+    System.out.println(mode);
+    if(mode == 0){
+      for (var i = 0; i < m_ledBuffer.getLength(); i++) {
+        m_ledBuffer.setHSV(i, hue, 255, value);
+      }
+      m_led.setData(m_ledBuffer);
+    }
     else if(mode == 1)
     {
       rainbow();

@@ -26,7 +26,7 @@ public class ClawSolenoid extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    clawsubsystem.extendClaw(direction);
+    clawsubsystem.closeClaw(direction);
     isFinished = true;
   }
 

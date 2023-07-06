@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ComplexWidget;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.shuffleboard.WidgetType;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.networktables.GenericEntry;
 
 
@@ -108,6 +109,13 @@ public class Arms extends SubsystemBase {
     }
   }
 
+  public void runCustomArmSetPoint(double setpoint){
+    setpoint = MathUtil.clamp(setpoint,-72,0);
+    setPIDHiLo();
+    SBArmTargettedPosition.setDouble(setpoint);
+    targettedPosition = setpoint;
+  }
+
   public void runSetPoint(){
     armMotorController.getPIDController().setOutputRange(-1, 1);
 
@@ -131,8 +139,13 @@ public class Arms extends SubsystemBase {
     }
     else if (targettedSetPoint ==3){
       setPIDHiLo();
-      SBArmTargettedPosition.setDouble(-70);
-      targettedPosition = -70;
+      SBArmTargettedPosition.setDouble(-71.5);
+      targettedPosition = -71.5;
+    }
+    else if (targettedSetPoint == 4){
+      setPIDHiLo();
+      SBArmTargettedPosition.setDouble(-60);
+      targettedPosition = -60;
     }
 
     if((targettedSetPoint ==0) && (armMotorController.getEncoder().getPosition()>=-1)){
