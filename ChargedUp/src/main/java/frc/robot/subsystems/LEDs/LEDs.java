@@ -118,7 +118,6 @@ public class LEDs extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println(mode);
     if(mode == 0){
       for (var i = 0; i < m_ledBuffer.getLength(); i++) {
         m_ledBuffer.setHSV(i, hue, 255, value);
